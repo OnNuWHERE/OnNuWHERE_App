@@ -30,6 +30,9 @@ android {
 }
 
 dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation files('libs/libDaumMapAndroid.jar')
+
     implementation('com.google.android.gms:play-services-maps:18.1.0')
     implementation('com.google.android.gms:play-services-location:21.0.1')
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
