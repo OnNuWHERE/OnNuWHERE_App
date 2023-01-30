@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "87061581293",
+    "project_id": "onnuwhere",
+    "storage_bucket": "onnuwhere.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:87061581293:android:97f8a4388e3100790f2be4",
+        "android_client_info": {
+          "package_name": "com.example.onnuwhere"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "87061581293-l23m9qhnb97k0d0rhqfikactm8dhng8g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLwxTRIGvdtPY__yINdkUhobpfKEbHii8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "87061581293-l23m9qhnb97k0d0rhqfikactm8dhng8g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
