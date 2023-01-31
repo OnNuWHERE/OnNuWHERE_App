@@ -1,0 +1,395 @@
+package com.example.onnuwhere.model;
+
+public class AED {
+    public long rnum;
+
+    public String buildAddress;
+    public String buildPlace;
+    public long clerkTel;
+
+    public double wgs84Lat;
+    public double wgs84Lon;
+
+    public String org;
+    public String manager;
+    public String managerTel;
+
+    public String mfg;
+    public String model;
+
+    public int zipcode1;
+    public int zipcode2;
+
+    public String gugun;
+    public String sido;
+
+    public String sunFrtYon;
+    public String sunScdYon;
+    public String sunThiYon;
+    public String sunFurYon;
+    public String sunFifYon;
+
+    public int monEndTme;
+    public int monSttTme;
+    public int tueEndTme;
+    public int tueSttTme;
+    public int wedEndTme;
+    public int wedSttTme;
+    public int thuEndTme;
+    public int thuSttTme;
+    public int friSttTme;
+    public int friEndTme;
+    public int satEndTme;
+    public int satSttTme;
+    public int sunSttTme;
+    public int sunEndTme;
+
+    public AED(long rnum, String buildAddress, String buildPlace, long clerkTel, double wgs84Lat, double wgs84Lon, String org, String manager, String managerTel, String mfg, String model, int zipcode1, int zipcode2, String gugun, String sido, String sunFrtYon, String sunScdYon, String sunThiYon, String sunFurYon, String sunFifYon, int monEndTme, int monSttTme, int tueEndTme, int tueSttTme, int wedEndTme, int wedSttTme, int thuEndTme, int thuSttTme, int friSttTme, int friEndTme, int satEndTme, int satSttTme, int sunSttTme, int sunEndTme) {
+        this.rnum = rnum;
+        this.buildAddress = buildAddress;
+        this.buildPlace = buildPlace;
+        this.clerkTel = clerkTel;
+        this.wgs84Lat = wgs84Lat;
+        this.wgs84Lon = wgs84Lon;
+        this.org = org;
+        this.manager = manager;
+        this.managerTel = managerTel;
+        this.mfg = mfg;
+        this.model = model;
+        this.zipcode1 = zipcode1;
+        this.zipcode2 = zipcode2;
+        this.gugun = gugun;
+        this.sido = sido;
+        this.sunFrtYon = sunFrtYon;
+        this.sunScdYon = sunScdYon;
+        this.sunThiYon = sunThiYon;
+        this.sunFurYon = sunFurYon;
+        this.sunFifYon = sunFifYon;
+        this.monEndTme = monEndTme;
+        this.monSttTme = monSttTme;
+        this.tueEndTme = tueEndTme;
+        this.tueSttTme = tueSttTme;
+        this.wedEndTme = wedEndTme;
+        this.wedSttTme = wedSttTme;
+        this.thuEndTme = thuEndTme;
+        this.thuSttTme = thuSttTme;
+        this.friSttTme = friSttTme;
+        this.friEndTme = friEndTme;
+        this.satEndTme = satEndTme;
+        this.satSttTme = satSttTme;
+        this.sunSttTme = sunSttTme;
+        this.sunEndTme = sunEndTme;
+    }
+
+    public long getRnum() {
+        return rnum;
+    }
+
+    public void setRnum(long rnum) {
+        this.rnum = rnum;
+    }
+
+    public String getBuildAddress() {
+        return buildAddress;
+    }
+
+    public void setBuildAddress(String buildAddress) {
+        this.buildAddress = buildAddress;
+    }
+
+    public String getBuildPlace() {
+        return buildPlace;
+    }
+
+    public void setBuildPlace(String buildPlace) {
+        this.buildPlace = buildPlace;
+    }
+
+    public long getClerkTel() {
+        return clerkTel;
+    }
+
+    public void setClerkTel(long clerkTel) {
+        this.clerkTel = clerkTel;
+    }
+
+    public double getWgs84Lat() {
+        return wgs84Lat;
+    }
+
+    public void setWgs84Lat(double wgs84Lat) {
+        this.wgs84Lat = wgs84Lat;
+    }
+
+    public double getWgs84Lon() {
+        return wgs84Lon;
+    }
+
+    public void setWgs84Lon(double wgs84Lon) {
+        this.wgs84Lon = wgs84Lon;
+    }
+
+    public String getOrg() {
+        return org;
+    }
+
+    public void setOrg(String org) {
+        this.org = org;
+    }
+
+    public String getManager() {
+        return manager;
+    }
+
+    public void setManager(String manager) {
+        this.manager = manager;
+    }
+
+    public String getManagerTel() {
+        return managerTel;
+    }
+
+    public void setManagerTel(String managerTel) {
+        this.managerTel = managerTel;
+    }
+
+    public String getMfg() {
+        return mfg;
+    }
+
+    public void setMfg(String mfg) {
+        this.mfg = mfg;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public int getZipcode1() {
+        return zipcode1;
+    }
+
+    public void setZipcode1(int zipcode1) {
+        this.zipcode1 = zipcode1;
+    }
+
+    public int getZipcode2() {
+        return zipcode2;
+    }
+
+    public void setZipcode2(int zipcode2) {
+        this.zipcode2 = zipcode2;
+    }
+
+    public String getGugun() {
+        return gugun;
+    }
+
+    public void setGugun(String gugun) {
+        this.gugun = gugun;
+    }
+
+    public String getSido() {
+        return sido;
+    }
+
+    public void setSido(String sido) {
+        this.sido = sido;
+    }
+
+    public String getSunFrtYon() {
+        return sunFrtYon;
+    }
+
+    public void setSunFrtYon(String sunFrtYon) {
+        this.sunFrtYon = sunFrtYon;
+    }
+
+    public String getSunScdYon() {
+        return sunScdYon;
+    }
+
+    public void setSunScdYon(String sunScdYon) {
+        this.sunScdYon = sunScdYon;
+    }
+
+    public String getSunThiYon() {
+        return sunThiYon;
+    }
+
+    public void setSunThiYon(String sunThiYon) {
+        this.sunThiYon = sunThiYon;
+    }
+
+    public String getSunFurYon() {
+        return sunFurYon;
+    }
+
+    public void setSunFurYon(String sunFurYon) {
+        this.sunFurYon = sunFurYon;
+    }
+
+    public String getSunFifYon() {
+        return sunFifYon;
+    }
+
+    public void setSunFifYon(String sunFifYon) {
+        this.sunFifYon = sunFifYon;
+    }
+
+    public int getMonEndTme() {
+        return monEndTme;
+    }
+
+    public void setMonEndTme(int monEndTme) {
+        this.monEndTme = monEndTme;
+    }
+
+    public int getMonSttTme() {
+        return monSttTme;
+    }
+
+    public void setMonSttTme(int monSttTme) {
+        this.monSttTme = monSttTme;
+    }
+
+    public int getTueEndTme() {
+        return tueEndTme;
+    }
+
+    public void setTueEndTme(int tueEndTme) {
+        this.tueEndTme = tueEndTme;
+    }
+
+    public int getTueSttTme() {
+        return tueSttTme;
+    }
+
+    public void setTueSttTme(int tueSttTme) {
+        this.tueSttTme = tueSttTme;
+    }
+
+    public int getWedEndTme() {
+        return wedEndTme;
+    }
+
+    public void setWedEndTme(int wedEndTme) {
+        this.wedEndTme = wedEndTme;
+    }
+
+    public int getWedSttTme() {
+        return wedSttTme;
+    }
+
+    public void setWedSttTme(int wedSttTme) {
+        this.wedSttTme = wedSttTme;
+    }
+
+    public int getThuEndTme() {
+        return thuEndTme;
+    }
+
+    public void setThuEndTme(int thuEndTme) {
+        this.thuEndTme = thuEndTme;
+    }
+
+    public int getThuSttTme() {
+        return thuSttTme;
+    }
+
+    public void setThuSttTme(int thuSttTme) {
+        this.thuSttTme = thuSttTme;
+    }
+
+    public int getFriSttTme() {
+        return friSttTme;
+    }
+
+    public void setFriSttTme(int friSttTme) {
+        this.friSttTme = friSttTme;
+    }
+
+    public int getFriEndTme() {
+        return friEndTme;
+    }
+
+    public void setFriEndTme(int friEndTme) {
+        this.friEndTme = friEndTme;
+    }
+
+    public int getSatEndTme() {
+        return satEndTme;
+    }
+
+    public void setSatEndTme(int satEndTme) {
+        this.satEndTme = satEndTme;
+    }
+
+    public int getSatSttTme() {
+        return satSttTme;
+    }
+
+    public void setSatSttTme(int satSttTme) {
+        this.satSttTme = satSttTme;
+    }
+
+    public int getSunSttTme() {
+        return sunSttTme;
+    }
+
+    public void setSunSttTme(int sunSttTme) {
+        this.sunSttTme = sunSttTme;
+    }
+
+    public int getSunEndTme() {
+        return sunEndTme;
+    }
+
+    public void setSunEndTme(int sunEndTme) {
+        this.sunEndTme = sunEndTme;
+    }
+
+    @Override
+    public String toString() {
+        return "Civil{" +
+                "rnum=" + rnum +
+                ", buildAddress='" + buildAddress + '\'' +
+                ", buildPlace='" + buildPlace + '\'' +
+                ", clerkTel=" + clerkTel +
+                ", wgs84Lat=" + wgs84Lat +
+                ", wgs84Lon=" + wgs84Lon +
+                ", org='" + org + '\'' +
+                ", manager='" + manager + '\'' +
+                ", managerTel='" + managerTel + '\'' +
+                ", mfg='" + mfg + '\'' +
+                ", model='" + model + '\'' +
+                ", zipcode1=" + zipcode1 +
+                ", zipcode2=" + zipcode2 +
+                ", gugun='" + gugun + '\'' +
+                ", sido='" + sido + '\'' +
+                ", sunFrtYon='" + sunFrtYon + '\'' +
+                ", sunScdYon='" + sunScdYon + '\'' +
+                ", sunThiYon='" + sunThiYon + '\'' +
+                ", sunFurYon='" + sunFurYon + '\'' +
+                ", sunFifYon='" + sunFifYon + '\'' +
+                ", monEndTme=" + monEndTme +
+                ", monSttTme=" + monSttTme +
+                ", tueEndTme=" + tueEndTme +
+                ", tueSttTme=" + tueSttTme +
+                ", wedEndTme=" + wedEndTme +
+                ", wedSttTme=" + wedSttTme +
+                ", thuEndTme=" + thuEndTme +
+                ", thuSttTme=" + thuSttTme +
+                ", friSttTme=" + friSttTme +
+                ", friEndTme=" + friEndTme +
+                ", satEndTme=" + satEndTme +
+                ", satSttTme=" + satSttTme +
+                ", sunSttTme=" + sunSttTme +
+                ", sunEndTme=" + sunEndTme +
+                '}';
+    }
+}
