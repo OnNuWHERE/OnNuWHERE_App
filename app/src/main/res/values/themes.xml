@@ -12,5 +12,11 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+    <!-- For Splash Screen -->
+    </style>
+
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">        스플래시 화면이니 위에 액션바(툴바)가 없어야겠죠?
+
+        <item name="android:windowBackground">@drawable/onnuwhere_big</item>        위에서 만든 xml 파일 이름을 써줍니다.
     </style>
 </resources>
