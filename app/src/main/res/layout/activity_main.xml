@@ -1,104 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_panel"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:foregroundGravity="fill_horizontal"
+    android:background="#ffffff"
+    android:gravity="bottom"
+    app:umanoDragView="@id/drawer"
+    app:umanoOverlay="true"
+    app:umanoPanelHeight="125dp"
+    app:umanoShadowHeight="0dp"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:id="@+id/map_view"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" />
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        android:foregroundGravity="fill_horizontal">
 
         <LinearLayout
+            android:id="@+id/map_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:background="@drawable/toolbar">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:background="@android:color/transparent"
-                    android:hint="장소 검색"
-                    android:textSize="20dp" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:background="@drawable/toolbar">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="5dp"
+                        android:background="@android:color/transparent"
+                        android:hint="장소 검색"
+                        android:textSize="20dp" />
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
             </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <RelativeLayout
+
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right">
+
+            <Button
+                android:id="@+id/test1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="125dp"
+                android:text="버튼1" />
+
+            <Button
+                android:id="@+id/test2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/test1"
+                android:text="버튼2" />
 
             <Button
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-    </androidx.appcompat.widget.Toolbar>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="right">
-
-        <Button
-            android:id="@+id/test1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:text="버튼1" />
-
-        <Button
-            android:id="@+id/test2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/test1"
-            android:text="버튼2" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/test2"
-            android:text="버튼3" />
-    </RelativeLayout>
-
-    <SlidingDrawer
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:allowSingleTap="false"
-        android:content="@+id/content"
-        android:handle="@+id/handle"
-        android:topOffset="100dp"
-        android:bottomOffset="-20dp">
-
-        <Button
-            android:id="@+id/handle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="슬라이딩 드로어"/>
-
-        <LinearLayout
-            android:id="@+id/content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="목록" />
+                android:layout_above="@+id/test2"
+                android:text="버튼3" />
+        </RelativeLayout>
 
-        </LinearLayout>
-    </SlidingDrawer>
+    </FrameLayout>
 
-</FrameLayout>
+    <LinearLayout
+        android:id="@+id/drawer"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/swipe"
+            android:layout_width="60dp"
+            android:layout_height="5dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/ic_launcher_background" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="테스트"
+            android:textSize="30dp" />
+    </LinearLayout>
+
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>
