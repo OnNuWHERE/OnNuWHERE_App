@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     ActionBar actionBar;
     Button searchBtn, btnAED, btnCivil, btnDisaster,btnCpos;
     EditText searchEdt;
+    MapPoint.GeoCoordinate mPointGeo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,17 +69,17 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         }else {
             checkRunTimePermission();
         }
-        Log.d("@@@","TrackingMode : "+mapView.getCurrentLocationTrackingMode());
+
         btnCpos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "클릭", Toast.LENGTH_SHORT).show();
-                if(mapView.getCurrentLocationTrackingMode().equals("TrackingModeOnWithHeading")){
+                Log.d("@@@","TrackingMode : "+mapView.getCurrentLocationTrackingMode());
+                if(mapView.getCurrentLocationTrackingMode()==MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading){
+                    Toast.makeText(MainActivity.this, "with", Toast.LENGTH_SHORT).show();
                     mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
-                    mapView.setCurrentLocationEventListener(MainActivity.this);
-                }else if (mapView.getCurrentLocationTrackingMode().equals("TrackingModeOnWithoutHeading")){
+                }else{
+                    Toast.makeText(MainActivity.this, "without", Toast.LENGTH_SHORT).show();
                     mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
-                    mapView.setCurrentLocationEventListener(MainActivity.this);
                 }
             }
         });
@@ -95,9 +97,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         });
 
     }
-
-
-
 //
 //    private void getHashKey() {
 //        PackageInfo packageInfo = null;
@@ -122,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     @Override
     public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
-        MapPoint.GeoCoordinate mPointGeo = mapPoint.getMapPointGeoCoord();
+       mPointGeo = mapPoint.getMapPointGeoCoord();
         Log.i("MainActivity", String.format("MapView onCurrentLocationUpdate (%f,%f) accuracy (%f)", mPointGeo.latitude, mPointGeo.longitude, v));
     }
 
