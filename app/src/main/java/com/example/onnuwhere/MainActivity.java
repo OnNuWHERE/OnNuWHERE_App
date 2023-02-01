@@ -229,28 +229,24 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     @Override
     public void onMapViewZoomLevelChanged(MapView mapView, int i) {
         Toast.makeText(this, "zoom", Toast.LENGTH_SHORT).show();
-        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
 
     }
 
     @Override
     public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
         Toast.makeText(this, "tap", Toast.LENGTH_SHORT).show();
-        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
 
     }
 
     @Override
     public void onMapViewDoubleTapped(MapView mapView, MapPoint mapPoint) {
         Toast.makeText(this, "double", Toast.LENGTH_SHORT).show();
-        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
 
     }
 
     @Override
     public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) {
         Toast.makeText(this, "long", Toast.LENGTH_SHORT).show();
-        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
     }
 
     @Override
@@ -262,12 +258,11 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     @Override
     public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
         Toast.makeText(this, "end", Toast.LENGTH_SHORT).show();
-        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
     }
 
     @Override
     public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
         Toast.makeText(this, "fin", Toast.LENGTH_SHORT).show();
-        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
+
     }
 }
