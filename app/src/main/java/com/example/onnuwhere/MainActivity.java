@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+import com.example.onnuwhere.model.Place;
 import com.example.onnuwhere.model.ResultSearchKeyword;
 
 import net.daum.mf.map.api.MapPoint;
@@ -289,18 +290,17 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         kakaoService = retrofit.create(KakaoService.class);
-        Call<List<ResultSearchKeyword>> call =
-                kakaoService.getSearchKeyword("be98ca85a3689bc0780a8f0f28b977c7", keyword);
-        call.enqueue(new Callback<List<ResultSearchKeyword>>() {
+        Call<ResultSearchKeyword> call =
+                kakaoService.getSearchKeyword("KakaoAK be98ca85a3689bc0780a8f0f28b977c7", keyword);
+        call.enqueue(new Callback<ResultSearchKeyword>() {
             @Override
-            public void onResponse(Call<List<ResultSearchKeyword>> call, Response<List<ResultSearchKeyword>> response) {
+            public void onResponse(Call<ResultSearchKeyword> call, Response<ResultSearchKeyword> response) {
                 Log.d("tag", response.toString()+"");
-                Log.d("@@@", response.body().toString());
             }
 
             @Override
-            public void onFailure(Call<List<ResultSearchKeyword>> call, Throwable t) {
-                Log.d("%%%", ""+t.toString());
+            public void onFailure(Call<ResultSearchKeyword> call, Throwable t) {
+                Log.d("FAIL",t.toString()+"");
             }
         });
     }
