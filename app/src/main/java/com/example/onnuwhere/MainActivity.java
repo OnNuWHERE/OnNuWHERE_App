@@ -25,10 +25,19 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+import com.example.onnuwhere.model.ResultSearchKeyword;
+
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
 import java.nio.file.Files;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapView.MapViewEventListener {
 
@@ -42,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     String keyword;
     RecyclerView recyclerView;
 
+    private KakaoService kakaoService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             @Override
             public void onClick(View v) {
                keyword = searchEdt.getText().toString();
-
+               searchKeyword(keyword);
             }
         });
 
@@ -273,4 +283,25 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         Toast.makeText(this, "fin", Toast.LENGTH_SHORT).show();
 
     }
+
+    public void searchKeyword(String keyword) {
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://dapi.kakao.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        kakaoService = retrofit.create(KakaoService.class);
+        Call<List<ResultSearchKeyword>> call =
+                kakaoService.getSearchKeyword("be98ca85a3689bc0780a8f0f28b977c7", keyword);
+        call.enqueue(new Callback<List<ResultSearchKeyword>>() {
+            @Override
+            public void onResponse(Call<List<ResultSearchKeyword>> call, Response<List<ResultSearchKeyword>> response) {
+                Log.d("@@@", response.body().toString());
+            }
+
+            @Override
+            public void onFailure(Call<List<ResultSearchKeyword>> call, Throwable t) {
+                Log.d("%%%", "실패");
+            }
+        });
+    }
+
 }

@@ -4,4 +4,5 @@ import java.util.List;
 
 public class ResultSearchKeyword {
     List<Place> placeList;
+
 }
