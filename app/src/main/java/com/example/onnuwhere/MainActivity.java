@@ -294,12 +294,13 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         call.enqueue(new Callback<List<ResultSearchKeyword>>() {
             @Override
             public void onResponse(Call<List<ResultSearchKeyword>> call, Response<List<ResultSearchKeyword>> response) {
+                Log.d("tag", response.toString()+"");
                 Log.d("@@@", response.body().toString());
             }
 
             @Override
             public void onFailure(Call<List<ResultSearchKeyword>> call, Throwable t) {
-                Log.d("%%%", "실패");
+                Log.d("%%%", ""+t.toString());
             }
         });
     }
