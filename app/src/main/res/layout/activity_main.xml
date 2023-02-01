@@ -65,37 +65,35 @@
             android:layout_gravity="right">
             <Button
                 android:id="@+id/btnAED"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="125dp"
-                android:background="@drawable/button"
-                android:text="버튼1" />
+                android:background="@drawable/aed_checked"/>
+
 
             <Button
                 android:id="@+id/btnCivil"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_above="@+id/btnAED"
-                android:background="@drawable/button"
-                android:text="버튼2" />
+                android:background="@drawable/minbangwi_checked" />
 
             <Button
                 android:id="@+id/btnDisaster"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_above="@+id/btnCivil"
-                android:background="@drawable/button"
-                android:text="버튼3" />
+                android:background="@drawable/earthquake_unchecked" />
         </RelativeLayout>
 
         <Button
             android:id="@+id/btnCpos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_gravity="bottom"
             android:layout_marginBottom="125dp"
-            android:text="현 위치 표시"/>
+            android:background="@drawable/location_crosshairs"/>
 
     </FrameLayout>
 
