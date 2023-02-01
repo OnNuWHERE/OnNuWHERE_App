@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -27,6 +28,8 @@ import android.widget.Toast;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
+import java.nio.file.Files;
+
 public class MainActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapView.MapViewEventListener {
 
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION};
@@ -36,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     EditText searchEdt;
     MapPoint.GeoCoordinate mPointGeo;
     MapPoint currentMapPoint;
+    String keyword;
+    RecyclerView recyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         btnCivil = (Button) findViewById(R.id.btnCivil);
         btnDisaster = (Button) findViewById(R.id.btnDisaster);
 
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
 
        final MapView mView = new MapView(MainActivity.this);
@@ -75,7 +82,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(MainActivity.this, ""+mView.getCurrentLocationTrackingMode(), Toast.LENGTH_SHORT).show();
+               keyword = searchEdt.getText().toString();
+
             }
         });
 
