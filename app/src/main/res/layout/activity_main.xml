@@ -41,6 +41,7 @@
                     android:background="@drawable/toolbar">
 
                     <EditText
+                        android:id="@+id/searchEdt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -51,6 +52,7 @@
                 </LinearLayout>
 
                 <Button
+                    android:id="@+id/searchBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button"/>
@@ -62,7 +64,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="right">
             <Button
-                android:id="@+id/test1"
+                android:id="@+id/btnAED"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -71,22 +73,24 @@
                 android:text="버튼1" />
 
             <Button
-                android:id="@+id/test2"
+                android:id="@+id/btnCivil"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/test1"
+                android:layout_above="@+id/btnAED"
                 android:background="@drawable/button"
                 android:text="버튼2" />
 
             <Button
+                android:id="@+id/btnDisaster"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/test2"
+                android:layout_above="@+id/btnCivil"
                 android:background="@drawable/button"
                 android:text="버튼3" />
         </RelativeLayout>
 
         <Button
+            android:id="@+id/btnCpos"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"

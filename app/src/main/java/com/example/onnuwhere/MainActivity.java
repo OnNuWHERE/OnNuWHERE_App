@@ -17,7 +17,10 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import net.daum.mf.map.api.MapPoint;
@@ -26,9 +29,10 @@ import net.daum.mf.map.api.MapView;
 public class MainActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapView.MapViewEventListener {
 
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION};
-
     Toolbar toolbar;
     ActionBar actionBar;
+    Button searchBtn, btnAED, btnCivil, btnDisaster,btnCpos;
+    EditText searchEdt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,17 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
 
+        btnCpos = (Button) findViewById(R.id.btnCpos);
+        searchEdt = (EditText) findViewById(R.id.searchEdt);
+        searchBtn = (Button) findViewById(R.id.searchBtn);
+
+
+        btnAED = (Button) findViewById(R.id.btnAED);
+        btnCivil = (Button) findViewById(R.id.btnCivil);
+        btnDisaster = (Button) findViewById(R.id.btnDisaster);
+
+
+
         MapView mapView = new MapView(MainActivity.this);
 
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
@@ -52,6 +67,33 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         }else {
             checkRunTimePermission();
         }
+        Log.d("@@@","TrackingMode : "+mapView.getCurrentLocationTrackingMode());
+        btnCpos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "클릭", Toast.LENGTH_SHORT).show();
+                if(mapView.getCurrentLocationTrackingMode().equals("TrackingModeOnWithHeading")){
+                    mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
+                    mapView.setCurrentLocationEventListener(MainActivity.this);
+                }else if (mapView.getCurrentLocationTrackingMode().equals("TrackingModeOnWithoutHeading")){
+                    mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
+                    mapView.setCurrentLocationEventListener(MainActivity.this);
+                }
+            }
+        });
+
+        btnCpos.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(mapView.getCurrentLocationTrackingMode().equals("TrackingModeOnWithHeading")){
+                    mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
+                }else if (mapView.getCurrentLocationTrackingMode().equals("TrackingModeOnWithoutHeading")){
+                    mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
+                }
+                return false;
+            }
+        });
+
     }
 
 
