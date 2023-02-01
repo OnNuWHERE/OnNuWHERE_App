@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     Button searchBtn, btnAED, btnCivil, btnDisaster,btnCpos;
     EditText searchEdt;
     MapPoint.GeoCoordinate mPointGeo;
+    MapPoint currentMapPoint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,40 +60,38 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
 
 
-        MapView mapView = new MapView(MainActivity.this);
+       final MapView mView = new MapView(MainActivity.this);
 
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
-        mapViewContainer.addView(mapView);
-        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
+        mapViewContainer.addView(mView);
+        mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
         if(!checkLocationServiceStatus()){
             showDialogForGpsServiceSetting();
         }else {
             checkRunTimePermission();
         }
 
-        btnCpos.setOnClickListener(new View.OnClickListener() {
+        searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("@@@","TrackingMode : "+mapView.getCurrentLocationTrackingMode());
-                if(mapView.getCurrentLocationTrackingMode()==MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading){
-                    Toast.makeText(MainActivity.this, "with", Toast.LENGTH_SHORT).show();
-                    mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
-                }else{
-                    Toast.makeText(MainActivity.this, "without", Toast.LENGTH_SHORT).show();
-                    mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
-                }
+                Toast.makeText(MainActivity.this, ""+mView.getCurrentLocationTrackingMode(), Toast.LENGTH_SHORT).show();
             }
         });
 
-        btnCpos.setOnLongClickListener(new View.OnLongClickListener() {
+        btnCpos.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
-                if(mapView.getCurrentLocationTrackingMode().equals("TrackingModeOnWithHeading")){
-                    mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
-                }else if (mapView.getCurrentLocationTrackingMode().equals("TrackingModeOnWithoutHeading")){
-                    mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
+            public void onClick(View v) {
+                Log.d("@@@","TrackingMode : "+mView.getCurrentLocationTrackingMode());
+                if(mView.getCurrentLocationTrackingMode()==MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading){
+                    Toast.makeText(MainActivity.this, "nonHeading", Toast.LENGTH_SHORT).show();
+                    mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
+                }else if (mView.getCurrentLocationTrackingMode()==MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading){
+                    Toast.makeText(MainActivity.this, "Heading", Toast.LENGTH_SHORT).show();
+                    mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
+                }else {
+                    Toast.makeText(MainActivity.this, "mHeading", Toast.LENGTH_SHORT).show();
+                    mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
                 }
-                return false;
             }
         });
 
@@ -122,7 +121,9 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     @Override
     public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
        mPointGeo = mapPoint.getMapPointGeoCoord();
-        Log.i("MainActivity", String.format("MapView onCurrentLocationUpdate (%f,%f) accuracy (%f)", mPointGeo.latitude, mPointGeo.longitude, v));
+        Log.d("@@@@", "x:"+ mPointGeo.latitude+"y:"+ mPointGeo.longitude+"f:"+ v);
+        currentMapPoint = MapPoint.mapPointWithGeoCoord(mPointGeo.latitude, mPointGeo.longitude);
+        mapView.setMapCenterPoint(currentMapPoint, true);
     }
 
     @Override
@@ -166,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         //런타임 퍼미션 처리
         //1. 위치 퍼미션을 가지고 있는지 확인
         int hasFineLocationPermission = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION);
-
         if(hasFineLocationPermission == PackageManager.PERMISSION_GRANTED){
             //이미 가지고 있다면 위치값을 가지고 올 수 있음
         }else{
@@ -227,36 +227,46 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     @Override
     public void onMapViewZoomLevelChanged(MapView mapView, int i) {
+        Toast.makeText(this, "zoom", Toast.LENGTH_SHORT).show();
+        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
 
     }
 
     @Override
     public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
+        Toast.makeText(this, "tap", Toast.LENGTH_SHORT).show();
+        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
 
     }
 
     @Override
     public void onMapViewDoubleTapped(MapView mapView, MapPoint mapPoint) {
+        Toast.makeText(this, "double", Toast.LENGTH_SHORT).show();
+        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
 
     }
 
     @Override
     public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) {
-
+        Toast.makeText(this, "long", Toast.LENGTH_SHORT).show();
+        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
     }
 
     @Override
     public void onMapViewDragStarted(MapView mapView, MapPoint mapPoint) {
-
+        Toast.makeText(this, "drag", Toast.LENGTH_SHORT).show();
+        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
     }
 
     @Override
     public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
-
+        Toast.makeText(this, "end", Toast.LENGTH_SHORT).show();
+        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
     }
 
     @Override
     public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
-
+        Toast.makeText(this, "fin", Toast.LENGTH_SHORT).show();
+        mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
     }
 }
