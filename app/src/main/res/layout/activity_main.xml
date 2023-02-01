@@ -52,7 +52,8 @@
 
                 <Button
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button"/>
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
         <RelativeLayout
@@ -66,6 +67,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="125dp"
+                android:background="@drawable/button"
                 android:text="버튼1" />
 
             <Button
@@ -73,14 +75,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/test1"
+                android:background="@drawable/button"
                 android:text="버튼2" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/test2"
+                android:background="@drawable/button"
                 android:text="버튼3" />
         </RelativeLayout>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="125dp"
+            android:text="현 위치 표시"/>
 
     </FrameLayout>
 
