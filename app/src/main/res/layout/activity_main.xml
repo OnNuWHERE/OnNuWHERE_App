@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:gravity="bottom"
-    app:umanoDragView="@id/drawer"
+    app:umanoDragView="@+id/drawer"
     app:umanoOverlay="true"
     app:umanoPanelHeight="125dp"
     app:umanoShadowHeight="0dp"
@@ -55,13 +55,11 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
-
         <RelativeLayout
-
+            android:id="@+id/RelativeBtn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="right">
-
             <Button
                 android:id="@+id/test1"
                 android:layout_width="wrap_content"
@@ -85,6 +83,9 @@
         </RelativeLayout>
 
     </FrameLayout>
+
+
+
 
     <LinearLayout
         android:id="@+id/drawer"
