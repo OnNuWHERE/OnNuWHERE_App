@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mView);
         mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
+        mView.setMapViewEventListener(this);
         if(!checkLocationServiceStatus()){
             showDialogForGpsServiceSetting();
         }else {
