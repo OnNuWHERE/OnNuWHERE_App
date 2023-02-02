@@ -287,6 +287,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
 
     public void searchKeyword(String keyword) {
+
         Retrofit retrofit = new Retrofit.Builder().baseUrl("https://dapi.kakao.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
