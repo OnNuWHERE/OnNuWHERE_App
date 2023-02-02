@@ -3,7 +3,7 @@
     <item android:drawable="@color/black" />
     <item>
         <bitmap
-            android:src="@drawable/onnuwhere_spl_sml"
+            android:src="@drawable/onnuwhere_sml"
             android:gravity="center"
             />
     </item>
