@@ -1,7 +1,12 @@
 package com.example.onnuwhere;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,6 +34,10 @@ public class Search_View extends Activity {
 
     private KakaoService kakaoService;
     LinearLayoutManager manager;
+
+    public static Context mContext;
+
+    Location location;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,19 +66,23 @@ public class Search_View extends Activity {
                 .build();
         String apiKey = "KakaoAK 091bdc2aa5e0e18b40a1fab4607866e8";
         kakaoService = retrofit.create(KakaoService.class);
+
         Call<ResultSearchKeyword> call =
                 kakaoService.getSearchKeyword(apiKey, keyword);
         call.enqueue(new Callback<ResultSearchKeyword>() {
             @Override
             public void onResponse(Call<ResultSearchKeyword> call, Response<ResultSearchKeyword> response) {
+                Log.d("success",""+response.toString());
+                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                if (ActivityCompat.checkSelfPermission(Search_View.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Search_View.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                mContext = Search_View.this;
                 manager = new LinearLayoutManager(Search_View.this,
                         RecyclerView.VERTICAL, false);
                 ResultSearchKeyword resultSearchKeyword = response.body();
                 SearchAddrAdapter adapter = new SearchAddrAdapter(resultSearchKeyword.getDocuments());
-                Intent intent = getIntent();
-                Double lat1 = intent.getDoubleExtra("lat",0);
-                Double lon1 = intent.getDoubleExtra("long",0);
-                adapter.calLocation(lat1,lon1);
                 recyclerView.setLayoutManager(manager);
                 recyclerView.setAdapter(adapter);
             }

@@ -58,7 +58,7 @@ public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.My
     @Override
     public void onBindViewHolder(@NonNull SearchAddrAdapter.MyViewHolder holder, int position) {
         place = placeList.get(position);
-        location = ((MainActivity)MainActivity.mContext).location;
+        location = ((Search_View)Search_View.mContext).location;
         holder.addrTitle.setText(place.getPlace_name());
         holder.addrCategory.setText(place.getCategory_group_name());
         holder.addrRaw.setText(place.getAddress_name());
@@ -86,6 +86,8 @@ public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.My
     public int getItemCount() {
         return placeList==null?0:placeList.size();
     }
+
+
 
 
     public double calLocation(double gpsLat, double gpsLong){
