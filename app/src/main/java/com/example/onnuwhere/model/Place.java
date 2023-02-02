@@ -5,6 +5,16 @@ public class Place {
     String address_name;
     String road_address_name;
     String x;
+    String y;
+    String category_group_name;
+
+    public String getCategory_group_name() {
+        return category_group_name;
+    }
+
+    public void setCategory_group_name(String category_group_name) {
+        this.category_group_name = category_group_name;
+    }
 
     public String getPlace_name() {
         return place_name;
@@ -46,5 +56,5 @@ public class Place {
         this.y = y;
     }
 
-    String y;
+
 }

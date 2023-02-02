@@ -8,16 +8,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -25,7 +29,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
-import com.example.onnuwhere.model.Place;
 import com.example.onnuwhere.model.ResultSearchKeyword;
 
 import net.daum.mf.map.api.MapPoint;
@@ -42,10 +45,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapView.MapViewEventListener {
 
-    String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION};
+
+    public static Context mContext;
+    Location location;
+
+
+    String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION};
     Toolbar toolbar;
     ActionBar actionBar;
-    Button searchBtn, btnAED, btnCivil, btnDisaster,btnCpos;
+    Button searchBtn, btnAED, btnCivil, btnDisaster, btnCpos;
     EditText searchEdt;
     MapPoint.GeoCoordinate mPointGeo;
     MapPoint currentMapPoint;
@@ -53,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     RecyclerView recyclerView;
 
     private KakaoService kakaoService;
+    LinearLayoutManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,37 +87,37 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
 
-       final MapView mView = new MapView(MainActivity.this);
+        final MapView mView = new MapView(MainActivity.this);
 
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mView);
         mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
         mView.setMapViewEventListener(this);
-        if(!checkLocationServiceStatus()){
+        if (!checkLocationServiceStatus()) {
             showDialogForGpsServiceSetting();
-        }else {
+        } else {
             checkRunTimePermission();
         }
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               keyword = searchEdt.getText().toString();
-               searchKeyword(keyword);
+                keyword = searchEdt.getText().toString();
+                searchKeyword(keyword);
             }
         });
 
         btnCpos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("@@@","TrackingMode : "+mView.getCurrentLocationTrackingMode());
-                if(mView.getCurrentLocationTrackingMode()==MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading){
+                Log.d("@@@", "TrackingMode : " + mView.getCurrentLocationTrackingMode());
+                if (mView.getCurrentLocationTrackingMode() == MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading) {
                     Toast.makeText(MainActivity.this, "nonHeading", Toast.LENGTH_SHORT).show();
                     mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
-                }else if (mView.getCurrentLocationTrackingMode()==MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading){
+                } else if (mView.getCurrentLocationTrackingMode() == MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading) {
                     Toast.makeText(MainActivity.this, "Heading", Toast.LENGTH_SHORT).show();
                     mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
-                }else {
+                } else {
                     Toast.makeText(MainActivity.this, "mHeading", Toast.LENGTH_SHORT).show();
                     mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
                 }
@@ -140,8 +149,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     @Override
     public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
-       mPointGeo = mapPoint.getMapPointGeoCoord();
-        Log.d("@@@@", "x:"+ mPointGeo.latitude+"y:"+ mPointGeo.longitude+"f:"+ v);
+        mPointGeo = mapPoint.getMapPointGeoCoord();
+        Log.d("@@@@", "x:" + mPointGeo.latitude + "y:" + mPointGeo.longitude + "f:" + v);
         currentMapPoint = MapPoint.mapPointWithGeoCoord(mPointGeo.latitude, mPointGeo.longitude);
         mapView.setMapCenterPoint(currentMapPoint, true);
     }
@@ -164,38 +173,38 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode==100 && grantResults.length==REQUIRED_PERMISSIONS.length){
+        if (requestCode == 100 && grantResults.length == REQUIRED_PERMISSIONS.length) {
             boolean check_result = true;
 
-            for (int result : grantResults){
-                if(result != PackageManager.PERMISSION_GRANTED){
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
                     check_result = false;
                 }
             }
-            if(check_result){
+            if (check_result) {
                 Log.d("@@@", "start");
-            }else if (ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0])){
+            } else if (ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0])) {
                 Toast.makeText(this, "Reject Permission", Toast.LENGTH_SHORT).show();
                 finish();
-            }else {
+            } else {
                 Toast.makeText(this, "reject Permission", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    void checkRunTimePermission(){
+    void checkRunTimePermission() {
         //런타임 퍼미션 처리
         //1. 위치 퍼미션을 가지고 있는지 확인
         int hasFineLocationPermission = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION);
-        if(hasFineLocationPermission == PackageManager.PERMISSION_GRANTED){
+        if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED) {
             //이미 가지고 있다면 위치값을 가지고 올 수 있음
-        }else{
+        } else {
             //퍼미션 허용 x 시 요청이 필요함
             ActivityCompat.requestPermissions(MainActivity.this, REQUIRED_PERMISSIONS, 100);
         }
     }
 
-    private void  showDialogForGpsServiceSetting(){
+    private void showDialogForGpsServiceSetting() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("위치 서비스 비활성화");
         builder.setMessage("앱을 사용하기 위해서는 위치 서비스가 필요합니다.\n" + "위치 설정을 수정하시겠습니까?");
@@ -220,20 +229,21 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode){
-            case 2001: if(checkLocationServiceStatus()){
-                Log.d("@@@","활성화");
-                checkRunTimePermission();
-                return;
-            }
-            break;
+        switch (requestCode) {
+            case 2001:
+                if (checkLocationServiceStatus()) {
+                    Log.d("@@@", "활성화");
+                    checkRunTimePermission();
+                    return;
+                }
+                break;
         }
     }
 
-    public boolean checkLocationServiceStatus(){
-       LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-       return  locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-   }
+    public boolean checkLocationServiceStatus() {
+        LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
 
     @Override
     public void onMapViewInitialized(MapView mapView) {
@@ -291,18 +301,36 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         Retrofit retrofit = new Retrofit.Builder().baseUrl("https://dapi.kakao.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
+        String apiKey = "KakaoAK 091bdc2aa5e0e18b40a1fab4607866e8";
         kakaoService = retrofit.create(KakaoService.class);
         Call<ResultSearchKeyword> call =
-                kakaoService.getSearchKeyword("KakaoAK be98ca85a3689bc0780a8f0f28b977c7", keyword);
+                kakaoService.getSearchKeyword(apiKey, keyword);
         call.enqueue(new Callback<ResultSearchKeyword>() {
             @Override
             public void onResponse(Call<ResultSearchKeyword> call, Response<ResultSearchKeyword> response) {
-                Log.d("tag", response.toString()+"");
+                Log.d("tag", response.toString() + "");
+                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                View addrDialog = LayoutInflater.from(getApplicationContext()).inflate(R.layout.addrlist_dialog,null);
+                RecyclerView dailogRecyclerView = (RecyclerView) addrDialog.findViewById(R.id.dialogRecyclerView);
+                manager = new LinearLayoutManager(MainActivity.this, RecyclerView.VERTICAL,false);
+                ResultSearchKeyword resultSearchKeyword = response.body();
+                SearchAddrAdapter adapter =new SearchAddrAdapter(resultSearchKeyword.getDocuments());
+                mContext = MainActivity.this;
+                dailogRecyclerView.setLayoutManager(manager);
+                dailogRecyclerView.setAdapter(adapter);
+                AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
+                dlg.setTitle("주소 검색 결과");
+                dlg.setView(addrDialog);
+                dlg.show();
             }
 
             @Override
             public void onFailure(Call<ResultSearchKeyword> call, Throwable t) {
-                Log.d("FAIL",t.toString()+"");
+                Log.d("%%%", ""+t.toString());
             }
         });
     }
