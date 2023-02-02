@@ -100,6 +100,11 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 Intent searchIntent = new Intent(MainActivity.this, Search_View.class);
                 searchIntent.putExtra("lat", location.getLatitude());
                 searchIntent.putExtra("long",location.getLongitude());
