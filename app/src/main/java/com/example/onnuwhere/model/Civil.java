@@ -28,7 +28,11 @@ public class Civil {
     public double epsg2097X;
     public double epsg2097Y;
 
-    public Civil(long cNum, long validDate, long updateDate, long updateTime, long zipcode, String bloAddr, String stAddr, String buildAddr, String buildPlace, long orgCd, String orgType, String org, String serialCd, double updateUoI, double epsg2097X, double epsg2097Y) {
+    public double X;
+    public double Y;
+
+
+    public Civil(long cNum, long validDate, long updateDate, long updateTime, long zipcode, String bloAddr, String stAddr, String buildAddr, String buildPlace, long orgCd, String orgType, String org, String serialCd, double updateUoI, double epsg2097X, double epsg2097Y, double x, double y) {
         this.cNum = cNum;
         this.validDate = validDate;
         this.updateDate = updateDate;
@@ -45,6 +49,8 @@ public class Civil {
         this.updateUoI = updateUoI;
         this.epsg2097X = epsg2097X;
         this.epsg2097Y = epsg2097Y;
+        X = x;
+        Y = y;
     }
 
     public long getcNum() {
@@ -175,6 +181,22 @@ public class Civil {
         this.epsg2097Y = epsg2097Y;
     }
 
+    public double getX() {
+        return X;
+    }
+
+    public void setX(double x) {
+        X = x;
+    }
+
+    public double getY() {
+        return Y;
+    }
+
+    public void setY(double y) {
+        Y = y;
+    }
+
     @Override
     public String toString() {
         return "Civil{" +
@@ -194,6 +216,8 @@ public class Civil {
                 ", updateUoI=" + updateUoI +
                 ", epsg2097X=" + epsg2097X +
                 ", epsg2097Y=" + epsg2097Y +
+                ", X=" + X +
+                ", Y=" + Y +
                 '}';
     }
 }
