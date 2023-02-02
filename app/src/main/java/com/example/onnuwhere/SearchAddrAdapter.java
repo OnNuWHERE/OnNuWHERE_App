@@ -52,7 +52,6 @@ public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.My
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.addr_list, parent, false);
 
         MyViewHolder viewHolder = new MyViewHolder(view);
-
         return viewHolder;
     }
 
@@ -63,7 +62,7 @@ public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.My
         holder.addrTitle.setText(place.getPlace_name());
         holder.addrCategory.setText(place.getCategory_group_name());
         holder.addrRaw.setText(place.getAddress_name());
-        if(calLocation(location.getLatitude(),location.getLongitude())>10){
+        if(calLocation(location.getLatitude(),location.getLongitude())>=1){
         holder.addrDistance.setText(
             String.valueOf(
                     calLocation(location.getLatitude(),location.getLongitude())+"km"));
@@ -112,6 +111,4 @@ public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.My
             return (Math.round(Math.abs(dist)));
         }
     }
-
-
 }

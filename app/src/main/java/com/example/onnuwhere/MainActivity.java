@@ -1,5 +1,6 @@
 package com.example.onnuwhere;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -54,10 +55,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     Toolbar toolbar;
     ActionBar actionBar;
     Button searchBtn, btnAED, btnCivil, btnDisaster, btnCpos;
-    EditText searchEdt;
     MapPoint.GeoCoordinate mPointGeo;
     MapPoint currentMapPoint;
-    String keyword;
     RecyclerView recyclerView;
 
     private KakaoService kakaoService;
@@ -76,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         actionBar.setDisplayShowTitleEnabled(false);
 
         btnCpos = (Button) findViewById(R.id.btnCpos);
-        searchEdt = (EditText) findViewById(R.id.searchEdt);
         searchBtn = (Button) findViewById(R.id.searchBtn);
 
 
@@ -102,8 +100,10 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                keyword = searchEdt.getText().toString();
-                searchKeyword(keyword);
+                Intent searchIntent = new Intent(MainActivity.this, Search_View.class);
+                searchIntent.putExtra("lat", location.getLatitude());
+                searchIntent.putExtra("long",location.getLongitude());
+                startActivityForResult(searchIntent,1);
             }
         });
 
@@ -296,43 +296,43 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     }
 
 
-    public void searchKeyword(String keyword) {
-
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://dapi.kakao.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        String apiKey = "KakaoAK 091bdc2aa5e0e18b40a1fab4607866e8";
-        kakaoService = retrofit.create(KakaoService.class);
-        Call<ResultSearchKeyword> call =
-                kakaoService.getSearchKeyword(apiKey, keyword);
-        call.enqueue(new Callback<ResultSearchKeyword>() {
-            @Override
-            public void onResponse(Call<ResultSearchKeyword> call, Response<ResultSearchKeyword> response) {
-                Log.d("tag", response.toString() + "");
-                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                View addrDialog = LayoutInflater.from(getApplicationContext()).inflate(R.layout.addrlist_dialog,null);
-                RecyclerView dailogRecyclerView = (RecyclerView) addrDialog.findViewById(R.id.dialogRecyclerView);
-                manager = new LinearLayoutManager(MainActivity.this, RecyclerView.VERTICAL,false);
-                ResultSearchKeyword resultSearchKeyword = response.body();
-                SearchAddrAdapter adapter =new SearchAddrAdapter(resultSearchKeyword.getDocuments());
-                mContext = MainActivity.this;
-                dailogRecyclerView.setLayoutManager(manager);
-                dailogRecyclerView.setAdapter(adapter);
-                AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
-                dlg.setTitle("주소 검색 결과");
-                dlg.setView(addrDialog);
-                dlg.show();
-            }
-
-            @Override
-            public void onFailure(Call<ResultSearchKeyword> call, Throwable t) {
-                Log.d("%%%", ""+t.toString());
-            }
-        });
-    }
+//    public void searchKeyword(String keyword) {
+//
+//        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://dapi.kakao.com/")
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+//        String apiKey = "KakaoAK 091bdc2aa5e0e18b40a1fab4607866e8";
+//        kakaoService = retrofit.create(KakaoService.class);
+//        Call<ResultSearchKeyword> call =
+//                kakaoService.getSearchKeyword(apiKey, keyword);
+//        call.enqueue(new Callback<ResultSearchKeyword>() {
+//            @Override
+//            public void onResponse(Call<ResultSearchKeyword> call, Response<ResultSearchKeyword> response) {
+//                Log.d("tag", response.toString() + "");
+//                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                    return;
+//                }
+//                location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//                View addrDialog = LayoutInflater.from(getApplicationContext()).inflate(R.layout.addrlist_dialog,null);
+//                RecyclerView dailogRecyclerView = (RecyclerView) addrDialog.findViewById(R.id.dialogRecyclerView);
+//                manager = new LinearLayoutManager(MainActivity.this, RecyclerView.VERTICAL,false);
+//                ResultSearchKeyword resultSearchKeyword = response.body();
+//                SearchAddrAdapter adapter =new SearchAddrAdapter(resultSearchKeyword.getDocuments());
+//                mContext = MainActivity.this;
+//                dailogRecyclerView.setLayoutManager(manager);
+//                dailogRecyclerView.setAdapter(adapter);
+//                AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
+//                dlg.setTitle("주소 검색 결과");
+//                dlg.setView(addrDialog);
+//                dlg.show();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResultSearchKeyword> call, Throwable t) {
+//                Log.d("%%%", ""+t.toString());
+//            }
+//        });
+//    }
 
 }

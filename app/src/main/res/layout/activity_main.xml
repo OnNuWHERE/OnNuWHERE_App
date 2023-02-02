@@ -30,33 +30,28 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content">-->
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    android:background="@drawable/toolbar">
+<!--                <LinearLayout-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:background="@drawable/toolbar">-->
 
-                    <EditText
-                        android:id="@+id/searchEdt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="5dp"
-                        android:background="@android:color/transparent"
-                        android:hint="장소 검색"
-                        android:textSize="20dp" />
-                </LinearLayout>
-
-                <Button
-                    android:id="@+id/searchBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/button"/>
-            </LinearLayout>
+<Button
+    android:id="@+id/searchBtn"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:background="#ffffff"
+    android:text="부산진구 부전2동"
+    android:textColor="#bbbbbb"
+    android:gravity="center_vertical"
+    />
+<!--                </LinearLayout>-->
+<!--            </LinearLayout>-->
         </androidx.appcompat.widget.Toolbar>
         <RelativeLayout
             android:id="@+id/RelativeBtn"
