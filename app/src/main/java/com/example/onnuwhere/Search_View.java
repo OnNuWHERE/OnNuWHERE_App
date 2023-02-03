@@ -50,6 +50,14 @@ public class Search_View extends Activity {
         searchEdt = (EditText) findViewById(R.id.searchEdt);
         recyclerView = (RecyclerView) findViewById(R.id.ResultRecyclerView);
 
+        btnReturn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
