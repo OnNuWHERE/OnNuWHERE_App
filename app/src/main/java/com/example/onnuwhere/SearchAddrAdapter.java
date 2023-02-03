@@ -32,7 +32,7 @@ public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.My
     private Location location;
 
     private Context context;
-    
+
     public SearchAddrAdapter(List<Place> placeList) {
         this.placeList = placeList;
     }
@@ -86,6 +86,7 @@ public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.My
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), "lol", Toast.LENGTH_SHORT).show();
