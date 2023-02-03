@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -77,7 +78,14 @@ public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.My
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Place p = new Place();
+                p.setId(place.getId());
 
+                Toast.makeText(v.getContext(), "lol", Toast.LENGTH_SHORT).show();
+                Log.d("x좌표",place.getX());
+                Log.d("y좌표",place.getY());
+                Log.d("장소이름", place.getPlace_name());
+                Log.d("장소id", place.getId());
             }
         });
     }

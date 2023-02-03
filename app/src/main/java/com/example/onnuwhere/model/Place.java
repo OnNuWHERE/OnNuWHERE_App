@@ -1,12 +1,22 @@
 package com.example.onnuwhere.model;
 
 public class Place {
+
+    String id;
     String place_name;
     String address_name;
     String road_address_name;
     String x;
     String y;
     String category_group_name;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getCategory_group_name() {
         return category_group_name;
