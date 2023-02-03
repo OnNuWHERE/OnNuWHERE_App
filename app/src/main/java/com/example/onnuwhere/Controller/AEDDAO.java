@@ -17,6 +17,7 @@ public class AEDDAO {
         fbDataAED = db.getReference("AED");
     }
 
+    //MainActivity.java 에서 Query.addValueEventListener(new ValueEventListener() > Override
     public Query findAll(DataSnapshot snapshot) {
         AEDList.clear();
         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {

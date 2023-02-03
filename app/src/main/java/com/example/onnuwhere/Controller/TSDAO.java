@@ -17,6 +17,7 @@ public class TSDAO {
         fbDataTS = db.getReference("TsunamiShelter");
     }
 
+    //MainActivity.java 에서 Query.addValueEventListener(new ValueEventListener() > Override
     public Query findAll(DataSnapshot snapshot) {
         List.clear();
         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {

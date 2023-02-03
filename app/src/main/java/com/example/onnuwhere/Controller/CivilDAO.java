@@ -17,6 +17,7 @@ public class CivilDAO {
         fbDataCivil = db.getReference("Civil");
     }
 
+    //MainActivity.java 에서 Query.addValueEventListener(new ValueEventListener() > Override
     public Query findAll(DataSnapshot snapshot) {
         CivilList.clear();
         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
