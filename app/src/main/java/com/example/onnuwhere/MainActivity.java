@@ -280,6 +280,15 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 }else{
                     Toast.makeText(MainActivity.this, "에러"+resultCode, Toast.LENGTH_SHORT).show();
                 }
+
+
+
+
+
+
+
+
+
             }
 
         }
