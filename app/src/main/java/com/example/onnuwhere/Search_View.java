@@ -73,7 +73,7 @@ public class Search_View extends Activity {
         if (ActivityCompat.checkSelfPermission(Search_View.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Search_View.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        location = (Location) lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         Retrofit retrofit = new Retrofit.Builder().baseUrl("https://dapi.kakao.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
