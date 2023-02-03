@@ -9,21 +9,14 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 
 public class TSDAO {
-    ArrayList<TsunamiShelter> List = new ArrayList<TsunamiShelter>();
     private DatabaseReference fbDataTS;
 
-    TSDAO() {
+    public TSDAO() {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         fbDataTS = db.getReference("TsunamiShelter");
     }
 
-    //MainActivity.java 에서 Query.addValueEventListener(new ValueEventListener() > Override
     public Query findAll(DataSnapshot snapshot) {
-        List.clear();
-        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-             TsunamiShelter TSData = dataSnapshot.getValue(TsunamiShelter.class);
-            List.add(TSData);
-        }
         return fbDataTS;
     }
 }

@@ -9,21 +9,15 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 
 public class EOSDAO {
-    ArrayList<EarthquakeOutdoorsShelter> List = new ArrayList<EarthquakeOutdoorsShelter>();
     private DatabaseReference fbDataEOS;
 
-    EOSDAO() {
+    public EOSDAO() {
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         fbDataEOS = db.getReference("EarthquakeOutdoorsShelter");
     }
 
     //MainActivity.java 에서 Query.addValueEventListener(new ValueEventListener() > Override
     public Query findAll(DataSnapshot snapshot) {
-        List.clear();
-        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-             EarthquakeOutdoorsShelter EOSData = dataSnapshot.getValue(EarthquakeOutdoorsShelter.class);
-            List.add(EOSData);
-        }
         return fbDataEOS;
     }
 }
