@@ -30,15 +30,22 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+import com.example.onnuwhere.Controller.AEDDAO;
+import com.example.onnuwhere.model.AED;
 import com.example.onnuwhere.model.ResultSearchKeyword;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -250,16 +257,17 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     Log.d("@@@", "활성화");
                     checkRunTimePermission();
                     return;
-                }break;
+                }
+                break;
 
-            case 1:{
-                if(resultCode==RESULT_OK){
+            case 1: {
+                if (resultCode == RESULT_OK) {
                     Toast.makeText(MainActivity.this, "@@@ " + resultCode, Toast.LENGTH_SHORT).show();
 
                     Intent markerIntent = data;
-                    Log.d("2@@@", markerIntent+"");
+                    Log.d("2@@@", markerIntent + "");
 
-                    double sLat =  Double.parseDouble(markerIntent.getStringExtra("y"));
+                    double sLat = Double.parseDouble(markerIntent.getStringExtra("y"));
                     double sLong = Double.parseDouble(markerIntent.getStringExtra("x"));
 
                     //마커 표시
@@ -271,22 +279,50 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     mView.addPOIItem(marker);
 
                     //중심점 변경
-                    mView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(sLat,sLong), true);
+                    mView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(sLat, sLong), true);
                     //TrackingModeOff
                     mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
                     //firebase 연결 후 주변 300m 만 마커 표시 그 외에는 마커에서 제외
                     //마커 사용시 커스텀 마커 사용
-                    Toast.makeText(MainActivity.this, "에러"+resultCode, Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(MainActivity.this, "에러"+resultCode, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
+
+                    AEDDAO adao = new AEDDAO();
+                    ArrayList<AED> AEDList = new ArrayList<>();
+
+                    adao.findAll().addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            AEDList.clear();
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                AED AEDData = dataSnapshot.getValue(AED.class);
+                                AEDList.add(AEDData);
+                                for (int i = 0; i < AEDList.size(); i++) {
+                                    double lat = AEDList.get(i).getWgs84Lat();
+                                    double lon = AEDList.get(i).getWgs84Lon();
+                                    double calDis = distance(lat,lon,sLat,sLong,"K");
+                                    if(calDis*1000<=500){
+                                        MapPOIItem mapPOIItem = new MapPOIItem();
+                                        mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat,lon));
+                                        mapPOIItem.setCustomImageResourceId(R.drawable.aed_location);
+                                        mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+                                        mapPOIItem.isCustomImageAutoscale();
+                                        mView.addPOIItem(mapPOIItem);
+                                    }
+                                }
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+
+                } else {
+                    Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
                 }
-
-
-
-
-
-
-
 
 
             }
@@ -345,6 +381,24 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     @Override
     public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
 
+    }
+
+    private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
+        if ((lat1 == lat2) && (lon1 == lon2)) {
+            return 0;
+        } else {
+            double theta = lon1 - lon2;
+            double dist = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2)) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.cos(Math.toRadians(theta));
+            dist = Math.acos(dist);
+            dist = Math.toDegrees(dist);
+            dist = dist * 60 * 1.1515;
+            if (unit.equals("K")) {
+                dist = dist * 1.609344;
+            } else if (unit.equals("N")) {
+                dist = dist * 0.8684;
+            }
+            return (Math.round(Math.abs(dist)));
+        }
     }
 
 }
