@@ -11,15 +11,33 @@
         android:layout_margin="5dp"
         android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:padding="5dp"
-            android:src="@mipmap/ic_launcher" />
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:padding="5dp"
+                android:src="@drawable/pin" />
+            <TextView
+                android:id="@+id/addrDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:text="TextView"
+                android:layout_marginRight="5dp"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -35,17 +53,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="10"
                     android:text="TextView"
+                    android:ems="9"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textSize="25sp" />
 
-                <TextView
-                    android:id="@+id/addrCategory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:text="TextView"
-                    android:layout_marginRight="5dp"
-                    android:textSize="15sp" />
+
 
             </LinearLayout>
 
@@ -63,11 +76,11 @@
                     android:text="TextView"
                     android:textSize="15sp" />
 
+
                 <TextView
-                    android:id="@+id/addrDistance"
+                    android:id="@+id/addrCategory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:gravity="right"
                     android:text="TextView"
                     android:layout_marginRight="5dp"

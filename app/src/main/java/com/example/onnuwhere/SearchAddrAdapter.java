@@ -86,7 +86,14 @@ public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.My
         holder.addrTitle.setText(place.getPlace_name());
         holder.addrCategory.setText(place.getCategory_group_name());
         holder.addrRaw.setText(place.getAddress_name());
-        holder.addrDistance.setText(place.getDistance());
+        double distance = Integer.parseInt(place.getDistance());
+        if(distance>1000) {
+            holder.addrDistance.setText(Math.round(distance*0.001)+"km");
+        } else {
+            holder.addrDistance.setText(Math.round(distance)+"m");
+        }
+
+
 
 //        if(calLocation(location.getLatitude(),location.getLongitude())>=1){
 //        holder.addrDistance.setText(
