@@ -119,7 +119,11 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                                 PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
-                location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (lm.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
+                    location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                } else {
+                    location = (Location) lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                }
                 Intent searchIntent = new Intent(MainActivity.this, Search_View.class);
                 startActivityForResult(searchIntent, 1);
 
