@@ -114,8 +114,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 }
                 location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 Intent searchIntent = new Intent(MainActivity.this, Search_View.class);
-                searchIntent.putExtra("lat", location.getLatitude());
-                searchIntent.putExtra("long", location.getLongitude());
                 startActivityForResult(searchIntent, 1);
 
             }
