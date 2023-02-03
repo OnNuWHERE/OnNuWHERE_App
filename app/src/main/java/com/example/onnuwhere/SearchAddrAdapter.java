@@ -1,6 +1,8 @@
 package com.example.onnuwhere;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -29,8 +31,16 @@ public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.My
     private Place place;
     private Location location;
 
+    private Context context;
+    
     public SearchAddrAdapter(List<Place> placeList) {
         this.placeList = placeList;
+    }
+
+    public SearchAddrAdapter(List<Place> placeList, Context context) {
+
+        this.placeList = placeList;
+        this.context = context;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -78,10 +88,12 @@ public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.My
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Place p = new Place();
-                p.setId(place.getId());
-
                 Toast.makeText(v.getContext(), "lol", Toast.LENGTH_SHORT).show();
+                Intent intent_marker = new Intent();
+                intent_marker.putExtra("x", place.getX());
+                intent_marker.putExtra("y", place.getY());
+                intent_marker.putExtra("placeName", place.getPlace_name());
+                intent_marker.putExtra("ID", place.getId());
                 Log.d("x좌표",place.getX());
                 Log.d("y좌표",place.getY());
                 Log.d("장소이름", place.getPlace_name());
