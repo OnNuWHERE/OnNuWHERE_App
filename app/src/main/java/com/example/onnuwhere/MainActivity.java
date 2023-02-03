@@ -31,6 +31,8 @@ import android.widget.Toast;
 
 
 import com.example.onnuwhere.model.ResultSearchKeyword;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
@@ -63,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     private KakaoService kakaoService;
     LinearLayoutManager manager;
     MapView mView;
+
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private final DatabaseReference databaseReference = database.getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +106,10 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             @Override
             public void onClick(View v) {
                 LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                                PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
                 location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -327,43 +335,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     }
 
 
-//    public void searchKeyword(String keyword) {
-//
-//        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://dapi.kakao.com/")
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//        String apiKey = "KakaoAK 091bdc2aa5e0e18b40a1fab4607866e8";
-//        kakaoService = retrofit.create(KakaoService.class);
-//        Call<ResultSearchKeyword> call =
-//                kakaoService.getSearchKeyword(apiKey, keyword);
-//        call.enqueue(new Callback<ResultSearchKeyword>() {
-//            @Override
-//            public void onResponse(Call<ResultSearchKeyword> call, Response<ResultSearchKeyword> response) {
-//                Log.d("tag", response.toString() + "");
-//                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                    return;
-//                }
-//                location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-//                View addrDialog = LayoutInflater.from(getApplicationContext()).inflate(R.layout.addrlist_dialog,null);
-//                RecyclerView dailogRecyclerView = (RecyclerView) addrDialog.findViewById(R.id.dialogRecyclerView);
-//                manager = new LinearLayoutManager(MainActivity.this, RecyclerView.VERTICAL,false);
-//                ResultSearchKeyword resultSearchKeyword = response.body();
-//                SearchAddrAdapter adapter =new SearchAddrAdapter(resultSearchKeyword.getDocuments());
-//                mContext = MainActivity.this;
-//                dailogRecyclerView.setLayoutManager(manager);
-//                dailogRecyclerView.setAdapter(adapter);
-//                AlertDialog.Builder dlg = new AlertDialog.Builder(MainActivity.this);
-//                dlg.setTitle("주소 검색 결과");
-//                dlg.setView(addrDialog);
-//                dlg.show();
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ResultSearchKeyword> call, Throwable t) {
-//                Log.d("%%%", ""+t.toString());
-//            }
-//        });
-//    }
+
 
 }
