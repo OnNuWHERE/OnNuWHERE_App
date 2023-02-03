@@ -9,6 +9,15 @@ public class Place {
     String x;
     String y;
     String category_group_name;
+    String distance;
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public void setDistance(String distance) {
+        this.distance = distance;
+    }
 
     public String getId() {
         return id;

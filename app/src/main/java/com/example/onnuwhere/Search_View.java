@@ -61,7 +61,11 @@ public class Search_View extends Activity {
     }
 
     public void searchKeyword(String keyword) {
-
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(Search_View.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Search_View.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         Retrofit retrofit = new Retrofit.Builder().baseUrl("https://dapi.kakao.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -69,16 +73,12 @@ public class Search_View extends Activity {
         kakaoService = retrofit.create(KakaoService.class);
 
         Call<ResultSearchKeyword> call =
-                kakaoService.getSearchKeyword(apiKey, keyword);
+                kakaoService.getSearchKeyword(apiKey, keyword,String.valueOf(location.getLatitude()),String.valueOf(location.getLongitude()),1,,"distance");
         call.enqueue(new Callback<ResultSearchKeyword>() {
             @Override
             public void onResponse(Call<ResultSearchKeyword> call, Response<ResultSearchKeyword> response) {
                 Log.d("success",""+response.toString());
-                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                if (ActivityCompat.checkSelfPermission(Search_View.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Search_View.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
                 mContext = Search_View.this;
                 manager = new LinearLayoutManager(Search_View.this,
                         RecyclerView.VERTICAL, false);
