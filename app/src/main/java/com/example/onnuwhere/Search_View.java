@@ -73,11 +73,11 @@ public class Search_View extends Activity {
         kakaoService = retrofit.create(KakaoService.class);
 
         Call<ResultSearchKeyword> call =
-                kakaoService.getSearchKeyword(apiKey, keyword,String.valueOf(location.getLatitude()),String.valueOf(location.getLongitude()),15);
+                kakaoService.getSearchKeyword(apiKey, keyword, String.valueOf(location.getLatitude()), String.valueOf(location.getLongitude()), 15);
         call.enqueue(new Callback<ResultSearchKeyword>() {
             @Override
             public void onResponse(Call<ResultSearchKeyword> call, Response<ResultSearchKeyword> response) {
-                Log.d("success",""+response.toString());
+                Log.d("success", "" + response.toString());
 
                 mContext = Search_View.this;
                 manager = new LinearLayoutManager(Search_View.this,
@@ -105,7 +105,7 @@ public class Search_View extends Activity {
 
             @Override
             public void onFailure(Call<ResultSearchKeyword> call, Throwable t) {
-                Log.d("%%%", ""+t.toString());
+                Log.d("%%%", "" + t.toString());
             }
         });
     }

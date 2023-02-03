@@ -47,22 +47,22 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapView.MapViewEventListener {
 
-
     public static Context mContext;
     Location location;
-
-
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION};
+
     Toolbar toolbar;
     ActionBar actionBar;
     Button searchBtn, btnAED, btnCivil, btnDisaster, btnCpos;
+
     MapPoint.GeoCoordinate mPointGeo;
     MapPoint currentMapPoint;
+    MapView mView;
+
     RecyclerView recyclerView;
 
     private KakaoService kakaoService;
     LinearLayoutManager manager;
-    MapView mView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
@@ -79,18 +80,18 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         btnCpos = (Button) findViewById(R.id.btnCpos);
         searchBtn = (Button) findViewById(R.id.searchBtn);
 
-
         btnAED = (Button) findViewById(R.id.btnAED);
         btnCivil = (Button) findViewById(R.id.btnCivil);
         btnDisaster = (Button) findViewById(R.id.btnDisaster);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        mView = new MapView(MainActivity.this);
 
+        mView = new MapView(MainActivity.this);
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mView);
         mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
         mView.setMapViewEventListener(this);
+
         if (!checkLocationServiceStatus()) {
             showDialogForGpsServiceSetting();
         } else {
@@ -101,11 +102,15 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             @Override
             public void onClick(View v) {
                 LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
                 if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
+
                 location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
                 Intent searchIntent = new Intent(MainActivity.this, Search_View.class);
+
                 searchIntent.putExtra("lat", location.getLatitude());
                 searchIntent.putExtra("long", location.getLongitude());
                 startActivityForResult(searchIntent, 1);
@@ -117,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             @Override
             public void onClick(View v) {
                 Log.d("@@@", "TrackingMode : " + mView.getCurrentLocationTrackingMode());
+
                 if (mView.getCurrentLocationTrackingMode() == MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading) {
                     Toast.makeText(MainActivity.this, "nonHeading", Toast.LENGTH_SHORT).show();
                     mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
@@ -126,10 +132,10 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 } else {
                     Toast.makeText(MainActivity.this, "mHeading", Toast.LENGTH_SHORT).show();
                     mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
+
                 }
             }
         });
-
     }
 //
 //    private void getHashKey() {
@@ -156,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     @Override
     public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
         mPointGeo = mapPoint.getMapPointGeoCoord();
+
         Log.d("@@@@", "x:" + mPointGeo.latitude + "y:" + mPointGeo.longitude + "f:" + v);
         currentMapPoint = MapPoint.mapPointWithGeoCoord(mPointGeo.latitude, mPointGeo.longitude);
         mapView.setMapCenterPoint(currentMapPoint, true);
@@ -179,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         if (requestCode == 100 && grantResults.length == REQUIRED_PERMISSIONS.length) {
             boolean check_result = true;
 
@@ -241,14 +249,15 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     Log.d("@@@", "활성화");
                     checkRunTimePermission();
                     return;
-                }break;
+                }
+                break;
 
-            case 1:{
-                if(resultCode==RESULT_OK){
+            case 1: {
+                if (resultCode == RESULT_OK) {
                     Toast.makeText(MainActivity.this, "@@@ " + resultCode, Toast.LENGTH_SHORT).show();
                     Intent markerIntent = data;
-                    Log.d("2@@@", markerIntent+"");
-                    double sLat =  Double.parseDouble(markerIntent.getStringExtra("y"));
+                    Log.d("2@@@", markerIntent + "");
+                    double sLat = Double.parseDouble(markerIntent.getStringExtra("y"));
                     double sLong = Double.parseDouble(markerIntent.getStringExtra("x"));
                     //마커 표시
                     MapPOIItem marker = new MapPOIItem();
@@ -259,14 +268,14 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     mView.addPOIItem(marker);
 
                     //중심점 변경
-                    mView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(sLat,sLong), true);
+                    mView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(sLat, sLong), true);
                     //TrackingModeOff
                     mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
                     //firebase 연결 후 주변 300m 만 마커 표시 그 외에는 마커에서 제외
                     //마커 사용시 커스텀 마커 사용
-                    Toast.makeText(MainActivity.this, "에러"+resultCode, Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(MainActivity.this, "에러"+resultCode, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
                 }
             }
 
