@@ -108,7 +108,12 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 Intent searchIntent = new Intent(MainActivity.this, Search_View.class);
                 searchIntent.putExtra("lat", location.getLatitude());
                 searchIntent.putExtra("long",location.getLongitude());
-                startActivityForResult(searchIntent,1);
+                startActivity(searchIntent);
+                Intent markerIntent = getIntent();
+                markerIntent.getStringExtra("x");
+                markerIntent.getStringExtra("y");
+                markerIntent.getStringExtra("placeName");
+                markerIntent.getStringExtra("ID");
             }
         });
 
