@@ -18,6 +18,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.onnuwhere.model.Place;
 import com.example.onnuwhere.model.ResultSearchKeyword;
 
 import retrofit2.Call;
@@ -85,6 +86,21 @@ public class Search_View extends Activity {
                 SearchAddrAdapter adapter = new SearchAddrAdapter(resultSearchKeyword.getDocuments());
                 recyclerView.setLayoutManager(manager);
                 recyclerView.setAdapter(adapter);
+
+                adapter.setSearchListener(new SearchListener() {
+                    @Override
+                    public void SearchItemClick(int position) {
+                        Place p = adapter.getItem(position);
+                        Intent intent_marker = new Intent(Search_View.this, MainActivity.class);
+                        intent_marker.putExtra("x", p.getX());
+                        intent_marker.putExtra("y", p.getY());
+                        intent_marker.putExtra("placeName", p.getPlace_name());
+                        intent_marker.putExtra("ID", p.getId());
+                        startActivity(intent_marker);
+                        setResult(Activity.RESULT_OK);
+                        finish();
+                    }
+                });
             }
 
 

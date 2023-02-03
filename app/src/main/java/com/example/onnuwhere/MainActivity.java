@@ -248,15 +248,17 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         switch (resultCode){
             case RESULT_OK:
                 Intent markerIntent = getIntent();
+                double slat = Double.parseDouble(markerIntent.getStringExtra("y"));
+                double slong = Double.parseDouble(markerIntent.getStringExtra("x"));
                 //마커 표시
                 MapPOIItem marker = new MapPOIItem();
                 marker.setItemName(markerIntent.getStringExtra("placeName"));
-//                marker.setTag("장소 id");
-//                marker.setMapPoint("맵포인트");
+                marker.setTag(Integer.parseInt(markerIntent.getStringExtra("ID")));
+                marker.setMapPoint(MapPoint.mapPointWithGeoCoord(slat, slong));
                 marker.setMarkerType(MapPOIItem.MarkerType.YellowPin);
                 mView.addPOIItem(marker);
                 //중심점 변경
-                mView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(Double.parseDouble(markerIntent.getStringExtra("y")), Double.parseDouble(markerIntent.getStringExtra("x"))), true);
+                mView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(slat, slong),true);
                 //TrackingModeOff
                 mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
                 //firebase 연결 후 주변 300m 만 마커 표시 그 외에는 마커에서 제외

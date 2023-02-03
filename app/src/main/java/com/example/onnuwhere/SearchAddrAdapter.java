@@ -1,5 +1,6 @@
 package com.example.onnuwhere;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +34,13 @@ public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.My
 
     private Context context;
 
+    private SearchListener searchListener;
+
+    public void setSearchListener(SearchListener searchListener) {
+        this.searchListener = searchListener;
+    }
+
+
     public SearchAddrAdapter(List<Place> placeList) {
         this.placeList = placeList;
     }
@@ -41,6 +49,11 @@ public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.My
 
         this.placeList = placeList;
         this.context = context;
+    }
+
+    public Place getItem(int position) {
+        Place p = placeList.get(position);
+        return p;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -67,7 +80,7 @@ public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.My
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchAddrAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SearchAddrAdapter.MyViewHolder holder,int position) {
         place = placeList.get(position);
         location = ((Search_View)Search_View.mContext).location;
         holder.addrTitle.setText(place.getPlace_name());
@@ -90,15 +103,8 @@ public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.My
             @Override
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), "lol", Toast.LENGTH_SHORT).show();
-                context = v.getContext();
-                Intent intent_marker = new Intent(context, MainActivity.class);
-                intent_marker.putExtra("x", place.getX());
-                intent_marker.putExtra("y", place.getY());
-                intent_marker.putExtra("placeName", place.getPlace_name());
-                intent_marker.putExtra("ID", place.getId());
-                context.startActivity(intent_marker);
-                ((Activity)context).setResult(Activity.RESULT_OK);
-                ((Activity)context).finish();
+                int pos = holder.getAdapterPosition();
+                searchListener.SearchItemClick(pos);
             }
         });
     }
