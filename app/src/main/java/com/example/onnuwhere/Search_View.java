@@ -87,6 +87,7 @@ public class Search_View extends Activity {
                 recyclerView.setAdapter(adapter);
             }
 
+
             @Override
             public void onFailure(Call<ResultSearchKeyword> call, Throwable t) {
                 Log.d("%%%", ""+t.toString());

@@ -90,16 +90,15 @@ public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.My
             @Override
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), "lol", Toast.LENGTH_SHORT).show();
+                context = v.getContext();
                 Intent intent_marker = new Intent(context, MainActivity.class);
                 intent_marker.putExtra("x", place.getX());
                 intent_marker.putExtra("y", place.getY());
                 intent_marker.putExtra("placeName", place.getPlace_name());
                 intent_marker.putExtra("ID", place.getId());
                 context.startActivity(intent_marker);
-//                Log.d("x좌표",place.getX());
-//                Log.d("y좌표",place.getY());
-//                Log.d("장소이름", place.getPlace_name());
-//                Log.d("장소id", place.getId());
+                ((Activity)context).setResult(Activity.RESULT_OK);
+                ((Activity)context).finish();
             }
         });
     }

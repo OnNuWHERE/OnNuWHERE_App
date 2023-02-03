@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.example.onnuwhere.model.ResultSearchKeyword;
 
+import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     private KakaoService kakaoService;
     LinearLayoutManager manager;
+    MapView mView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,9 +85,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         btnDisaster = (Button) findViewById(R.id.btnDisaster);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-
-
-        final MapView mView = new MapView(MainActivity.this);
+        mView = new MapView(MainActivity.this);
 
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
         mapViewContainer.addView(mView);
@@ -107,13 +107,9 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 Intent searchIntent = new Intent(MainActivity.this, Search_View.class);
                 searchIntent.putExtra("lat", location.getLatitude());
-                searchIntent.putExtra("long",location.getLongitude());
-                startActivity(searchIntent);
-                Intent markerIntent = getIntent();
-                markerIntent.getStringExtra("x");
-                markerIntent.getStringExtra("y");
-                markerIntent.getStringExtra("placeName");
-                markerIntent.getStringExtra("ID");
+                searchIntent.putExtra("long", location.getLongitude());
+                startActivityForResult(searchIntent, 1);
+
             }
         });
 
@@ -245,8 +241,30 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     Log.d("@@@", "활성화");
                     checkRunTimePermission();
                     return;
-                }
+                }break;
+
+        }
+
+        switch (resultCode){
+            case RESULT_OK:
+                Intent markerIntent = getIntent();
+                //마커 표시
+                MapPOIItem marker = new MapPOIItem();
+                marker.setItemName(markerIntent.getStringExtra("placeName"));
+//                marker.setTag("장소 id");
+//                marker.setMapPoint("맵포인트");
+                marker.setMarkerType(MapPOIItem.MarkerType.YellowPin);
+                mView.addPOIItem(marker);
+                //중심점 변경
+                mView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(Double.parseDouble(markerIntent.getStringExtra("y")), Double.parseDouble(markerIntent.getStringExtra("x"))), true);
+                //TrackingModeOff
+                mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
+                //firebase 연결 후 주변 300m 만 마커 표시 그 외에는 마커에서 제외
+                //마커 사용시 커스텀 마커 사용
+
                 break;
+            case 400:
+                Log.e("error","error");
         }
     }
 
