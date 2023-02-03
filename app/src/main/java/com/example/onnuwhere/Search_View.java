@@ -73,7 +73,7 @@ public class Search_View extends Activity {
         kakaoService = retrofit.create(KakaoService.class);
 
         Call<ResultSearchKeyword> call =
-                kakaoService.getSearchKeyword(apiKey, keyword,String.valueOf(location.getLatitude()),String.valueOf(location.getLongitude()),1,,"distance");
+                kakaoService.getSearchKeyword(apiKey, keyword,String.valueOf(location.getLatitude()),String.valueOf(location.getLongitude()),15);
         call.enqueue(new Callback<ResultSearchKeyword>() {
             @Override
             public void onResponse(Call<ResultSearchKeyword> call, Response<ResultSearchKeyword> response) {
