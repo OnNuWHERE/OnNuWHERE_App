@@ -95,11 +95,7 @@ public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.My
             String.valueOf(
                     calLocation(location.getLatitude(),location.getLongitude())*1000+"m"));
         }
-
-
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), "lol", Toast.LENGTH_SHORT).show();

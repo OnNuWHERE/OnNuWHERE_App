@@ -243,30 +243,33 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     return;
                 }break;
 
-        }
+            case 1:{
+                if(resultCode==RESULT_OK){
+                    Toast.makeText(MainActivity.this, "@@@ " + resultCode, Toast.LENGTH_SHORT).show();
+                    Intent markerIntent = data;
+                    Log.d("2@@@", markerIntent+"");
+                    double sLat =  Double.parseDouble(markerIntent.getStringExtra("y"));
+                    double sLong = Double.parseDouble(markerIntent.getStringExtra("x"));
+                    //마커 표시
+                    MapPOIItem marker = new MapPOIItem();
+                    marker.setItemName(markerIntent.getStringExtra("placeName"));
+                    marker.setTag(Integer.parseInt(markerIntent.getStringExtra("ID")));
+                    marker.setMapPoint(MapPoint.mapPointWithGeoCoord(sLat, sLong));
+                    marker.setMarkerType(MapPOIItem.MarkerType.YellowPin);
+                    mView.addPOIItem(marker);
 
-        switch (resultCode){
-            case RESULT_OK:
-                Intent markerIntent = getIntent();
-                double slat = Double.parseDouble(markerIntent.getStringExtra("y"));
-                double slong = Double.parseDouble(markerIntent.getStringExtra("x"));
-                //마커 표시
-                MapPOIItem marker = new MapPOIItem();
-                marker.setItemName(markerIntent.getStringExtra("placeName"));
-                marker.setTag(Integer.parseInt(markerIntent.getStringExtra("ID")));
-                marker.setMapPoint(MapPoint.mapPointWithGeoCoord(slat, slong));
-                marker.setMarkerType(MapPOIItem.MarkerType.YellowPin);
-                mView.addPOIItem(marker);
-                //중심점 변경
-                mView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(slat, slong),true);
-                //TrackingModeOff
-                mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
-                //firebase 연결 후 주변 300m 만 마커 표시 그 외에는 마커에서 제외
-                //마커 사용시 커스텀 마커 사용
+                    //중심점 변경
+                    mView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(sLat,sLong), true);
+                    //TrackingModeOff
+                    mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
+                    //firebase 연결 후 주변 300m 만 마커 표시 그 외에는 마커에서 제외
+                    //마커 사용시 커스텀 마커 사용
+                    Toast.makeText(MainActivity.this, "에러"+resultCode, Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(MainActivity.this, "에러"+resultCode, Toast.LENGTH_SHORT).show();
+                }
+            }
 
-                break;
-            case 400:
-                Log.e("error","error");
         }
     }
 
@@ -316,12 +319,10 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     @Override
     public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
-        Toast.makeText(this, "end", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
-        Toast.makeText(this, "fin", Toast.LENGTH_SHORT).show();
 
     }
 
