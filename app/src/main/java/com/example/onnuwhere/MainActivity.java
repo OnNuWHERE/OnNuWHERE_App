@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     marker.setTag(Integer.parseInt(markerIntent.getStringExtra("ID")));
                     marker.setMapPoint(MapPoint.mapPointWithGeoCoord(sLat, sLong));
                     marker.setMarkerType(MapPOIItem.MarkerType.YellowPin);
-                    mView.addPOIItem(marker);
+//                    mView.addPOIItem(marker);
 
                     //중심점 변경
                     mView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(sLat, sLong), true);
@@ -292,14 +292,17 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 //                    AEDDAO adao = new AEDDAO();
                     database = FirebaseDatabase
                             .getInstance("https://onnuwhere-default-rtdb.asia-southeast1.firebasedatabase.app/");
-                    DatabaseReference refTsunami = database.getReference("TsunamiShelter");
+                    DatabaseReference refTsunami =
+                            database.getReference("TsunamiShelter");
                     ArrayList<TsunamiShelter> TsunamiList = new ArrayList<>();
 
-                    refTsunami.addValueEventListener(new ValueEventListener() {
+                    refTsunami.orderByChild("sigungu_name").equalTo("영덕군").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             TsunamiList.clear();
                             List<MapPOIItem> mapPOIItemList = new ArrayList<>();
+                            mapPOIItemList.add(marker);
+
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                                 TsunamiShelter TsunamiData = dataSnapshot.getValue(TsunamiShelter.class);
                                 TsunamiList.add(TsunamiData);
@@ -308,17 +311,20 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                                     double lon = TsunamiList.get(i).getLon();
                                     MapPOIItem mapPOIItem = new MapPOIItem();
                                     double calDis = distance(lat, lon, sLat, sLong, "K");
+                                    mapPOIItem.setItemName("영덕군");
+                                    mapPOIItem.setTag(Long.valueOf(TsunamiList.get(i).getId()).intValue());
                                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
                                     mapPOIItem.setMarkerType(MapPOIItem.MarkerType.RedPin);
 //                                        mapPOIItem.setCustomImageResourceId(R.drawable.aed_location);
 //                                        mapPOIItem.isCustomImageAutoscale();
                                     mapPOIItemList.add(mapPOIItem);
                                     if (calDis * 1000 <= 20000) {
-                                        mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
+//                                        mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
+//                                        mView.addPOIItem(mapPOIItemList.get(i));
                                     }
                                 }
-
                             }
+                            mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
                         }
 
                         @Override
