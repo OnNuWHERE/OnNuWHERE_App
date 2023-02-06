@@ -21,6 +21,7 @@ public class EarthquakeOutdoorsShelter {
     private String xcord;
     private String ycord;
 
+
     public EarthquakeOutdoorsShelter(long acmdfclty_sn, String arcd, String rdnmadr_cd, String bdong_cd, String hdong_cd, String sgg_nm, String ctprvn_nm, String dtl_adres, String vt_acmdfclty_nm, long fclty_ar, String xcord, String ycord) {
         this.acmdfclty_sn = acmdfclty_sn;
         this.arcd = arcd;

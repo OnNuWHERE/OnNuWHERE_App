@@ -7,6 +7,7 @@ public class Civil {
 
     private String update;
     private long updateDate;
+
     private String updateTime;
 
     private long zipcode;
@@ -23,6 +24,7 @@ public class Civil {
 
     private String serialCd;
 
+    private double updateUoI;
 
     private double epsg2097X;
     private double epsg2097Y;
@@ -49,6 +51,7 @@ public class Civil {
         this.orgType = orgType;
         this.org = org;
         this.serialCd = serialCd;
+        this.updateUoI = updateUoI;
         this.epsg2097X = epsg2097X;
         this.epsg2097Y = epsg2097Y;
         X = x;
@@ -167,6 +170,14 @@ public class Civil {
         this.serialCd = serialCd;
     }
 
+    public double getUpdateUoI() {
+        return updateUoI;
+    }
+
+    public void setUpdateUoI(double updateUoI) {
+        this.updateUoI = updateUoI;
+    }
+
     public double getEpsg2097X() {
         return epsg2097X;
     }
@@ -216,6 +227,7 @@ public class Civil {
                 ", orgType='" + orgType + '\'' +
                 ", org='" + org + '\'' +
                 ", serialCd='" + serialCd + '\'' +
+                ", updateUoI=" + updateUoI +
                 ", epsg2097X=" + epsg2097X +
                 ", epsg2097Y=" + epsg2097Y +
                 ", X=" + X +

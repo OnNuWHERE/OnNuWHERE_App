@@ -1,5 +1,6 @@
 package com.example.onnuwhere;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -29,6 +30,7 @@ import android.widget.Toast;
 
 
 import com.example.onnuwhere.model.AED;
+import com.example.onnuwhere.model.Civil;
 import com.example.onnuwhere.model.TsunamiShelter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -64,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     FirebaseDatabase database;
     String address;
-    String[] gugun;
+    String[] gugun,cigu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -282,7 +284,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     //마커 사용시 커스텀 마커 사용
                     Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
                     TsunamiSearch(sLong,sLat);
-                    AEDSearch(sLong, sLat);
+//                    AEDSearch(sLong, sLat);
+                    CivilSearch(sLong,sLat);
 
 //                    AEDDAO adao = new AEDDAO();
 
@@ -351,35 +354,80 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     }
 
-    private void AEDSearch(double x, double y) {
+//    private void AEDSearch(double x, double y) {
+//        database = FirebaseDatabase
+//                .getInstance();
+//        DatabaseReference refAED =
+//                database.getReference("AED");
+//        ArrayList<AED> AEDList = new ArrayList<>();
+
+//        refAED.orderByChild("gugun").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                AEDList.clear();
+//                List<MapPOIItem> mapPOIItemList = new ArrayList<>();
+//                int index = 0;
+//                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                    AED AEDData = dataSnapshot.getValue(AED.class);
+//                    AEDList.add(AEDData);
+////                                for (int i = 0; i < TsunamiList.size(); i++) {
+//                    double lat = AEDList.get(index).getWgs84Lat();
+//                    double lon = AEDList.get(index).getWgs84Lon();
+//                    MapPOIItem mapPOIItem = new MapPOIItem();
+//                    double calDis = distance(lat, lon, y, x, "K");
+//                    mapPOIItem.setItemName(AEDList.get(index).getOrg());
+//                    mapPOIItem.setTag(Integer.parseInt(AEDList.get(index).getZipcode1()+""+AEDList.get(index).getZipcode2()));
+//                    mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
+//                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.BluePin);
+////                                        mapPOIItem.setCustomImageResourceId(R.drawable.aed_location);
+////                                        mapPOIItem.isCustomImageAutoscale();
+//
+//                    if (calDis * 1000 <= 100000) {
+//                        mapPOIItemList.add(mapPOIItem);
+//                    }
+////                                }
+//                    index++;
+//                }
+//                mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//    }
+
+    private void CivilSearch(double x, double y){
         database = FirebaseDatabase
                 .getInstance();
-        DatabaseReference refAED =
-                database.getReference("AED");
-        ArrayList<AED> AEDList = new ArrayList<>();
+        DatabaseReference refCivil =
+                database.getReference("Civil");
+        ArrayList<Civil> civilArrayList = new ArrayList<>();
 
-        refAED.orderByChild("gugun").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
+
+        refCivil.orderByChild("stAddr").startAt(gugun[0]+" "+gugun[1]).addValueEventListener(new ValueEventListener() {
+//        refCivil.orderByChild("stAddr").equalTo("경상북도 영주시 구성로 269 (휴천동, 한국통신)").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                AEDList.clear();
+                civilArrayList.clear();
                 List<MapPOIItem> mapPOIItemList = new ArrayList<>();
+                MapPOIItem mapPOIItem = new MapPOIItem();
                 int index = 0;
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    AED AEDData = dataSnapshot.getValue(AED.class);
-                    AEDList.add(AEDData);
+                    Civil civilData = dataSnapshot.getValue(Civil.class);
+                    civilArrayList.add(civilData);
 //                                for (int i = 0; i < TsunamiList.size(); i++) {
-                    double lat = AEDList.get(index).getWgs84Lat();
-                    double lon = AEDList.get(index).getWgs84Lon();
-                    MapPOIItem mapPOIItem = new MapPOIItem();
+                    double lat = civilArrayList.get(index).getY();
+                    double lon = civilArrayList.get(index).getX();
                     double calDis = distance(lat, lon, y, x, "K");
-                    mapPOIItem.setItemName(AEDList.get(index).getOrg());
-                    mapPOIItem.setTag(Integer.parseInt(AEDList.get(index).getZipcode1()+""+AEDList.get(index).getZipcode2()));
+                    mapPOIItem.setItemName(civilArrayList.get(index).getBuildPlace());
                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
-                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.BluePin);
-//                                        mapPOIItem.setCustomImageResourceId(R.drawable.aed_location);
-//                                        mapPOIItem.isCustomImageAutoscale();
-
-                    if (calDis * 1000 <= 100000) {
+                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+                    mapPOIItem.setCustomImageResourceId(R.drawable.aed_location);
+                    mapPOIItem.setCustomImageAutoscale(true);
+                    mapPOIItem.setCustomImageAnchor(0.5f,1.5f);
+                    if (calDis * 1000 <= 50000) {
                         mapPOIItemList.add(mapPOIItem);
                     }
 //                                }
@@ -393,6 +441,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
             }
         });
+
     }
 
     private void TsunamiSearch(double x, double y) {
