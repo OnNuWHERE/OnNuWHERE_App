@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.example.onnuwhere.Controller.AEDDAO;
 import com.example.onnuwhere.model.AED;
+import com.example.onnuwhere.model.Civil;
 import com.example.onnuwhere.model.ResultSearchKeyword;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -73,8 +74,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     LinearLayoutManager manager;
     MapView mView;
 
-    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private final DatabaseReference databaseReference = database.getReference();
+    FirebaseDatabase database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -288,26 +288,29 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     //마커 사용시 커스텀 마커 사용
                     Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
 
-                    AEDDAO adao = new AEDDAO();
-                    ArrayList<AED> AEDList = new ArrayList<>();
+//                    AEDDAO adao = new AEDDAO();
+                    database = FirebaseDatabase
+                            .getInstance("https://onnuwhere-default-rtdb.asia-southeast1.firebasedatabase.app/");
+                    DatabaseReference refCivil = database.getReference("Civil");
+                    ArrayList<Civil> CivilList = new ArrayList<>();
 
-                    adao.findAll().addValueEventListener(new ValueEventListener() {
+                    refCivil.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            AEDList.clear();
+                            CivilList.clear();
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                                AED AEDData = dataSnapshot.getValue(AED.class);
-                                AEDList.add(AEDData);
-                                for (int i = 0; i < AEDList.size(); i++) {
-                                    double lat = AEDList.get(i).getWgs84Lat();
-                                    double lon = AEDList.get(i).getWgs84Lon();
+                                Civil Civildata = dataSnapshot.getValue(Civil.class);
+                                CivilList.add(Civildata);
+                                for (int i = 0; i < CivilList.size(); i++) {
+                                    double lat = CivilList.get(i).getY();
+                                    double lon = CivilList.get(i).getX();
                                     double calDis = distance(lat,lon,sLat,sLong,"K");
                                     if(calDis*1000<=500){
                                         MapPOIItem mapPOIItem = new MapPOIItem();
                                         mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat,lon));
-                                        mapPOIItem.setCustomImageResourceId(R.drawable.aed_location);
-                                        mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
-                                        mapPOIItem.isCustomImageAutoscale();
+                                        mapPOIItem.setMarkerType(MapPOIItem.MarkerType.RedPin);
+//                                        mapPOIItem.setCustomImageResourceId(R.drawable.aed_location);
+//                                        mapPOIItem.isCustomImageAutoscale();
                                         mView.addPOIItem(mapPOIItem);
                                     }
                                 }

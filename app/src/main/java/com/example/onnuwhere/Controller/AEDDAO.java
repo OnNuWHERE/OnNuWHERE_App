@@ -12,7 +12,8 @@ public class AEDDAO {
     private DatabaseReference fbDataAED;
 
     public AEDDAO() {
-        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        FirebaseDatabase db = FirebaseDatabase
+                .getInstance("https://onnuwhere-default-rtdb.asia-southeast1.firebasedatabase.app/");
         fbDataAED = db.getReference("AED");
     }
 

@@ -31,8 +31,29 @@ public class Civil {
     public double X;
     public double Y;
 
+    public Civil() {
+//        this.cNum = 0;
+//        this.validDate = 0;
+//        this.updateDate = 0;
+//        this.updateTime = 0;
+//        this.zipcode = 0;
+//        this.bloAddr = "";
+//        this.stAddr = "";
+//        this.buildAddr = "";
+//        this.buildPlace = "";
+//        this.orgCd = 0;
+//        this.orgType = "";
+//        this.org = "";
+//        this.serialCd = "";
+//        this.updateUoI = 0;
+//        this.epsg2097X = 0;
+//        this.epsg2097Y = 0;
+//        X = 0;
+//        Y = 0;
+    }
 
-    public Civil(long cNum, long validDate, long updateDate, long updateTime, long zipcode, String bloAddr, String stAddr, String buildAddr, String buildPlace, long orgCd, String orgType, String org, String serialCd, double updateUoI, double epsg2097X, double epsg2097Y, double x, double y) {
+
+    public Civil(long cNum, long validDate, long updateDate, long updateTime, long zipcode, String bloAddr, String stAddr, String buildAddr, String buildPlace, long orgCd, String orgType, String org, String serialCd, double updateUoI, double epsg2097X, double epsg2097Y, double X, double Y) {
         this.cNum = cNum;
         this.validDate = validDate;
         this.updateDate = updateDate;
@@ -49,8 +70,8 @@ public class Civil {
         this.updateUoI = updateUoI;
         this.epsg2097X = epsg2097X;
         this.epsg2097Y = epsg2097Y;
-        X = x;
-        Y = y;
+        this.X = X;
+        this.Y = Y;
     }
 
     public long getcNum() {

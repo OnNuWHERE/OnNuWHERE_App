@@ -29,6 +29,9 @@ public class AED {
     public String sunFurYon;
     public String sunFifYon;
 
+    public int holEndTme;
+    public int holSttTme;
+
     public int monEndTme;
     public int monSttTme;
     public int tueEndTme;
@@ -43,6 +46,46 @@ public class AED {
     public int satSttTme;
     public int sunSttTme;
     public int sunEndTme;
+
+    public AED() {
+        this.rnum = 0;
+        this.buildAddress = "";
+        this.buildPlace = "";
+        this.clerkTel = 0;
+        this.wgs84Lat = 0;
+        this.wgs84Lon = 0;
+        this.org = "";
+        this.manager = "";
+        this.managerTel = "";
+        this.mfg = "";
+        this.model = "";
+        this.zipcode1 = 0;
+        this.zipcode2 = 0;
+        this.gugun = "";
+        this.sido = "";
+        this.sunFrtYon = "";
+        this.sunScdYon = "";
+        this.sunThiYon = "";
+        this.sunFurYon = "";
+        this.sunFifYon = "";
+        this.monEndTme = 0;
+        this.monSttTme = 0;
+        this.tueEndTme = 0;
+        this.tueSttTme = 0;
+        this.wedEndTme = 0;
+        this.wedSttTme = 0;
+        this.thuEndTme = 0;
+        this.thuSttTme = 0;
+        this.friSttTme = 0;
+        this.friEndTme = 0;
+        this.satEndTme = 0;
+        this.satSttTme = 0;
+        this.sunSttTme = 0;
+        this.sunEndTme = 0;
+        this.holEndTme = 0;
+        this.holSttTme = 0;
+
+    }
 
     public AED(long rnum, String buildAddress, String buildPlace, long clerkTel, double wgs84Lat, double wgs84Lon, String org, String manager, String managerTel, String mfg, String model, int zipcode1, int zipcode2, String gugun, String sido, String sunFrtYon, String sunScdYon, String sunThiYon, String sunFurYon, String sunFifYon, int monEndTme, int monSttTme, int tueEndTme, int tueSttTme, int wedEndTme, int wedSttTme, int thuEndTme, int thuSttTme, int friSttTme, int friEndTme, int satEndTme, int satSttTme, int sunSttTme, int sunEndTme) {
         this.rnum = rnum;
@@ -79,6 +122,22 @@ public class AED {
         this.satSttTme = satSttTme;
         this.sunSttTme = sunSttTme;
         this.sunEndTme = sunEndTme;
+    }
+
+    public int getHolEndTme() {
+        return holEndTme;
+    }
+
+    public void setHolEndTme(int holEndTme) {
+        this.holEndTme = holEndTme;
+    }
+
+    public int getHolSttTme() {
+        return holSttTme;
+    }
+
+    public void setHolSttTme(int holSttTme) {
+        this.holSttTme = holSttTme;
     }
 
     public long getRnum() {
