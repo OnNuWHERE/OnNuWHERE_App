@@ -5,8 +5,8 @@ public class Civil {
 
     private long validDate;
 
+    private String update;
     private long updateDate;
-
     private String updateTime;
 
     private long zipcode;
@@ -23,7 +23,6 @@ public class Civil {
 
     private String serialCd;
 
-    private double updateUoI;
 
     private double epsg2097X;
     private double epsg2097Y;
@@ -31,9 +30,14 @@ public class Civil {
     private double X;
     private double Y;
 
-    public Civil(long cNum, long validDate, long updateDate, String updateTime, long zipcode, String bloAddr, String stAddr, String buildAddr, String buildPlace, long orgCd, String orgType, String org, String serialCd, double updateUoI, double epsg2097X, double epsg2097Y, double x, double y) {
+
+    public Civil() {
+    }
+
+    public Civil(long cNum, long validDate, String update, long updateDate, String updateTime, long zipcode, String bloAddr, String stAddr, String buildAddr, String buildPlace, long orgCd, String orgType, String org, String serialCd, double epsg2097X, double epsg2097Y, double x, double y) {
         this.cNum = cNum;
         this.validDate = validDate;
+        this.update = update;
         this.updateDate = updateDate;
         this.updateTime = updateTime;
         this.zipcode = zipcode;
@@ -45,7 +49,6 @@ public class Civil {
         this.orgType = orgType;
         this.org = org;
         this.serialCd = serialCd;
-        this.updateUoI = updateUoI;
         this.epsg2097X = epsg2097X;
         this.epsg2097Y = epsg2097Y;
         X = x;
@@ -66,6 +69,14 @@ public class Civil {
 
     public void setValidDate(long validDate) {
         this.validDate = validDate;
+    }
+
+    public String getUpdate() {
+        return update;
+    }
+
+    public void setUpdate(String update) {
+        this.update = update;
     }
 
     public long getUpdateDate() {
@@ -156,14 +167,6 @@ public class Civil {
         this.serialCd = serialCd;
     }
 
-    public double getUpdateUoI() {
-        return updateUoI;
-    }
-
-    public void setUpdateUoI(double updateUoI) {
-        this.updateUoI = updateUoI;
-    }
-
     public double getEpsg2097X() {
         return epsg2097X;
     }
@@ -201,6 +204,7 @@ public class Civil {
         return "Civil{" +
                 "cNum=" + cNum +
                 ", validDate=" + validDate +
+                ", update='" + update + '\'' +
                 ", updateDate=" + updateDate +
                 ", updateTime='" + updateTime + '\'' +
                 ", zipcode=" + zipcode +
@@ -212,7 +216,6 @@ public class Civil {
                 ", orgType='" + orgType + '\'' +
                 ", org='" + org + '\'' +
                 ", serialCd='" + serialCd + '\'' +
-                ", updateUoI=" + updateUoI +
                 ", epsg2097X=" + epsg2097X +
                 ", epsg2097Y=" + epsg2097Y +
                 ", X=" + X +
