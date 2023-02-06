@@ -34,6 +34,7 @@ import com.example.onnuwhere.Controller.AEDDAO;
 import com.example.onnuwhere.model.AED;
 import com.example.onnuwhere.model.Civil;
 import com.example.onnuwhere.model.ResultSearchKeyword;
+import com.example.onnuwhere.model.TsunamiShelter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -291,27 +292,29 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 //                    AEDDAO adao = new AEDDAO();
                     database = FirebaseDatabase
                             .getInstance("https://onnuwhere-default-rtdb.asia-southeast1.firebasedatabase.app/");
-                    DatabaseReference refCivil = database.getReference("Civil");
-                    ArrayList<Civil> CivilList = new ArrayList<>();
+                    DatabaseReference refTsunami = database.getReference("TsunamiShelter");
+                    ArrayList<TsunamiShelter> TsunamiList = new ArrayList<>();
 
-                    refCivil.addValueEventListener(new ValueEventListener() {
+                    refTsunami.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            CivilList.clear();
+                            TsunamiList.clear();
+                            List<MapPOIItem> mapPOIItemList = new ArrayList<>();
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                                Civil Civildata = dataSnapshot.getValue(Civil.class);
-                                CivilList.add(Civildata);
-                                for (int i = 0; i < CivilList.size(); i++) {
-                                    double lat = CivilList.get(i).getY();
-                                    double lon = CivilList.get(i).getX();
-                                    double calDis = distance(lat,lon,sLat,sLong,"K");
-                                    if(calDis*1000<=500){
-                                        MapPOIItem mapPOIItem = new MapPOIItem();
-                                        mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat,lon));
-                                        mapPOIItem.setMarkerType(MapPOIItem.MarkerType.RedPin);
+                                TsunamiShelter TsunamiData = dataSnapshot.getValue(TsunamiShelter.class);
+                                TsunamiList.add(TsunamiData);
+                                for (int i = 0; i < TsunamiList.size(); i++) {
+                                    double lat = TsunamiList.get(i).getLat();
+                                    double lon = TsunamiList.get(i).getLon();
+                                    MapPOIItem mapPOIItem = new MapPOIItem();
+                                    double calDis = distance(lat, lon, sLat, sLong, "K");
+                                    mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
+                                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.RedPin);
 //                                        mapPOIItem.setCustomImageResourceId(R.drawable.aed_location);
 //                                        mapPOIItem.isCustomImageAutoscale();
-                                        mView.addPOIItem(mapPOIItem);
+                                    mapPOIItemList.add(mapPOIItem);
+                                    if (calDis * 1000 <= 20000) {
+                                        mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
                                     }
                                 }
 

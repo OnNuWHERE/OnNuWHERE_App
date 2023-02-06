@@ -22,6 +22,10 @@ public class TsunamiShelter {
     private double lon;
     private double lat;
 
+    public TsunamiShelter() {
+        
+    }
+
     public TsunamiShelter(long id, String seismic, String shel_div_type, String remarks, String shel_nm, long height, long lenth, long shel_av, String sido_name, String sigungu_name, String address, double lon, double lat) {
         this.id = id;
         this.seismic = seismic;
