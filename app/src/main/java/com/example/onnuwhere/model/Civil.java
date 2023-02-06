@@ -7,7 +7,7 @@ public class Civil {
 
     private long updateDate;
 
-    private long updateTime;
+    private String updateTime;
 
     private long zipcode;
 
@@ -31,29 +31,7 @@ public class Civil {
     private double X;
     private double Y;
 
-    public Civil() {
-//        this.cNum = 0;
-//        this.validDate = 0;
-//        this.updateDate = 0;
-//        this.updateTime = 0;
-//        this.zipcode = 0;
-//        this.bloAddr = "";
-//        this.stAddr = "";
-//        this.buildAddr = "";
-//        this.buildPlace = "";
-//        this.orgCd = 0;
-//        this.orgType = "";
-//        this.org = "";
-//        this.serialCd = "";
-//        this.updateUoI = 0;
-//        this.epsg2097X = 0;
-//        this.epsg2097Y = 0;
-//        X = 0;
-//        Y = 0;
-    }
-
-
-    public Civil(long cNum, long validDate, long updateDate, long updateTime, long zipcode, String bloAddr, String stAddr, String buildAddr, String buildPlace, long orgCd, String orgType, String org, String serialCd, double updateUoI, double epsg2097X, double epsg2097Y, double X, double Y) {
+    public Civil(long cNum, long validDate, long updateDate, String updateTime, long zipcode, String bloAddr, String stAddr, String buildAddr, String buildPlace, long orgCd, String orgType, String org, String serialCd, double updateUoI, double epsg2097X, double epsg2097Y, double x, double y) {
         this.cNum = cNum;
         this.validDate = validDate;
         this.updateDate = updateDate;
@@ -70,8 +48,8 @@ public class Civil {
         this.updateUoI = updateUoI;
         this.epsg2097X = epsg2097X;
         this.epsg2097Y = epsg2097Y;
-        this.X = X;
-        this.Y = Y;
+        X = x;
+        Y = y;
     }
 
     public long getcNum() {
@@ -98,11 +76,11 @@ public class Civil {
         this.updateDate = updateDate;
     }
 
-    public long getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(long updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -224,7 +202,7 @@ public class Civil {
                 "cNum=" + cNum +
                 ", validDate=" + validDate +
                 ", updateDate=" + updateDate +
-                ", updateTime=" + updateTime +
+                ", updateTime='" + updateTime + '\'' +
                 ", zipcode=" + zipcode +
                 ", bloAddr='" + bloAddr + '\'' +
                 ", stAddr='" + stAddr + '\'' +
