@@ -2,7 +2,8 @@
   "project_info": {
     "project_number": "87061581293",
     "project_id": "onnuwhere",
-    "storage_bucket": "onnuwhere.appspot.com"
+    "storage_bucket": "onnuwhere.appspot.com",
+    "firebase_url": "https://onnuwhere-default-rtdb.asia-southeast1.firebasedatabase.app/"
   },
   "client": [
     {

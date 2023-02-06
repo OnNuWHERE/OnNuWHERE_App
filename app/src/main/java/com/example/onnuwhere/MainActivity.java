@@ -366,7 +366,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     private void TsunamiSearch(double x, double y) {
 
         database = FirebaseDatabase
-                .getInstance("https://onnuwhere-default-rtdb.asia-southeast1.firebasedatabase.app/");
+                .getInstance();
         DatabaseReference refTsunami =
                 database.getReference("TsunamiShelter");
         ArrayList<TsunamiShelter> TsunamiList = new ArrayList<>();
