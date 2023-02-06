@@ -108,6 +108,7 @@ public class Search_View extends Activity {
                         intent_marker.putExtra("y", p.getY());
                         intent_marker.putExtra("placeName", p.getPlace_name());
                         intent_marker.putExtra("ID", p.getId());
+                        intent_marker.putExtra("address_name", p.getAddress_name());
                         setResult(RESULT_OK, intent_marker);
                         finish();
                     }

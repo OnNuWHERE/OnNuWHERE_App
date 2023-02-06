@@ -76,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     MapView mView;
 
     FirebaseDatabase database;
+    String address;
+    String[] gugun;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,10 +180,12 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         Log.d("@@@@", "x:" + mPointGeo.latitude + "y:" + mPointGeo.longitude + "f:" + v);
         currentMapPoint = MapPoint.mapPointWithGeoCoord(mPointGeo.latitude, mPointGeo.longitude);
         mapView.setMapCenterPoint(currentMapPoint, true);
+
     }
 
     @Override
     public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
+        TsunamiSearch(mPointGeo.latitude, mPointGeo.longitude);
 
     }
 
@@ -272,6 +276,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
                     double sLat = Double.parseDouble(markerIntent.getStringExtra("y"));
                     double sLong = Double.parseDouble(markerIntent.getStringExtra("x"));
+                    address = markerIntent.getStringExtra("address_name");
+                    gugun = address.split(" ");
 
                     //마커 표시
                     MapPOIItem marker = new MapPOIItem();
@@ -279,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     marker.setTag(Integer.parseInt(markerIntent.getStringExtra("ID")));
                     marker.setMapPoint(MapPoint.mapPointWithGeoCoord(sLat, sLong));
                     marker.setMarkerType(MapPOIItem.MarkerType.YellowPin);
-//                    mView.addPOIItem(marker);
+                    mView.addPOIItem(marker);
 
                     //중심점 변경
                     mView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(sLat, sLong), true);
@@ -288,51 +294,10 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     //firebase 연결 후 주변 300m 만 마커 표시 그 외에는 마커에서 제외
                     //마커 사용시 커스텀 마커 사용
                     Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
+                    TsunamiSearch(sLong,sLat);
 
 //                    AEDDAO adao = new AEDDAO();
-                    database = FirebaseDatabase
-                            .getInstance("https://onnuwhere-default-rtdb.asia-southeast1.firebasedatabase.app/");
-                    DatabaseReference refTsunami =
-                            database.getReference("TsunamiShelter");
-                    ArrayList<TsunamiShelter> TsunamiList = new ArrayList<>();
 
-                    refTsunami.orderByChild("sigungu_name").equalTo("영덕군").addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            TsunamiList.clear();
-                            List<MapPOIItem> mapPOIItemList = new ArrayList<>();
-                            mapPOIItemList.add(marker);
-                             int index = 0;
-                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                                TsunamiShelter TsunamiData = dataSnapshot.getValue(TsunamiShelter.class);
-                                TsunamiList.add(TsunamiData);
-//                                for (int i = 0; i < TsunamiList.size(); i++) {
-                                    double lat = TsunamiList.get(index).getLat();
-                                    double lon = TsunamiList.get(index).getLon();
-                                    MapPOIItem mapPOIItem = new MapPOIItem();
-                                    double calDis = distance(lat, lon, sLat, sLong, "K");
-                                    mapPOIItem.setItemName("영덕군");
-                                    mapPOIItem.setTag(Long.valueOf(TsunamiList.get(index).getId()).intValue());
-                                    mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
-                                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.RedPin);
-//                                        mapPOIItem.setCustomImageResourceId(R.drawable.aed_location);
-//                                        mapPOIItem.isCustomImageAutoscale();
-                                    mapPOIItemList.add(mapPOIItem);
-                                    if (calDis * 1000 <= 20000) {
-//                                        mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
-//                                        mView.addPOIItem(mapPOIItemList.get(i));
-//                                    }
-                                }
-                                    index++;
-                            }
-                            mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
 
 
                 } else {
@@ -395,6 +360,54 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     @Override
     public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    private void TsunamiSearch(double x, double y) {
+
+        database = FirebaseDatabase
+                .getInstance("https://onnuwhere-default-rtdb.asia-southeast1.firebasedatabase.app/");
+        DatabaseReference refTsunami =
+                database.getReference("TsunamiShelter");
+        ArrayList<TsunamiShelter> TsunamiList = new ArrayList<>();
+
+//        refTsunami.orderByChild("sigungu_name").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
+        refTsunami.addValueEventListener(new ValueEventListener() {
+            @Override
+
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                TsunamiList.clear();
+                List<MapPOIItem> mapPOIItemList = new ArrayList<>();
+                int index = 0;
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    TsunamiShelter TsunamiData = dataSnapshot.getValue(TsunamiShelter.class);
+                    TsunamiList.add(TsunamiData);
+//                                for (int i = 0; i < TsunamiList.size(); i++) {
+                    double lat = TsunamiList.get(index).getLat();
+                    double lon = TsunamiList.get(index).getLon();
+                    MapPOIItem mapPOIItem = new MapPOIItem();
+                    double calDis = distance(lat, lon, y, x, "K");
+                    mapPOIItem.setItemName(TsunamiList.get(index).getShel_nm());
+                    mapPOIItem.setTag(Long.valueOf(TsunamiList.get(index).getId()).intValue());
+                    mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
+                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.RedPin);
+//                                        mapPOIItem.setCustomImageResourceId(R.drawable.aed_location);
+//                                        mapPOIItem.isCustomImageAutoscale();
+
+                    if (calDis * 1000 <= 1000000) {
+                        mapPOIItemList.add(mapPOIItem);
+                    }
+//                                }
+                    index++;
+                }
+                mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
 
