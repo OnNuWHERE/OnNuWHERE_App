@@ -302,17 +302,17 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                             TsunamiList.clear();
                             List<MapPOIItem> mapPOIItemList = new ArrayList<>();
                             mapPOIItemList.add(marker);
-
+                             int index = 0;
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                                 TsunamiShelter TsunamiData = dataSnapshot.getValue(TsunamiShelter.class);
                                 TsunamiList.add(TsunamiData);
-                                for (int i = 0; i < TsunamiList.size(); i++) {
-                                    double lat = TsunamiList.get(i).getLat();
-                                    double lon = TsunamiList.get(i).getLon();
+//                                for (int i = 0; i < TsunamiList.size(); i++) {
+                                    double lat = TsunamiList.get(index).getLat();
+                                    double lon = TsunamiList.get(index).getLon();
                                     MapPOIItem mapPOIItem = new MapPOIItem();
                                     double calDis = distance(lat, lon, sLat, sLong, "K");
                                     mapPOIItem.setItemName("영덕군");
-                                    mapPOIItem.setTag(Long.valueOf(TsunamiList.get(i).getId()).intValue());
+                                    mapPOIItem.setTag(Long.valueOf(TsunamiList.get(index).getId()).intValue());
                                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
                                     mapPOIItem.setMarkerType(MapPOIItem.MarkerType.RedPin);
 //                                        mapPOIItem.setCustomImageResourceId(R.drawable.aed_location);
@@ -321,8 +321,9 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                                     if (calDis * 1000 <= 20000) {
 //                                        mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
 //                                        mView.addPOIItem(mapPOIItemList.get(i));
-                                    }
+//                                    }
                                 }
+                                    index++;
                             }
                             mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
                         }

@@ -1,35 +1,35 @@
 package com.example.onnuwhere.model;
 
 public class Civil {
-    public long cNum;
+    private long cNum;
 
-    public long validDate;
+    private long validDate;
 
-    public long updateDate;
+    private long updateDate;
 
-    public long updateTime;
+    private long updateTime;
 
-    public long zipcode;
+    private long zipcode;
 
-    public String bloAddr;
-    public String stAddr;
+    private String bloAddr;
+    private String stAddr;
 
-    public String buildAddr;
-    public String buildPlace;
+    private String buildAddr;
+    private String buildPlace;
 
-    public long orgCd;
-    public String orgType;
-    public String org;
+    private long orgCd;
+    private String orgType;
+    private String org;
 
-    public String serialCd;
+    private String serialCd;
 
-    public double updateUoI;
+    private double updateUoI;
 
-    public double epsg2097X;
-    public double epsg2097Y;
+    private double epsg2097X;
+    private double epsg2097Y;
 
-    public double X;
-    public double Y;
+    private double X;
+    private double Y;
 
     public Civil() {
 //        this.cNum = 0;

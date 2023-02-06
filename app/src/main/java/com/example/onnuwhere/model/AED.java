@@ -1,51 +1,51 @@
 package com.example.onnuwhere.model;
 
 public class AED {
-    public long rnum;
+    private long rnum;
 
-    public String buildAddress;
-    public String buildPlace;
-    public long clerkTel;
+    private String buildAddress;
+    private String buildPlace;
+    private long clerkTel;
 
-    public double wgs84Lat;
-    public double wgs84Lon;
+    private double wgs84Lat;
+    private double wgs84Lon;
 
-    public String org;
-    public String manager;
-    public String managerTel;
+    private String org;
+    private String manager;
+    private String managerTel;
 
-    public String mfg;
-    public String model;
+    private String mfg;
+    private String model;
 
-    public int zipcode1;
-    public int zipcode2;
+    private int zipcode1;
+    private int zipcode2;
 
-    public String gugun;
-    public String sido;
+    private String gugun;
+    private String sido;
 
-    public String sunFrtYon;
-    public String sunScdYon;
-    public String sunThiYon;
-    public String sunFurYon;
-    public String sunFifYon;
+    private String sunFrtYon;
+    private String sunScdYon;
+    private String sunThiYon;
+    private String sunFurYon;
+    private String sunFifYon;
 
-    public int holEndTme;
-    public int holSttTme;
+    private int holEndTme;
+    private int holSttTme;
 
-    public int monEndTme;
-    public int monSttTme;
-    public int tueEndTme;
-    public int tueSttTme;
-    public int wedEndTme;
-    public int wedSttTme;
-    public int thuEndTme;
-    public int thuSttTme;
-    public int friSttTme;
-    public int friEndTme;
-    public int satEndTme;
-    public int satSttTme;
-    public int sunSttTme;
-    public int sunEndTme;
+    private int monEndTme;
+    private int monSttTme;
+    private int tueEndTme;
+    private int tueSttTme;
+    private int wedEndTme;
+    private int wedSttTme;
+    private int thuEndTme;
+    private int thuSttTme;
+    private int friSttTme;
+    private int friEndTme;
+    private int satEndTme;
+    private int satSttTme;
+    private int sunSttTme;
+    private int sunEndTme;
 
     public AED() {
         this.rnum = 0;
