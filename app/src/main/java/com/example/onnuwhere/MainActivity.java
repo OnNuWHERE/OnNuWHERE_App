@@ -295,6 +295,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     //마커 사용시 커스텀 마커 사용
                     Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
                     TsunamiSearch(sLong,sLat);
+                    AEDSearch(sLong, sLat);
 
 //                    AEDDAO adao = new AEDDAO();
 
@@ -361,6 +362,50 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     @Override
     public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
 
+    }
+
+    private void AEDSearch(double x, double y) {
+        database = FirebaseDatabase
+                .getInstance();
+        DatabaseReference refAED =
+                database.getReference("AED");
+        ArrayList<AED> AEDList = new ArrayList<>();
+
+        refAED.orderByChild("gugun").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                AEDList.clear();
+                List<MapPOIItem> mapPOIItemList = new ArrayList<>();
+                int index = 0;
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    AED AEDData = dataSnapshot.getValue(AED.class);
+                    AEDList.add(AEDData);
+//                                for (int i = 0; i < TsunamiList.size(); i++) {
+                    double lat = AEDList.get(index).getWgs84Lat();
+                    double lon = AEDList.get(index).getWgs84Lon();
+                    MapPOIItem mapPOIItem = new MapPOIItem();
+                    double calDis = distance(lat, lon, y, x, "K");
+                    mapPOIItem.setItemName(AEDList.get(index).getOrg());
+                    mapPOIItem.setTag(Integer.parseInt(AEDList.get(index).getZipcode1()+""+AEDList.get(index).getZipcode2()));
+                    mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
+                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.BluePin);
+//                                        mapPOIItem.setCustomImageResourceId(R.drawable.aed_location);
+//                                        mapPOIItem.isCustomImageAutoscale();
+
+                    if (calDis * 1000 <= 100000) {
+                        mapPOIItemList.add(mapPOIItem);
+                    }
+//                                }
+                    index++;
+                }
+                mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void TsunamiSearch(double x, double y) {
