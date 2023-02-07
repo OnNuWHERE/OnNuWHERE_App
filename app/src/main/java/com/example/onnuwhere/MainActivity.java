@@ -355,7 +355,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     }
 
     private void AEDSearch(double x, double y) {
-        mView.addPOIItems(null);
         database = FirebaseDatabase
                 .getInstance();
         DatabaseReference refAED =
@@ -453,6 +452,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         refEarthquake.orderByChild("sgg_nm").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mContext = MainActivity.this;
                 EarthquakeList.clear();
                 int index = 0;
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
@@ -469,11 +469,16 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     mapPOIItem.setCustomImageResourceId(R.drawable.earthquake_32);
                     mapPOIItem.setCustomImageAutoscale(false);
                     mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
-                    if (calDis * 1000 <= 50000) {
+                    if (calDis * 1000 <= 5000) {
                         mapPOIItemList.add(mapPOIItem);
                     }
                     index++;
                 }
+                manager = new LinearLayoutManager(MainActivity.this,
+                        RecyclerView.VERTICAL, false);
+                EarthquakeAdapter earthquakeAdapter = new EarthquakeAdapter(EarthquakeList);
+                recyclerView.setLayoutManager(manager);
+                recyclerView.setAdapter(earthquakeAdapter);
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
             @Override
