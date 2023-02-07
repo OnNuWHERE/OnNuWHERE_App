@@ -376,10 +376,10 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     AED AEDData = dataSnapshot.getValue(AED.class);
                     AEDList.add(AEDData);
                     MapPOIItem mapPOIItem = new MapPOIItem();
-                    double lat = AEDList.get(index).getWgs84Lat();
-                    double lon = AEDList.get(index).getWgs84Lon();
+                    double lat = AEDList.get(index).getlat();
+                    double lon = AEDList.get(index).getlon();
                     double calDis = distance(lat, lon, y, x, "K");
-                    mapPOIItem.setItemName(AEDList.get(index).getOrg());
+                    mapPOIItem.setItemName(AEDList.get(index).getTitle());
                     mapPOIItem.setTag(Integer.parseInt(AEDList.get(index).getZipcode1() + "" + AEDList.get(index).getZipcode2()));
                     mapPOIItem.setItemName(AEDList.get(index).getBuildPlace());
                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
@@ -387,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     mapPOIItem.setCustomImageResourceId(R.drawable.aed_32);
                     mapPOIItem.setCustomImageAutoscale(false);
                     mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
-                    if (calDis * 1000 <= 100000) {
+                    if (calDis * 1000 <= 5000) {
                         mapPOIItemList.add(mapPOIItem);
                     }
                     index++;
@@ -419,18 +419,18 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Civil civilData = dataSnapshot.getValue(Civil.class);
                     civilList.add(civilData);
-                    double lat = civilList.get(index).getY();
-                    double lon = civilList.get(index).getX();
+                    double lat = civilList.get(index).getLat();
+                    double lon = civilList.get(index).getLon();
                     MapPOIItem mapPOIItem = new MapPOIItem();
                     double calDis = distance(lat, lon, y, x, "K");
-                    mapPOIItem.setItemName(civilList.get(index).getOrg());
+                    mapPOIItem.setItemName(civilList.get(index).getTitle());
                     mapPOIItem.setTag((int) civilList.get(index).getcNum());
                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
                     mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
                     mapPOIItem.setCustomImageResourceId(R.drawable.shelter_32);
                     mapPOIItem.setCustomImageAutoscale(false);
                     mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
-                    if (calDis * 1000 <= 1000000) {
+                    if (calDis * 1000 <= 5000) {
                         mapPOIItemList.add(mapPOIItem);
                     }
                     index++;
@@ -461,11 +461,11 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     EarthquakeOutdoorsShelter EarthquakeData = dataSnapshot.getValue(EarthquakeOutdoorsShelter.class);
                     EarthquakeList.add(EarthquakeData);
-                    double lat = EarthquakeList.get(index).getYcord();
-                    double lon = EarthquakeList.get(index).getXcord();
+                    double lat = EarthquakeList.get(index).getLat();
+                    double lon = EarthquakeList.get(index).getLon();
                     MapPOIItem mapPOIItem = new MapPOIItem();
                     double calDis = distance(lat, lon, y, x, "K");
-                    mapPOIItem.setItemName(EarthquakeList.get(index).getVt_acmdfclty_nm());
+                    mapPOIItem.setItemName(EarthquakeList.get(index).getTitle());
                     mapPOIItem.setTag(Long.valueOf(EarthquakeList.get(index).getArcd()).intValue());
                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
                     mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
@@ -478,8 +478,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     index++;
                 }
 
-                EarthquakeAdapter earthquakeAdapter = new EarthquakeAdapter(EarthquakeList);
-                recyclerView.setAdapter(earthquakeAdapter);
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
             @Override
@@ -512,7 +510,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     double lon = TsunamiList.get(index).getLon();
                     MapPOIItem mapPOIItem = new MapPOIItem();
                     double calDis = distance(lat, lon, y, x, "K");
-                    mapPOIItem.setItemName(TsunamiList.get(index).getShel_nm());
+                    mapPOIItem.setItemName(TsunamiList.get(index).getTitle());
                     mapPOIItem.setTag(Long.valueOf(TsunamiList.get(index).getId()).intValue());
                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
                     mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
@@ -524,8 +522,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
-                TsunamiAdapter tsunamiAdapter = new TsunamiAdapter(TsunamiList);
-                recyclerView.setAdapter(tsunamiAdapter);
+
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
 

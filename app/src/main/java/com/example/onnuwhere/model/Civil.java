@@ -2,17 +2,17 @@ package com.example.onnuwhere.model;
 
 public class Civil {
 
-    private double X;
-    private double Y;
+    private double lon;
+    private double lat;
     private String bloAddr;
     private String gugun;
     private String buildAddr;
     private String buildPlace;
     private long cNum;
-    private String org;
+    private String title;
     private String orgType;
     private String serialCd;
-    private String stAddr;
+    private String address;
     private String update;
     private long updateDate;
     private String updateTime;
@@ -20,37 +20,37 @@ public class Civil {
     public Civil() {
     }
 
-    public Civil(long cNum, String update, long updateDate, String updateTime, String bloAddr, String stAddr, String buildAddr, String buildPlace, String orgType, String org, String serialCd, double x, double y, String gugun) {
+    public Civil(long cNum, String update, long updateDate, String updateTime, String bloAddr, String address, String buildAddr, String buildPlace, String orgType, String title, String serialCd, double lon, double lat, String gugun) {
         this.cNum = cNum;
         this.update = update;
         this.updateDate = updateDate;
         this.updateTime = updateTime;
         this.bloAddr = bloAddr;
-        this.stAddr = stAddr;
+        this.address = address;
         this.buildAddr = buildAddr;
         this.buildPlace = buildPlace;
         this.orgType = orgType;
-        this.org = org;
+        this.title = title;
         this.serialCd = serialCd;
-        X = x;
-        Y = y;
+        this.lon = lon;
+        this.lat = lat;
         this.gugun = gugun;
     }
 
-    public double getX() {
-        return X;
+    public double getLon() {
+        return lon;
     }
 
-    public void setX(double x) {
-        X = x;
+    public void setLon(double lon) {
+        this.lon = lon;
     }
 
-    public double getY() {
-        return Y;
+    public double getLat() {
+        return lat;
     }
 
-    public void setY(double y) {
-        Y = y;
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 
     public String getBloAddr() {
@@ -93,12 +93,12 @@ public class Civil {
         this.cNum = cNum;
     }
 
-    public String getOrg() {
-        return org;
+    public String getTitle() {
+        return title;
     }
 
-    public void setOrg(String org) {
-        this.org = org;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getOrgType() {
@@ -117,12 +117,12 @@ public class Civil {
         this.serialCd = serialCd;
     }
 
-    public String getStAddr() {
-        return stAddr;
+    public String getAddress() {
+        return address;
     }
 
-    public void setStAddr(String stAddr) {
-        this.stAddr = stAddr;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getUpdate() {
@@ -157,14 +157,14 @@ public class Civil {
                 ", updateDate=" + updateDate +
                 ", updateTime='" + updateTime + '\'' +
                 ", bloAddr='" + bloAddr + '\'' +
-                ", stAddr='" + stAddr + '\'' +
+                ", stAddr='" + address + '\'' +
                 ", buildAddr='" + buildAddr + '\'' +
                 ", buildPlace='" + buildPlace + '\'' +
                 ", orgType='" + orgType + '\'' +
-                ", org='" + org + '\'' +
+                ", org='" + title + '\'' +
                 ", serialCd='" + serialCd + '\'' +
-                ", X=" + X +
-                ", Y=" + Y +
+                ", X=" + lon +
+                ", Y=" + lat +
                 ", gugun="+ gugun + '\'' +
                 '}';
     }

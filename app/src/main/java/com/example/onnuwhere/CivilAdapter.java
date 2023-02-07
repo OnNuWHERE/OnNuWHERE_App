@@ -54,11 +54,11 @@ public class CivilAdapter extends RecyclerView.Adapter<CivilAdapter.MyViewHolder
                 .mView.getMapCenterPoint().getMapPointGeoCoord().latitude;
         double lon = ((MainActivity)MainActivity.mContext)
                 .mView.getMapCenterPoint().getMapPointGeoCoord().longitude;
-        double dis = distance(civil.getY(),civil.getX(),lat,lon,"K");
+        double dis = distance(civil.getLat(),civil.getLon(),lat,lon,"K");
         if(dis*1000<=5000){
-            holder.addrTitle.setText(civil.getOrg());
+            holder.addrTitle.setText(civil.getTitle());
             holder.addrCategory.setText("민방공대피소");
-            holder.addrRaw.setText(civil.getStAddr());
+            holder.addrRaw.setText(civil.getAddress());
 
             holder.addrDistance.setText(String.valueOf(dis));
         }

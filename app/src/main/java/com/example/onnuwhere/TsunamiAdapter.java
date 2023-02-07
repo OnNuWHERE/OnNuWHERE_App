@@ -57,7 +57,7 @@ public class TsunamiAdapter extends RecyclerView.Adapter<TsunamiAdapter.MyViewHo
                 .mView.getMapCenterPoint().getMapPointGeoCoord().longitude;
         double dis = distance(tsunamiShelter.getLat(),tsunamiShelter.getLon(),lat,lon,"K");
         if(dis*1000<=5000){
-            holder.addrTitle.setText(tsunamiShelter.getShel_nm());
+            holder.addrTitle.setText(tsunamiShelter.getTitle());
             holder.addrCategory.setText("해일대피소");
             holder.addrRaw.setText(tsunamiShelter.getAddress());
 

@@ -6,10 +6,10 @@ public class AED {
     private String buildAddress;
     private String buildPlace;
 
-    private double wgs84Lat;
-    private double wgs84Lon;
+    private double lat;
+    private double lon;
 
-    private String org;
+    private String title;
 
     private String mfg;
     private String model;
@@ -27,9 +27,9 @@ public class AED {
         this.rnum = 0;
         this.buildAddress = "";
         this.buildPlace = "";
-        this.wgs84Lat = 0;
-        this.wgs84Lon = 0;
-        this.org = "";
+        this.lat = 0;
+        this.lon = 0;
+        this.title = "";
         this.mfg = "";
         this.model = "";
         this.zipcode1 = 0;
@@ -38,13 +38,13 @@ public class AED {
         this.sido = "";
     }
 
-    public AED(long rnum, String buildAddress, String buildPlace, long clerkTel, double wgs84Lat, double wgs84Lon, String org, String manager, String managerTel, String mfg, String model, int zipcode1, int zipcode2, String gugun, String sido, String sunFrtYon, String sunScdYon, String sunThiYon, String sunFurYon, String sunFifYon, int monEndTme, int monSttTme, int tueEndTme, int tueSttTme, int wedEndTme, int wedSttTme, int thuEndTme, int thuSttTme, int friSttTme, int friEndTme, int satEndTme, int satSttTme, int sunSttTme, int sunEndTme) {
+    public AED(long rnum, String buildAddress, String buildPlace, double lat, double lon, String title, String mfg, String model, int zipcode1, int zipcode2, String gugun, String sido) {
         this.rnum = rnum;
         this.buildAddress = buildAddress;
         this.buildPlace = buildPlace;
-        this.wgs84Lat = wgs84Lat;
-        this.wgs84Lon = wgs84Lon;
-        this.org = org;
+        this.lat = lat;
+        this.lon = lon;
+        this.title = title;
         this.mfg = mfg;
         this.model = model;
         this.zipcode1 = zipcode1;
@@ -83,28 +83,28 @@ public class AED {
 
 
 
-    public double getWgs84Lat() {
-        return wgs84Lat;
+    public double getlat() {
+        return lat;
     }
 
-    public void setWgs84Lat(double wgs84Lat) {
-        this.wgs84Lat = wgs84Lat;
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 
-    public double getWgs84Lon() {
-        return wgs84Lon;
+    public double getlon() {
+        return lon;
     }
 
-    public void setWgs84Lon(double wgs84Lon) {
-        this.wgs84Lon = wgs84Lon;
+    public void setLon(double lon) {
+        this.lon = lon;
     }
 
-    public String getOrg() {
-        return org;
+    public String getTitle() {
+        return title;
     }
 
-    public void setOrg(String org) {
-        this.org = org;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
 
@@ -164,9 +164,9 @@ public class AED {
                 "rnum=" + rnum +
                 ", buildAddress='" + buildAddress + '\'' +
                 ", buildPlace='" + buildPlace + '\'' +
-                ", wgs84Lat=" + wgs84Lat +
-                ", wgs84Lon=" + wgs84Lon +
-                ", org='" + org + '\'' +
+                ", wgs84Lat=" + lat +
+                ", wgs84Lon=" + lon +
+                ", org='" + title + '\'' +
                 ", mfg='" + mfg + '\'' +
                 ", model='" + model + '\'' +
                 ", zipcode1=" + zipcode1 +
