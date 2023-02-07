@@ -31,6 +31,7 @@ import com.example.onnuwhere.model.AED;
 import com.example.onnuwhere.model.EarthquakeOutdoorsShelter;
 import com.example.onnuwhere.model.Civil;
 import com.example.onnuwhere.model.TsunamiShelter;
+import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             }
         });
     }
-//
+
 //    private void getHashKey() {
 //        PackageInfo packageInfo = null;
 //        try {
@@ -268,6 +269,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     gugun = address.split(" ");
 
                     //마커 표시
+                    mView.removeAllPOIItems();
                     MapPOIItem marker = new MapPOIItem();
                     marker.setItemName(markerIntent.getStringExtra("placeName"));
                     marker.setTag(Integer.parseInt(markerIntent.getStringExtra("ID")));
@@ -352,35 +354,36 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     }
 
     private void AEDSearch(double x, double y) {
+        mView.addPOIItems(null);
         database = FirebaseDatabase
                 .getInstance();
         DatabaseReference refAED =
                 database.getReference("AED");
         ArrayList<AED> AEDList = new ArrayList<>();
+        List<MapPOIItem> mapPOIItemList = new ArrayList<>();
+        mapPOIItemList.clear();
+
 
         refAED.orderByChild("gugun").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 AEDList.clear();
-                List<MapPOIItem> mapPOIItemList = new ArrayList<>();
                 int index = 0;
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     AED AEDData = dataSnapshot.getValue(AED.class);
                     AEDList.add(AEDData);
-//                                for (int i = 0; i < TsunamiList.size(); i++) {
+                    MapPOIItem mapPOIItem = new MapPOIItem();
                     double lat = AEDList.get(index).getWgs84Lat();
                     double lon = AEDList.get(index).getWgs84Lon();
-                    MapPOIItem mapPOIItem = new MapPOIItem();
                     double calDis = distance(lat, lon, y, x, "K");
                     mapPOIItem.setItemName(AEDList.get(index).getOrg());
                     mapPOIItem.setTag(Integer.parseInt(AEDList.get(index).getZipcode1() + "" + AEDList.get(index).getZipcode2()));
+                    mapPOIItem.setItemName(AEDList.get(index).getBuildPlace());
                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
-
                     mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
                     mapPOIItem.setCustomImageResourceId(R.drawable.aed_32);
                     mapPOIItem.setCustomImageAutoscale(false);
                     mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
-
                     if (calDis * 1000 <= 100000) {
                         mapPOIItemList.add(mapPOIItem);
                     }
@@ -399,32 +402,32 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     private void CivilSearch(double x, double y) {
         database = FirebaseDatabase
                 .getInstance();
-        DatabaseReference refCivil =
+        DatabaseReference refTsunami =
                 database.getReference("Civil");
-        ArrayList<Civil> civilArrayList = new ArrayList<>();
-
-        refCivil.orderByChild("gugun").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
+        ArrayList<Civil> civilList = new ArrayList<>();
+        List<MapPOIItem> mapPOIItemList = new ArrayList<>();
+        mapPOIItemList.clear();
+        refTsunami.orderByChild("gugun").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
             @Override
+
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                civilArrayList.clear();
-                List<MapPOIItem> mapPOIItemList = new ArrayList<>();
-                MapPOIItem mapPOIItem = new MapPOIItem();
+                civilList.clear();
                 int index = 0;
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Civil civilData = dataSnapshot.getValue(Civil.class);
-                    civilArrayList.add(civilData);
-                    double lat = civilArrayList.get(index).getY();
-                    double lon = civilArrayList.get(index).getX();
+                    civilList.add(civilData);
+                    double lat = civilList.get(index).getY();
+                    double lon = civilList.get(index).getX();
+                    MapPOIItem mapPOIItem = new MapPOIItem();
                     double calDis = distance(lat, lon, y, x, "K");
-                    mapPOIItem.setItemName(civilArrayList.get(index).getOrg());
-                    mapPOIItem.setTag((int) civilArrayList.get(index).getcNum());
-                    mapPOIItem.setItemName(civilArrayList.get(index).getBuildPlace());
+                    mapPOIItem.setItemName(civilList.get(index).getOrg());
+                    mapPOIItem.setTag((int) civilList.get(index).getcNum());
                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
                     mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
                     mapPOIItem.setCustomImageResourceId(R.drawable.shelter_32);
-                    mapPOIItem.setCustomImageAutoscale(true);
+                    mapPOIItem.setCustomImageAutoscale(false);
                     mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
-                    if (calDis * 1000 <= 5000) {
+                    if (calDis * 1000 <= 1000000) {
                         mapPOIItemList.add(mapPOIItem);
                     }
                     index++;
@@ -436,21 +439,20 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
             }
         });
-
     }
-
     private void EarthquakeSearch(double x, double y) {
         database = FirebaseDatabase
                 .getInstance();
         DatabaseReference refEarthquake =
                 database.getReference("Earthquake");
         ArrayList<EarthquakeOutdoorsShelter> EarthquakeList = new ArrayList<>();
+        List<MapPOIItem> mapPOIItemList = new ArrayList<>();
+        mapPOIItemList.clear();
 
         refEarthquake.orderByChild("sgg_nm").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 EarthquakeList.clear();
-                List<MapPOIItem> mapPOIItemList = new ArrayList<>();
                 int index = 0;
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     EarthquakeOutdoorsShelter EarthquakeData = dataSnapshot.getValue(EarthquakeOutdoorsShelter.class);
@@ -473,8 +475,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 }
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
-
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -484,17 +484,16 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     }
 
     private void TsunamiSearch(double x, double y) {
-
         database = FirebaseDatabase
                 .getInstance();
         DatabaseReference refTsunami =
                 database.getReference("Tsunami");
         ArrayList<TsunamiShelter> TsunamiList = new ArrayList<>();
         List<MapPOIItem> mapPOIItemList = new ArrayList<>();
+        mapPOIItemList.clear();
 
         refTsunami.orderByChild("sigungu_name").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
             @Override
-
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 TsunamiList.clear();
                 int index = 0;
