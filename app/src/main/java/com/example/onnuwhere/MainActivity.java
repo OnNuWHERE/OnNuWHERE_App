@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 }
             }
         });
-
     }
 //
 //    private void getHashKey() {
@@ -162,18 +161,18 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 //    }
 
     @Override
-    public void onCurrentLocationUpdate(MapView mapView, MapPoint mapPoint, float v) {
+    public void onCurrentLocationUpdate(@NonNull MapView mapView, @NonNull MapPoint mapPoint, float v) {
         mPointGeo = mapPoint.getMapPointGeoCoord();
-
         Log.d("@@@@", "x:" + mPointGeo.latitude + "y:" + mPointGeo.longitude + "f:" + v);
         currentMapPoint = MapPoint.mapPointWithGeoCoord(mPointGeo.latitude, mPointGeo.longitude);
         mapView.setMapCenterPoint(currentMapPoint, true);
 
     }
 
+
     @Override
     public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
-//        TsunamiSearch(mPointGeo.latitude, mPointGeo.longitude);
+
 
     }
 
@@ -215,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         int hasFineLocationPermission = ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION);
         if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED) {
             //이미 가지고 있다면 위치값을 가지고 올 수 있음
+
         } else {
             //퍼미션 허용 x 시 요청이 필요함
             ActivityCompat.requestPermissions(MainActivity.this, REQUIRED_PERMISSIONS, 100);
@@ -282,8 +282,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     //firebase 연결 후 주변 300m 만 마커 표시 그 외에는 마커에서 제외
                     //마커 사용시 커스텀 마커 사용
                     Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
-                    TsunamiSearch(sLong,sLat);
-                    CivilSearch(sLong,sLat);
+                    TsunamiSearch(sLong, sLat);
+                    CivilSearch(sLong, sLat);
                     AEDSearch(sLong, sLat);
                     EarthquakeSearch(sLong, sLat);
 
@@ -309,6 +309,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     @Override
     public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) {
+
 
     }
 
@@ -374,6 +375,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     mapPOIItem.setItemName(AEDList.get(index).getOrg());
                     mapPOIItem.setTag(Integer.parseInt(AEDList.get(index).getZipcode1() + "" + AEDList.get(index).getZipcode2()));
                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
+
                     mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
                     mapPOIItem.setCustomImageResourceId(R.drawable.aed_32);
                     mapPOIItem.setCustomImageAutoscale(false);
@@ -382,7 +384,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     if (calDis * 1000 <= 100000) {
                         mapPOIItemList.add(mapPOIItem);
                     }
-//                                }
                     index++;
                 }
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
@@ -403,8 +404,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         ArrayList<Civil> civilArrayList = new ArrayList<>();
 
 
-        refCivil.orderByChild("stAddr").startAt(gugun[0] + " " + gugun[1]).addValueEventListener(new ValueEventListener() {
-            //        refCivil.orderByChild("stAddr").equalTo("경상북도 영주시 구성로 269 (휴천동, 한국통신)").addValueEventListener(new ValueEventListener() {
+        refCivil.orderByChild("gugun").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 civilArrayList.clear();
@@ -422,14 +422,14 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     mapPOIItem.setTag((int) civilArrayList.get(index).getcNum());
                     mapPOIItem.setItemName(civilArrayList.get(index).getBuildPlace());
                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
-                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.BluePin);
-//                                        mapPOIItem.setCustomImageResourceId(R.drawable.aed_location);
-//                                        mapPOIItem.isCustomImageAutoscale();
+                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+                    mapPOIItem.setCustomImageResourceId(R.drawable.shelter_32);
+                    mapPOIItem.setCustomImageAutoscale(true);
+                    mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
 
                     if (calDis * 1000 <= 300000) {
                         mapPOIItemList.add(mapPOIItem);
                     }
-//                                }
                     index++;
                 }
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
@@ -440,13 +440,14 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
             }
         });
+
     }
 
     private void EarthquakeSearch(double x, double y) {
         database = FirebaseDatabase
                 .getInstance();
         DatabaseReference refEarthquake =
-                database.getReference("EarthquakOutShelter");
+                database.getReference("Earthquake");
         ArrayList<EarthquakeOutdoorsShelter> EarthquakeList = new ArrayList<>();
 
         refEarthquake.orderByChild("sgg_nm").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
@@ -465,29 +466,24 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     mapPOIItem.setItemName(EarthquakeList.get(index).getVt_acmdfclty_nm());
                     mapPOIItem.setTag(Long.valueOf(EarthquakeList.get(index).getArcd()).intValue());
                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
-                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.RedPin);
-                    if (calDis * 1000 <= 100000) {
-                        mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
-                        mapPOIItem.setCustomImageResourceId(R.drawable.earthquake_32);
-                        mapPOIItem.setCustomImageAutoscale(false);
-                        mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
-                        if (calDis * 1000 <= 50000) {
-                            mapPOIItemList.add(mapPOIItem);
-                        }
-                        index++;
+                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+                    mapPOIItem.setCustomImageResourceId(R.drawable.earthquake_32);
+                    mapPOIItem.setCustomImageAutoscale(false);
+                    mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
+                    if (calDis * 1000 <= 50000) {
+                        mapPOIItemList.add(mapPOIItem);
                     }
-                    mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
+                    index++;
                 }
-
-
+                mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
+
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
-
 
     }
 
@@ -496,15 +492,15 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         database = FirebaseDatabase
                 .getInstance();
         DatabaseReference refTsunami =
-                database.getReference("TsunamiShelter");
+                database.getReference("Tsunami");
         ArrayList<TsunamiShelter> TsunamiList = new ArrayList<>();
+        List<MapPOIItem> mapPOIItemList = new ArrayList<>();
 
         refTsunami.orderByChild("sigungu_name").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
             @Override
 
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 TsunamiList.clear();
-                List<MapPOIItem> mapPOIItemList = new ArrayList<>();
                 int index = 0;
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     TsunamiShelter TsunamiData = dataSnapshot.getValue(TsunamiShelter.class);
@@ -524,7 +520,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     if (calDis * 1000 <= 1000000) {
                         mapPOIItemList.add(mapPOIItem);
                     }
-//                                }
                     index++;
                 }
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
@@ -535,7 +530,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
             }
         });
-
     }
 
     private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
