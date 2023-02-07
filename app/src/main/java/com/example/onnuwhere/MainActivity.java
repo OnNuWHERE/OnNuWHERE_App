@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     String address;
     String[] gugun;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -495,6 +496,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         refTsunami.orderByChild("sigungu_name").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mContext = MainActivity.this;
                 TsunamiList.clear();
                 int index = 0;
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
@@ -511,12 +513,16 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     mapPOIItem.setCustomImageResourceId(R.drawable.tsunami_32);
                     mapPOIItem.setCustomImageAutoscale(false);
                     mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
-
-                    if (calDis * 1000 <= 1000000) {
+                    if (calDis * 1000 <= 5000) {
                         mapPOIItemList.add(mapPOIItem);
                     }
                     index++;
                 }
+                manager = new LinearLayoutManager(MainActivity.this,
+                        RecyclerView.VERTICAL, false);
+                TsunamiAdapter tsunamiAdapter = new TsunamiAdapter(TsunamiList);
+                recyclerView.setLayoutManager(manager);
+                recyclerView.setAdapter(tsunamiAdapter);
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
 
