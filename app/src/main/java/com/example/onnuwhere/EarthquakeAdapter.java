@@ -4,6 +4,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,7 +27,6 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<EarthquakeAdapter.My
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.addr_list, parent, false);
-
         EarthquakeAdapter.MyViewHolder viewHolder = new EarthquakeAdapter.MyViewHolder(view);
         return viewHolder;
     }
@@ -45,6 +45,12 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<EarthquakeAdapter.My
             holder.addrCategory.setText("지진대피소");
             holder.addrRaw.setText(earthquakeOutdoorsShelter.getDtl_adres());
             holder.addrDistance.setText(String.valueOf(dis));
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(((MainActivity) MainActivity.mContext).getApplicationContext(), ""+earthquakeOutdoorsShelter.getVt_acmdfclty_nm(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 

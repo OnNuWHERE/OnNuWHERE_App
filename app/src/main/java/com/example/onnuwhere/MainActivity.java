@@ -285,6 +285,9 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     //firebase 연결 후 주변 300m 만 마커 표시 그 외에는 마커에서 제외
                     //마커 사용시 커스텀 마커 사용
                     Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
+                    manager = new LinearLayoutManager(MainActivity.this,
+                            RecyclerView.VERTICAL, false);
+                    recyclerView.setLayoutManager(manager);
                     TsunamiSearch(sLong, sLat);
                     CivilSearch(sLong, sLat);
                     AEDSearch(sLong, sLat);
@@ -474,10 +477,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
-                manager = new LinearLayoutManager(MainActivity.this,
-                        RecyclerView.VERTICAL, false);
+
                 EarthquakeAdapter earthquakeAdapter = new EarthquakeAdapter(EarthquakeList);
-                recyclerView.setLayoutManager(manager);
                 recyclerView.setAdapter(earthquakeAdapter);
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
@@ -523,10 +524,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
-                manager = new LinearLayoutManager(MainActivity.this,
-                        RecyclerView.VERTICAL, false);
                 TsunamiAdapter tsunamiAdapter = new TsunamiAdapter(TsunamiList);
-                recyclerView.setLayoutManager(manager);
                 recyclerView.setAdapter(tsunamiAdapter);
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
