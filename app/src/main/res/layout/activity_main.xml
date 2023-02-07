@@ -30,29 +30,29 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent">
 
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content">-->
+            <!--            <LinearLayout-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content">-->
 
-<!--                <LinearLayout-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:background="@drawable/toolbar">-->
+            <!--                <LinearLayout-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="match_parent"-->
+            <!--                    android:layout_weight="1"-->
+            <!--                    android:background="@drawable/toolbar">-->
 
-<Button
-    android:id="@+id/searchBtn"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:background="#ffffff"
-    android:text="부산진구 부전2동"
-    android:textColor="#bbbbbb"
-    android:gravity="center_vertical"
-    />
-<!--                </LinearLayout>-->
-<!--            </LinearLayout>-->
+            <Button
+                android:id="@+id/searchBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="#ffffff"
+                android:gravity="center_vertical"
+                android:text="부산진구 부전2동"
+                android:textColor="#bbbbbb" />
+            <!--                </LinearLayout>-->
+            <!--            </LinearLayout>-->
         </androidx.appcompat.widget.Toolbar>
+
         <RelativeLayout
             android:id="@+id/RelativeBtn"
             android:layout_width="wrap_content"
@@ -123,28 +123,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <Button
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
+
             <Button
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
+
             <Button
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
+
             <Button
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/recyclerView" />
-
-
-
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewpager"
+            android:clipChildren="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:layout_marginBottom="10dp"/>
     </LinearLayout>
 
 </com.sothree.slidinguppanel.SlidingUpPanelLayout>

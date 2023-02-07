@@ -9,11 +9,8 @@ public class EarthquakeOutdoorsShelter {
     private String ctprvn_nm;
     private String sgg_nm;
     private String title;
-
     private String address;
-
     private long fclty_ar;
-
     private double lon;
     private double lat;
 

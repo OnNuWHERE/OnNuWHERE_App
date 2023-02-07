@@ -1,6 +1,8 @@
 package com.example.onnuwhere.model;
 
-public class AED {
+import java.util.List;
+
+public class AED{
     private long rnum;
 
     private String buildAddress;
@@ -19,6 +21,7 @@ public class AED {
 
     private String gugun;
     private String sido;
+    private String address;
 
 
 
@@ -36,9 +39,10 @@ public class AED {
         this.zipcode2 = 0;
         this.gugun = "";
         this.sido = "";
+        this.address = "";
     }
 
-    public AED(long rnum, String buildAddress, String buildPlace, double lat, double lon, String title, String mfg, String model, int zipcode1, int zipcode2, String gugun, String sido) {
+    public AED(long rnum, String buildAddress, String buildPlace, double lat, double lon, String title, String mfg, String model, int zipcode1, int zipcode2, String gugun, String sido,String address) {
         this.rnum = rnum;
         this.buildAddress = buildAddress;
         this.buildPlace = buildPlace;
@@ -51,9 +55,8 @@ public class AED {
         this.zipcode2 = zipcode2;
         this.gugun = gugun;
         this.sido = sido;
+        this.address = address;
     }
-
-
 
     public long getRnum() {
         return rnum;
@@ -79,11 +82,7 @@ public class AED {
         this.buildPlace = buildPlace;
     }
 
-
-
-
-
-    public double getlat() {
+    public double getLat() {
         return lat;
     }
 
@@ -91,7 +90,7 @@ public class AED {
         this.lat = lat;
     }
 
-    public double getlon() {
+    public double getLon() {
         return lon;
     }
 
@@ -106,8 +105,6 @@ public class AED {
     public void setTitle(String title) {
         this.title = title;
     }
-
-
 
     public String getMfg() {
         return mfg;
@@ -157,6 +154,13 @@ public class AED {
         this.sido = sido;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     @Override
     public String toString() {
