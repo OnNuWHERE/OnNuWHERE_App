@@ -375,8 +375,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     mapPOIItem.setTag(Integer.parseInt(AEDList.get(index).getZipcode1() + "" + AEDList.get(index).getZipcode2()));
                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
                     mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
-                    mapPOIItem.setCustomImageResourceId(R.drawable.aed_location);
-                    mapPOIItem.setCustomImageAutoscale(true);
+                    mapPOIItem.setCustomImageResourceId(R.drawable.aed_32);
+                    mapPOIItem.setCustomImageAutoscale(false);
                     mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
 
                     if (calDis * 1000 <= 100000) {
@@ -466,10 +466,10 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     mapPOIItem.setTag(Long.valueOf(EarthquakeList.get(index).getArcd()).intValue());
                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
                     mapPOIItem.setMarkerType(MapPOIItem.MarkerType.RedPin);
-                    if (calDis * 1000 <= 300000) {
+                    if (calDis * 1000 <= 100000) {
                         mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
-                        mapPOIItem.setCustomImageResourceId(R.drawable.earthquake_location);
-                        mapPOIItem.setCustomImageAutoscale(true);
+                        mapPOIItem.setCustomImageResourceId(R.drawable.earthquake_32);
+                        mapPOIItem.setCustomImageAutoscale(false);
                         mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
                         if (calDis * 1000 <= 50000) {
                             mapPOIItemList.add(mapPOIItem);
@@ -517,8 +517,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     mapPOIItem.setTag(Long.valueOf(TsunamiList.get(index).getId()).intValue());
                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
                     mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
-                    mapPOIItem.setCustomImageResourceId(R.drawable.tsunami_location);
-                    mapPOIItem.setCustomImageAutoscale(true);
+                    mapPOIItem.setCustomImageResourceId(R.drawable.tsunami_32);
+                    mapPOIItem.setCustomImageAutoscale(false);
                     mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
 
                     if (calDis * 1000 <= 1000000) {
