@@ -17,6 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OnNuWHERE"
         android:usesCleartextTraffic="true"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
         tools:targetApi="31">
 
         <activity
