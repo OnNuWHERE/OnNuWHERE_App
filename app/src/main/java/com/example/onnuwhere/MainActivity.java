@@ -403,7 +403,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 database.getReference("Civil");
         ArrayList<Civil> civilArrayList = new ArrayList<>();
 
-
         refCivil.orderByChild("gugun").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -414,7 +413,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Civil civilData = dataSnapshot.getValue(Civil.class);
                     civilArrayList.add(civilData);
-//                                for (int i = 0; i < TsunamiList.size(); i++) {
                     double lat = civilArrayList.get(index).getY();
                     double lon = civilArrayList.get(index).getX();
                     double calDis = distance(lat, lon, y, x, "K");
@@ -426,15 +424,13 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     mapPOIItem.setCustomImageResourceId(R.drawable.shelter_32);
                     mapPOIItem.setCustomImageAutoscale(true);
                     mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
-
-                    if (calDis * 1000 <= 300000) {
+                    if (calDis * 1000 <= 5000) {
                         mapPOIItemList.add(mapPOIItem);
                     }
                     index++;
                 }
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 

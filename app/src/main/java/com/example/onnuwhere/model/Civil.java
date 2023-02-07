@@ -5,40 +5,36 @@ public class Civil {
     private double X;
     private double Y;
     private String bloAddr;
+    private String gugun;
     private String buildAddr;
     private String buildPlace;
     private long cNum;
     private String org;
-    private long orgCd;
     private String orgType;
     private String serialCd;
     private String stAddr;
     private String update;
     private long updateDate;
     private String updateTime;
-    private long validDate;
-    private long zipcode;
 
     public Civil() {
     }
 
-    public Civil(long cNum, long validDate, String update, long updateDate, String updateTime, long zipcode, String bloAddr, String stAddr, String buildAddr, String buildPlace, long orgCd, String orgType, String org, String serialCd, double epsg2097X, double epsg2097Y, double x, double y) {
+    public Civil(long cNum, String update, long updateDate, String updateTime, String bloAddr, String stAddr, String buildAddr, String buildPlace, String orgType, String org, String serialCd, double x, double y, String gugun) {
         this.cNum = cNum;
-        this.validDate = validDate;
         this.update = update;
         this.updateDate = updateDate;
         this.updateTime = updateTime;
-        this.zipcode = zipcode;
         this.bloAddr = bloAddr;
         this.stAddr = stAddr;
         this.buildAddr = buildAddr;
         this.buildPlace = buildPlace;
-        this.orgCd = orgCd;
         this.orgType = orgType;
         this.org = org;
         this.serialCd = serialCd;
         X = x;
         Y = y;
+        this.gugun = gugun;
     }
 
     public double getX() {
@@ -63,6 +59,14 @@ public class Civil {
 
     public void setBloAddr(String bloAddr) {
         this.bloAddr = bloAddr;
+    }
+
+    public String getGugun() {
+        return gugun;
+    }
+
+    public void setGugun(String gugun) {
+        this.gugun = gugun;
     }
 
     public String getBuildAddr() {
@@ -95,14 +99,6 @@ public class Civil {
 
     public void setOrg(String org) {
         this.org = org;
-    }
-
-    public long getOrgCd() {
-        return orgCd;
-    }
-
-    public void setOrgCd(long orgCd) {
-        this.orgCd = orgCd;
     }
 
     public String getOrgType() {
@@ -153,41 +149,23 @@ public class Civil {
         this.updateTime = updateTime;
     }
 
-    public long getValidDate() {
-        return validDate;
-    }
-
-    public void setValidDate(long validDate) {
-        this.validDate = validDate;
-    }
-
-    public long getZipcode() {
-        return zipcode;
-    }
-
-    public void setZipcode(long zipcode) {
-        this.zipcode = zipcode;
-    }
-
     @Override
     public String toString() {
         return "Civil{" +
                 "cNum=" + cNum +
-                ", validDate=" + validDate +
                 ", update='" + update + '\'' +
                 ", updateDate=" + updateDate +
                 ", updateTime='" + updateTime + '\'' +
-                ", zipcode=" + zipcode +
                 ", bloAddr='" + bloAddr + '\'' +
                 ", stAddr='" + stAddr + '\'' +
                 ", buildAddr='" + buildAddr + '\'' +
                 ", buildPlace='" + buildPlace + '\'' +
-                ", orgCd=" + orgCd +
                 ", orgType='" + orgType + '\'' +
                 ", org='" + org + '\'' +
                 ", serialCd='" + serialCd + '\'' +
                 ", X=" + X +
                 ", Y=" + Y +
+                ", gugun="+ gugun + '\'' +
                 '}';
     }
 }
