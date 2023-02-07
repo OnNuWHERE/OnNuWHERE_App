@@ -65,7 +65,7 @@
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="125dp"
-                android:background="@drawable/aed_checked"/>
+                android:background="@drawable/slct_aed_btn"/>
 
 
             <Button
@@ -73,14 +73,21 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_above="@+id/btnAED"
-                android:background="@drawable/minbangwi_checked" />
+                android:background="@drawable/slct_civil_btn" />
 
             <Button
                 android:id="@+id/btnDisaster"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_above="@+id/btnCivil"
-                android:background="@drawable/earthquake_unchecked" />
+                android:background="@drawable/slct_eqos_btn" />
+
+            <Button
+                android:id="@+id/btnTsunami"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_above="@+id/btnDisaster"
+                android:background="@drawable/slct_tsunami_btn" />
         </RelativeLayout>
 
         <Button
@@ -89,7 +96,7 @@
             android:layout_height="50dp"
             android:layout_gravity="bottom"
             android:layout_marginBottom="125dp"
-            android:background="@drawable/location_crosshairs"/>
+            android:background="@drawable/slct_tracking_btn"/>
 
     </FrameLayout>
 
