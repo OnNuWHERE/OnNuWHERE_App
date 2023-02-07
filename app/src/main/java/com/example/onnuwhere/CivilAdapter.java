@@ -7,30 +7,25 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.onnuwhere.model.TsunamiShelter;
-
+import com.example.onnuwhere.model.Civil;
 import java.util.ArrayList;
-import java.util.List;
 
-public class TsunamiAdapter extends RecyclerView.Adapter<TsunamiAdapter.MyViewHolder> {
+public class CivilAdapter extends RecyclerView.Adapter<CivilAdapter.MyViewHolder> {
 
     private MainActivity mContext;
 
-    private TsunamiShelter tsunamiShelter;
+    private Civil civil;
 
 
 
-    private ArrayList<TsunamiShelter> tsunamiShelterList;
+    private ArrayList<Civil> civilArrayList;
 
-    TsunamiAdapter(ArrayList<TsunamiShelter> tsunamiShelterList) {
-        this.tsunamiShelterList = tsunamiShelterList;
+    CivilAdapter(ArrayList<Civil> civilArrayList) {
+        this.civilArrayList = civilArrayList;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView addrTitle, addrDistance, addrRaw, addrCategory;
-
-
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             addrTitle = (TextView) itemView.findViewById(R.id.addrTitle);
@@ -41,37 +36,35 @@ public class TsunamiAdapter extends RecyclerView.Adapter<TsunamiAdapter.MyViewHo
     }
     @NonNull
     @Override
-    public TsunamiAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CivilAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.addr_list, parent, false);
-
         MyViewHolder viewHolder = new MyViewHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TsunamiAdapter.MyViewHolder holder, int position) {
-        tsunamiShelter = tsunamiShelterList.get(position);
+    public void onBindViewHolder(@NonNull CivilAdapter.MyViewHolder holder, int position) {
+        civil = civilArrayList.get(position);
         double lat = ((MainActivity)MainActivity.mContext)
                 .mView.getMapCenterPoint().getMapPointGeoCoord().latitude;
         double lon = ((MainActivity)MainActivity.mContext)
                 .mView.getMapCenterPoint().getMapPointGeoCoord().longitude;
-        double dis = distance(tsunamiShelter.getLat(),tsunamiShelter.getLon(),lat,lon,"K");
+        double dis = distance(civil.getY(),civil.getX(),lat,lon,"K");
         if(dis*1000<=5000){
-            holder.addrTitle.setText(tsunamiShelter.getShel_nm());
-            holder.addrCategory.setText("해일대피소");
-            holder.addrRaw.setText(tsunamiShelter.getAddress());
+            holder.addrTitle.setText(civil.getOrg());
+            holder.addrCategory.setText("민방공대피소");
+            holder.addrRaw.setText(civil.getStAddr());
             if(dis<2){
                 holder.addrDistance.setText((dis*0.001)+"m");
             }else {
                 holder.addrDistance.setText(dis+"km");
             }
-
         }
     }
 
     @Override
     public int getItemCount() {
-        return tsunamiShelterList==null?0:tsunamiShelterList.size();
+        return civilArrayList==null?0:civilArrayList.size();
     }
 
     private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {

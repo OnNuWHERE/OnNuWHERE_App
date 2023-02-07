@@ -392,6 +392,11 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
+                manager = new LinearLayoutManager(MainActivity.this,
+                        RecyclerView.VERTICAL, false);
+                AEDAdpater aedAdpater = new AEDAdpater(AEDList);
+                recyclerView.setLayoutManager(manager);
+                recyclerView.setAdapter(aedAdpater);
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
 
@@ -435,6 +440,11 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
+                manager = new LinearLayoutManager(MainActivity.this,
+                        RecyclerView.VERTICAL, false);
+                CivilAdapter civilAdapter = new CivilAdapter(civilList);
+                recyclerView.setLayoutManager(manager);
+                recyclerView.setAdapter(civilAdapter);
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
             @Override

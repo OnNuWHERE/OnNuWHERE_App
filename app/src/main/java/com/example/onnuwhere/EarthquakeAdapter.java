@@ -44,7 +44,11 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<EarthquakeAdapter.My
             holder.addrTitle.setText(earthquakeOutdoorsShelter.getVt_acmdfclty_nm());
             holder.addrCategory.setText("지진대피소");
             holder.addrRaw.setText(earthquakeOutdoorsShelter.getDtl_adres());
-            holder.addrDistance.setText(String.valueOf(dis));
+            if(dis<2){
+                holder.addrDistance.setText((dis*0.001)+"m");
+            }else {
+                holder.addrDistance.setText(dis+"km");
+            }
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
