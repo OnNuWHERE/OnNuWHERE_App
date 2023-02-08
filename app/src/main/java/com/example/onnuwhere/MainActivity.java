@@ -32,8 +32,13 @@ import com.example.onnuwhere.model.AED;
 import com.example.onnuwhere.model.DataPage;
 import com.example.onnuwhere.model.EarthquakeOutdoorsShelter;
 import com.example.onnuwhere.model.Civil;
+import com.example.onnuwhere.model.Place;
 import com.example.onnuwhere.model.Recycle;
 import com.example.onnuwhere.model.TsunamiShelter;
+import com.example.onnuwhere.model.firstpage.Document;
+import com.example.onnuwhere.model.firstpage.InitAddr;
+import com.example.onnuwhere.model.firstpage.InitLoc;
+import com.example.onnuwhere.model.firstpage.InitRoadAddr;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,6 +51,12 @@ import net.daum.mf.map.api.MapView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapView.MapViewEventListener {
 
@@ -62,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     MapView mView;
     ViewPager2 viewPager2;
     FirebaseDatabase database;
+    KakaoService kakaoService;
     String address;
     String[] gugun;
     ArrayList<TsunamiShelter> TsunamiList;
@@ -106,22 +118,58 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             checkRunTimePermission();
         }
 
+        // 초기 위치 검색 후 주위 마커 띄우기 식
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                        PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        if (lm.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
+            location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        } else {
+            location = (Location) lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        }
+        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://dapi.kakao.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        String apiKey = "KakaoAK 091bdc2aa5e0e18b40a1fab4607866e8";
+        kakaoService = retrofit.create(KakaoService.class);
+
+        Call<Document> call =
+                kakaoService.getXY(apiKey, String.valueOf(location.getLongitude()),
+                        String.valueOf(location.getLatitude()));
+
+        call.enqueue(new Callback<Document>() {
+            @Override
+            public void onResponse(Call<Document> call, Response<Document> response) {
+                Document p = response.body();
+                InitLoc loc = p.getDocuments();
+                InitRoadAddr addr = loc.getRoad_address();
+                address = addr.getAddress_name();
+                Log.d("주소", ""+address);
+                gugun = address.split(" ");
+                TsunamiSearch(location.getLongitude(), location.getLatitude());
+                CivilSearch(location.getLongitude(), location.getLatitude());
+                AEDSearch(location.getLongitude(), location.getLatitude());
+                EarthquakeSearch(location.getLongitude(), location.getLatitude());
+                btnAED.setSelected(true);
+                btnCivil.setSelected(true);
+                btnTsunami.setSelected(true);
+                btnDisaster.setSelected(true);
+            }
+
+            @Override
+            public void onFailure(Call<Document> call, Throwable t) {
+
+            }
+        });
+
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED &&
-                        ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                                PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                if (lm.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
-                    location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                } else {
-                    location = (Location) lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                }
                 Intent searchIntent = new Intent(MainActivity.this, Search_View.class);
                 startActivityForResult(searchIntent, 1);
 
@@ -155,12 +203,23 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         btnAED.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MapPOIItem[] maklist = mView.getPOIItems();
                 if (selectedBtn) {
                     btnAED.setSelected(false);
                     selectedBtn = false;
+                    for (int i=0; i<maklist.length; i++) {
+                        if(maklist[i].getCustomImageResourceId() == R.drawable.aed_32){
+                            maklist[i].setAlpha(0.0f);
+                        }
+                    }
                 } else {
                     btnAED.setSelected(true);
                     selectedBtn = true;
+                    for (int i=0; i<maklist.length; i++) {
+                        if(maklist[i].getCustomImageResourceId() == R.drawable.aed_32){
+                            maklist[i].setAlpha(1.0f);
+                        }
+                    }
                 }
             }
         });//btnAED
@@ -168,12 +227,23 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         btnTsunami.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MapPOIItem[] maklist = mView.getPOIItems();
                 if (selectedBtn) {
                     btnTsunami.setSelected(false);
                     selectedBtn = false;
+                    for (int i=0; i<maklist.length; i++) {
+                        if(maklist[i].getCustomImageResourceId() == R.drawable.tsunami_32){
+                            maklist[i].setAlpha(0.0f);
+                        }
+                    }
                 } else {
                     btnTsunami.setSelected(true);
                     selectedBtn = true;
+                    for (int i=0; i<maklist.length; i++) {
+                        if(maklist[i].getCustomImageResourceId() == R.drawable.tsunami_32){
+                            maklist[i].setAlpha(1.0f);
+                        }
+                    }
                 }
             }
         });//btnTsunami
@@ -181,12 +251,23 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         btnCivil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MapPOIItem[] maklist = mView.getPOIItems();
                 if (selectedBtn) {
                     btnCivil.setSelected(false);
                     selectedBtn = false;
+                    for (int i=0; i<maklist.length; i++) {
+                        if(maklist[i].getCustomImageResourceId() == R.drawable.shelter_32){
+                            maklist[i].setAlpha(0.0f);
+                        }
+                    }
                 } else {
                     btnCivil.setSelected(true);
                     selectedBtn = true;
+                    for (int i=0; i<maklist.length; i++) {
+                        if(maklist[i].getCustomImageResourceId() == R.drawable.shelter_32){
+                            maklist[i].setAlpha(1.0f);
+                        }
+                    }
                 }
             }
         });//btnCivil
@@ -194,12 +275,23 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         btnDisaster.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                MapPOIItem[] maklist = mView.getPOIItems();
                 if (selectedBtn) {
                     btnDisaster.setSelected(false);
                     selectedBtn = false;
+                    for (int i=0; i<maklist.length; i++) {
+                        if(maklist[i].getCustomImageResourceId() == R.drawable.earthquake_32){
+                            maklist[i].setAlpha(0.0f);
+                        }
+                    }
                 } else {
                     btnDisaster.setSelected(true);
                     selectedBtn = true;
+                    for (int i=0; i<maklist.length; i++) {
+                        if(maklist[i].getCustomImageResourceId() == R.drawable.earthquake_32){
+                            maklist[i].setAlpha(1.0f);
+                        }
+                    }
                 }
             }
         });//btnDisaster
@@ -306,6 +398,11 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     address = markerIntent.getStringExtra("address_name");
                     gugun = address.split(" ");
 
+                    btnDisaster.setSelected(true);
+                    btnAED.setSelected(true);
+                    btnCivil.setSelected(true);
+                    btnTsunami.setSelected(true);
+
                     //마커 표시
                     mView.removeAllPOIItems();
                     MapPOIItem marker = new MapPOIItem();
@@ -328,6 +425,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 }
                 viewPager2.setAdapter(new MainAdapter(dataPageList));
                 Log.d("목록", "" + dataPageList.toString());
+
             }
         }
     }//onActivityResult
@@ -434,12 +532,12 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     private void CivilSearch(double x, double y) {
         database = FirebaseDatabase
                 .getInstance();
-        DatabaseReference refTsunami =
+        DatabaseReference refCivil =
                 database.getReference("Civil");
         civilList = new ArrayList<>();
         List<MapPOIItem> mapPOIItemList = new ArrayList<>();
         mapPOIItemList.clear();
-        refTsunami.orderByChild("gugun").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
+        refCivil.orderByChild("gugun").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
             @Override
 
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -651,6 +749,200 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             dataPage.setRecycleList(recycleList);
         }
         return dataPage;
+    }
+
+    private void MainTsu(double x, double y) {
+        database = FirebaseDatabase
+                .getInstance();
+        DatabaseReference refTsunami =
+                database.getReference("Tsunami");
+        TsunamiList = new ArrayList<>();
+        List<MapPOIItem> mapPOIItemList = new ArrayList<>();
+        mapPOIItemList.clear();
+
+        refTsunami.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mContext = MainActivity.this;
+                TsunamiList.clear();
+                int index = 0;
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Log.d("index", "" + index);
+                    TsunamiShelter TsunamiData = dataSnapshot.getValue(TsunamiShelter.class);
+                    TsunamiList.add(TsunamiData);
+                    double lat = TsunamiList.get(index).getLat();
+                    double lon = TsunamiList.get(index).getLon();
+                    MapPOIItem mapPOIItem = new MapPOIItem();
+                    double calDis = distance(lat, lon, y, x, "K");
+                    mapPOIItem.setItemName(TsunamiList.get(index).getTitle());
+                    mapPOIItem.setTag(Long.valueOf(TsunamiList.get(index).getId()).intValue());
+                    mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
+                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+                    mapPOIItem.setCustomImageResourceId(R.drawable.tsunami_32);
+                    mapPOIItem.setCustomImageAutoscale(false);
+                    mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
+                    if (calDis * 1000 <= 5000) {
+                        mapPOIItemList.add(mapPOIItem);
+                    }
+                    index++;
+                }
+                dataPageList.add(TsuRe(TsunamiList));
+                Log.d("@@@", "" + TsunamiList.size());
+                mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void MainERQ(double x, double y) {
+
+        database = FirebaseDatabase
+                .getInstance();
+        DatabaseReference refEarthquake =
+                database.getReference("Earthquake");
+        EarthquakeList = new ArrayList<>();
+        List<MapPOIItem> mapPOIItemList = new ArrayList<>();
+        mapPOIItemList.clear();
+
+        refEarthquake.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mContext = MainActivity.this;
+                EarthquakeList.clear();
+                int index = 0;
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    EarthquakeOutdoorsShelter EarthquakeData = dataSnapshot.getValue(EarthquakeOutdoorsShelter.class);
+                    EarthquakeList.add(EarthquakeData);
+                    double lat = EarthquakeList.get(index).getLat();
+                    double lon = EarthquakeList.get(index).getLon();
+                    MapPOIItem mapPOIItem = new MapPOIItem();
+                    double calDis = distance(lat, lon, y, x, "K");
+                    mapPOIItem.setItemName(EarthquakeList.get(index).getTitle());
+                    mapPOIItem.setTag(Long.valueOf(EarthquakeList.get(index).getArcd()).intValue());
+                    mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
+                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+                    mapPOIItem.setCustomImageResourceId(R.drawable.earthquake_32);
+                    mapPOIItem.setCustomImageAutoscale(false);
+                    mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
+                    if (calDis * 1000 <= 5000) {
+                        mapPOIItemList.add(mapPOIItem);
+                    }
+                    index++;
+                }
+                dataPageList.add(ERQRe(EarthquakeList));
+                Log.d("@@@", "" + EarthquakeList.size());
+                mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    private void MainCivil(double x, double y) {
+        database = FirebaseDatabase
+                .getInstance();
+        DatabaseReference refCivil =
+                database.getReference("Civil");
+        civilList = new ArrayList<>();
+        List<MapPOIItem> mapPOIItemList = new ArrayList<>();
+        mapPOIItemList.clear();
+        refCivil.addValueEventListener(new ValueEventListener() {
+            @Override
+
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                civilList.clear();
+                int index = 0;
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Civil civilData = dataSnapshot.getValue(Civil.class);
+                    civilList.add(civilData);
+                    double lat = civilList.get(index).getLat();
+                    double lon = civilList.get(index).getLon();
+                    MapPOIItem mapPOIItem = new MapPOIItem();
+                    double calDis = distance(lat, lon, y, x, "K");
+                    mapPOIItem.setItemName(civilList.get(index).getTitle());
+                    mapPOIItem.setTag((int) civilList.get(index).getcNum());
+                    mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
+                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+                    mapPOIItem.setCustomImageResourceId(R.drawable.shelter_32);
+                    mapPOIItem.setCustomImageAutoscale(false);
+                    mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
+                    if (calDis * 1000 <= 5000) {
+                        mapPOIItemList.add(mapPOIItem);
+                    }
+                    index++;
+                }
+                dataPageList.add(CivilRe(civilList));
+                Log.d("@@@", "" + civilList.size());
+                mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    private void MainAED(double x, double y) {
+        database = FirebaseDatabase
+                .getInstance();
+        DatabaseReference refAED =
+                database.getReference("AED");
+        AEDList = new ArrayList<>();
+        List<MapPOIItem> mapPOIItemList = new ArrayList<>();
+        mapPOIItemList.clear();
+
+        refAED.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                AEDList.clear();
+
+                int index = 0;
+
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    AED AEDData = dataSnapshot.getValue(AED.class);
+                    AEDList.add(AEDData);
+
+                    MapPOIItem mapPOIItem = new MapPOIItem();
+
+                    double lat = AEDList.get(index).getLat();
+                    double lon = AEDList.get(index).getLon();
+                    double calDis = distance(lat, lon, y, x, "K");
+
+                    mapPOIItem.setItemName(AEDList.get(index).getTitle());
+                    mapPOIItem.setTag(Integer.parseInt(AEDList.get(index).getZipcode1() + "" + AEDList.get(index).getZipcode2()));
+                    mapPOIItem.setItemName(AEDList.get(index).getBuildPlace());
+                    mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
+                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
+                    mapPOIItem.setCustomImageResourceId(R.drawable.aed_32);
+                    mapPOIItem.setCustomImageAutoscale(false);
+                    mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
+
+                    if (calDis * 1000 <= 5000) {
+                        mapPOIItemList.add(mapPOIItem);
+                    }
+                    index++;
+                }
+                dataPageList.add(AEDRe(AEDList));
+                Log.d("@@@", "" + AEDList.size());
+                mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
 

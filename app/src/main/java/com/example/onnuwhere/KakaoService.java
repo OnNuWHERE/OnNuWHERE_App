@@ -1,9 +1,12 @@
 package com.example.onnuwhere;
 
-import com.example.onnuwhere.model.Place;
+
 import com.example.onnuwhere.model.ResultSearchKeyword;
 
-import java.util.List;
+import com.example.onnuwhere.model.firstpage.Document;
+import com.example.onnuwhere.model.firstpage.InitLoc;
+
+
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -16,4 +19,10 @@ public interface KakaoService {
             @Header("Authorization") String key, @Query("query") String query
             ,@Query("y") String y, @Query("x") String x,
              @Query("size") int size);
+
+    @GET("v2/local/geo/coord2address.json")
+    Call<Document> getXY(
+            @Header("Authorization") String key
+            ,@Query("x") String x, @Query("y") String y);
+
 }
