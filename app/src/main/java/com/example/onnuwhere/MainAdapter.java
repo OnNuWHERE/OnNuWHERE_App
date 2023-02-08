@@ -39,7 +39,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             recyclerView = (RecyclerView) itemView.findViewById(R.id.subRecycler);
         }
     }
-
     @NonNull
     @Override
     public MainAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -52,7 +51,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull MainAdapter.ViewHolder holder, int position) {
     dataPage = dataPageList.get(position);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(holder.recyclerView.getContext(),LinearLayoutManager.HORIZONTAL,false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(holder.recyclerView.getContext(),LinearLayoutManager.VERTICAL,false);
         layoutManager.setInitialPrefetchItemCount(dataPage.getRecycleList().size());
 
         SubAdapter subAdapter = new SubAdapter(dataPage.getRecycleList());

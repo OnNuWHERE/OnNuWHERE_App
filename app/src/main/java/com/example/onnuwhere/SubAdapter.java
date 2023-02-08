@@ -1,5 +1,6 @@
 package com.example.onnuwhere;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,9 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull SubAdapter.ViewHolder holder, int position) {
+        Log.d("sub","list"+recycleList);
         recycle = recycleList.get(position);
+        Log.d("sub","recycle:"+recycle);
         double lat = ((MainActivity)MainActivity.mContext)
                 .mView.getMapCenterPoint().getMapPointGeoCoord().latitude;
         double lon = ((MainActivity)MainActivity.mContext)
