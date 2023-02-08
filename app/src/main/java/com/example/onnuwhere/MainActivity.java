@@ -82,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     ArrayList<EarthquakeOutdoorsShelter> EarthquakeList;
 
     List<DataPage> dataPageList = new ArrayList<>();
+    double sLat;
+    double sLong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -393,8 +395,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     Intent markerIntent = data;
                     Log.d("2@@@", markerIntent + "");
 
-                    double sLat = Double.parseDouble(markerIntent.getStringExtra("y"));
-                    double sLong = Double.parseDouble(markerIntent.getStringExtra("x"));
+                    sLat = Double.parseDouble(markerIntent.getStringExtra("y"));
+                    sLong = Double.parseDouble(markerIntent.getStringExtra("x"));
                     address = markerIntent.getStringExtra("address_name");
                     gugun = address.split(" ");
 
@@ -420,11 +422,19 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     CivilSearch(sLong, sLat);
                     AEDSearch(sLong, sLat);
                     EarthquakeSearch(sLong, sLat);
+                    new Handler().postDelayed(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            viewPager2.setAdapter(new MainAdapter(dataPageList));
+                        }
+                    }, 16500);// 0.6초 정도 딜레이를 준 후 시작
+
+                    Log.d("목록", "" + dataPageList.toString());
                 } else {
                     Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
                 }
-                viewPager2.setAdapter(new MainAdapter(dataPageList));
-                Log.d("목록", "" + dataPageList.toString());
 
             }
         }
@@ -669,6 +679,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     }
 
     private DataPage AEDRe(ArrayList<AED> AEDList) {
+
         List<Recycle> recycleList = new ArrayList<>();
 
         if (AEDList.size() != 0) {
@@ -680,6 +691,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 recycle.setTitle(a.getTitle());
                 recycle.setAddress(a.getAddress());
                 recycle.setCategory("제세동기");
+                recycle.setDis(distance(a.getLat(),a.getLon(),sLat,sLong,"K"));
                 recycleList.add(recycle);
             }
         }
@@ -690,6 +702,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     }
 
     private DataPage CivilRe(ArrayList<Civil> civilList) {
+
         List<Recycle> recycleList = new ArrayList<>();
 
         if (civilList.size() != 0) {
@@ -701,6 +714,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 recycle.setTitle(c.getTitle());
                 recycle.setAddress(c.getAddress());
                 recycle.setCategory("민방공대피소");
+                recycle.setDis(distance(c.getLat(),c.getLon(),sLat,sLong,"K"));
                 recycleList.add(recycle);
             }
         }
@@ -722,6 +736,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 recycle.setTitle(e.getTitle());
                 recycle.setAddress(e.getAddress());
                 recycle.setCategory("지진대피소");
+                recycle.setDis(distance(e.getLat(),e.getLon(),sLat,sLong,"K"));
                 recycleList.add(recycle);
             }
         }
@@ -732,6 +747,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     }
 
     private DataPage TsuRe(ArrayList<TsunamiShelter> tsunamiList) {
+
         List<Recycle> recycleList = new ArrayList<>();
 
         DataPage dataPage = new DataPage();
@@ -744,205 +760,12 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 recycle.setTitle(t.getTitle());
                 recycle.setAddress(t.getAddress());
                 recycle.setCategory("해일대피소");
+                recycle.setDis(distance(t.getLat(),t.getLon(),sLat,sLong,"K"));
                 recycleList.add(recycle);
             }
             dataPage.setRecycleList(recycleList);
         }
         return dataPage;
-    }
-
-    private void MainTsu(double x, double y) {
-        database = FirebaseDatabase
-                .getInstance();
-        DatabaseReference refTsunami =
-                database.getReference("Tsunami");
-        TsunamiList = new ArrayList<>();
-        List<MapPOIItem> mapPOIItemList = new ArrayList<>();
-        mapPOIItemList.clear();
-
-        refTsunami.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                mContext = MainActivity.this;
-                TsunamiList.clear();
-                int index = 0;
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Log.d("index", "" + index);
-                    TsunamiShelter TsunamiData = dataSnapshot.getValue(TsunamiShelter.class);
-                    TsunamiList.add(TsunamiData);
-                    double lat = TsunamiList.get(index).getLat();
-                    double lon = TsunamiList.get(index).getLon();
-                    MapPOIItem mapPOIItem = new MapPOIItem();
-                    double calDis = distance(lat, lon, y, x, "K");
-                    mapPOIItem.setItemName(TsunamiList.get(index).getTitle());
-                    mapPOIItem.setTag(Long.valueOf(TsunamiList.get(index).getId()).intValue());
-                    mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
-                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
-                    mapPOIItem.setCustomImageResourceId(R.drawable.tsunami_32);
-                    mapPOIItem.setCustomImageAutoscale(false);
-                    mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
-                    if (calDis * 1000 <= 5000) {
-                        mapPOIItemList.add(mapPOIItem);
-                    }
-                    index++;
-                }
-                dataPageList.add(TsuRe(TsunamiList));
-                Log.d("@@@", "" + TsunamiList.size());
-                mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    private void MainERQ(double x, double y) {
-
-        database = FirebaseDatabase
-                .getInstance();
-        DatabaseReference refEarthquake =
-                database.getReference("Earthquake");
-        EarthquakeList = new ArrayList<>();
-        List<MapPOIItem> mapPOIItemList = new ArrayList<>();
-        mapPOIItemList.clear();
-
-        refEarthquake.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                mContext = MainActivity.this;
-                EarthquakeList.clear();
-                int index = 0;
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    EarthquakeOutdoorsShelter EarthquakeData = dataSnapshot.getValue(EarthquakeOutdoorsShelter.class);
-                    EarthquakeList.add(EarthquakeData);
-                    double lat = EarthquakeList.get(index).getLat();
-                    double lon = EarthquakeList.get(index).getLon();
-                    MapPOIItem mapPOIItem = new MapPOIItem();
-                    double calDis = distance(lat, lon, y, x, "K");
-                    mapPOIItem.setItemName(EarthquakeList.get(index).getTitle());
-                    mapPOIItem.setTag(Long.valueOf(EarthquakeList.get(index).getArcd()).intValue());
-                    mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
-                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
-                    mapPOIItem.setCustomImageResourceId(R.drawable.earthquake_32);
-                    mapPOIItem.setCustomImageAutoscale(false);
-                    mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
-                    if (calDis * 1000 <= 5000) {
-                        mapPOIItemList.add(mapPOIItem);
-                    }
-                    index++;
-                }
-                dataPageList.add(ERQRe(EarthquakeList));
-                Log.d("@@@", "" + EarthquakeList.size());
-                mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-    }
-
-    private void MainCivil(double x, double y) {
-        database = FirebaseDatabase
-                .getInstance();
-        DatabaseReference refCivil =
-                database.getReference("Civil");
-        civilList = new ArrayList<>();
-        List<MapPOIItem> mapPOIItemList = new ArrayList<>();
-        mapPOIItemList.clear();
-        refCivil.addValueEventListener(new ValueEventListener() {
-            @Override
-
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                civilList.clear();
-                int index = 0;
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Civil civilData = dataSnapshot.getValue(Civil.class);
-                    civilList.add(civilData);
-                    double lat = civilList.get(index).getLat();
-                    double lon = civilList.get(index).getLon();
-                    MapPOIItem mapPOIItem = new MapPOIItem();
-                    double calDis = distance(lat, lon, y, x, "K");
-                    mapPOIItem.setItemName(civilList.get(index).getTitle());
-                    mapPOIItem.setTag((int) civilList.get(index).getcNum());
-                    mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
-                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
-                    mapPOIItem.setCustomImageResourceId(R.drawable.shelter_32);
-                    mapPOIItem.setCustomImageAutoscale(false);
-                    mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
-                    if (calDis * 1000 <= 5000) {
-                        mapPOIItemList.add(mapPOIItem);
-                    }
-                    index++;
-                }
-                dataPageList.add(CivilRe(civilList));
-                Log.d("@@@", "" + civilList.size());
-                mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-    }
-
-    private void MainAED(double x, double y) {
-        database = FirebaseDatabase
-                .getInstance();
-        DatabaseReference refAED =
-                database.getReference("AED");
-        AEDList = new ArrayList<>();
-        List<MapPOIItem> mapPOIItemList = new ArrayList<>();
-        mapPOIItemList.clear();
-
-        refAED.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                AEDList.clear();
-
-                int index = 0;
-
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    AED AEDData = dataSnapshot.getValue(AED.class);
-                    AEDList.add(AEDData);
-
-                    MapPOIItem mapPOIItem = new MapPOIItem();
-
-                    double lat = AEDList.get(index).getLat();
-                    double lon = AEDList.get(index).getLon();
-                    double calDis = distance(lat, lon, y, x, "K");
-
-                    mapPOIItem.setItemName(AEDList.get(index).getTitle());
-                    mapPOIItem.setTag(Integer.parseInt(AEDList.get(index).getZipcode1() + "" + AEDList.get(index).getZipcode2()));
-                    mapPOIItem.setItemName(AEDList.get(index).getBuildPlace());
-                    mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
-                    mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
-                    mapPOIItem.setCustomImageResourceId(R.drawable.aed_32);
-                    mapPOIItem.setCustomImageAutoscale(false);
-                    mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
-
-                    if (calDis * 1000 <= 5000) {
-                        mapPOIItemList.add(mapPOIItem);
-                    }
-                    index++;
-                }
-                dataPageList.add(AEDRe(AEDList));
-                Log.d("@@@", "" + AEDList.size());
-                mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
     }
 
 
