@@ -9,7 +9,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
@@ -524,10 +523,10 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         List<Recycle> recycleList = new ArrayList<>();
         if(AEDList.size()!=0){
             for(AED a : AEDList){
-                recycle.setLat(AEDList.get(index).getLat());
-                recycle.setLon(AEDList.get(index).getLon());
-                recycle.setTitle(AEDList.get(index).getTitle());
-                recycle.setAddress(AEDList.get(index).getAddress());
+                recycle.setLat(a.getLat());
+                recycle.setLon(a.getLon());
+                recycle.setTitle(a.getTitle());
+                recycle.setAddress(a.getAddress());
                 recycle.setCategory("제세동기");
                 recycleList.add(recycle);
                 index++;
@@ -538,18 +537,16 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         return dataPage;
     }
     private DataPage CivilRe() {
-        int index = 0;
         Recycle recycle = new Recycle();
         List<Recycle> recycleList = new ArrayList<>();
         if (civilList.size() != 0) {
-            for (ArrayList<Civil> c : civilList) {
-                recycle.setLat(civilList.get(index).getLat());
-                recycle.setLon(civilList.get(index).getLon());
-                recycle.setTitle(civilList.get(index).getTitle());
-                recycle.setAddress(civilList.get(index).getAddress());
+            for (Civil c : civilList) {
+                recycle.setLat(c.getLat());
+                recycle.setLon(c.getLon());
+                recycle.setTitle(c.getTitle());
+                recycle.setAddress(c.getAddress());
                 recycle.setCategory("민방공대피소");
                 recycleList.add(recycle);
-                index++;
             }
         }
         DataPage dataPage = new DataPage();
@@ -562,10 +559,10 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         List<Recycle> recycleList = new ArrayList<>();
         if(EarthquakeList.size()!=0){
             for(EarthquakeOutdoorsShelter e : EarthquakeList){
-                recycle.setLat(EarthquakeList.get(index).getLat());
-                recycle.setLon(EarthquakeList.get(index).getLon());
-                recycle.setTitle(EarthquakeList.get(index).getTitle());
-                recycle.setAddress(EarthquakeList.get(index).getAddress());
+                recycle.setLat(e.getLat());
+                recycle.setLon(e.getLon());
+                recycle.setTitle(e.getTitle());
+                recycle.setAddress(e.getAddress());
                 recycle.setCategory("지진대피소");
                 recycleList.add(recycle);
                 index++;
@@ -581,10 +578,10 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         List<Recycle> recycleList = new ArrayList<>();
         if(TsunamiList.size()!=0){
             for(TsunamiShelter t : TsunamiList){
-                recycle.setLat(TsunamiList.get(index).getLat());
-                recycle.setLon(TsunamiList.get(index).getLon());
-                recycle.setTitle(TsunamiList.get(index).getTitle());
-                recycle.setAddress(TsunamiList.get(index).getAddress());
+                recycle.setLat(t.getLat());
+                recycle.setLon(t.getLon());
+                recycle.setTitle(t.getTitle());
+                recycle.setAddress(t.getAddress());
                 recycle.setCategory("해일대피소");
                 recycleList.add(recycle);
                 index++;
