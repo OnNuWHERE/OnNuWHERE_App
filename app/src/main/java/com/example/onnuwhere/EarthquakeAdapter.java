@@ -38,23 +38,19 @@ public class EarthquakeAdapter extends RecyclerView.Adapter<EarthquakeAdapter.My
                 .mView.getMapCenterPoint().getMapPointGeoCoord().latitude;
         double lon = ((MainActivity)MainActivity.mContext)
                 .mView.getMapCenterPoint().getMapPointGeoCoord().longitude;
-        double dis = distance(earthquakeOutdoorsShelter.getYcord(),
-                earthquakeOutdoorsShelter.getXcord(),lat,lon,"K");
+        double dis = distance(earthquakeOutdoorsShelter.getLat(),
+                earthquakeOutdoorsShelter.getLon(),lat,lon,"K");
         if(dis*1000<=5000){
-            holder.addrTitle.setText(earthquakeOutdoorsShelter.getVt_acmdfclty_nm());
+            holder.addrTitle.setText(earthquakeOutdoorsShelter.getTitle());
             holder.addrCategory.setText("지진대피소");
-            holder.addrRaw.setText(earthquakeOutdoorsShelter.getDtl_adres());
-            if(dis<2){
-                holder.addrDistance.setText((dis*0.001)+"m");
-            }else {
-                holder.addrDistance.setText(dis+"km");
-            }
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(((MainActivity) MainActivity.mContext).getApplicationContext(), ""+earthquakeOutdoorsShelter.getVt_acmdfclty_nm(), Toast.LENGTH_SHORT).show();
-                }
-            });
+            holder.addrRaw.setText(earthquakeOutdoorsShelter.getAddress());
+            holder.addrDistance.setText(String.valueOf(dis));
+//            holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Toast.makeText(((MainActivity) MainActivity.mContext).getApplicationContext(), ""+earthquakeOutdoorsShelter.getVt_acmdfclty_nm(), Toast.LENGTH_SHORT).show();
+//                }
+//            });
         }
     }
 

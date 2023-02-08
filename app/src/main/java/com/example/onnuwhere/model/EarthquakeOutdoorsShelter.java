@@ -8,14 +8,11 @@ public class EarthquakeOutdoorsShelter {
 
     private String ctprvn_nm;
     private String sgg_nm;
-    private String vt_acmdfclty_nm;
-
-    private String dtl_adres;
-
+    private String title;
+    private String address;
     private long fclty_ar;
-
-    private double xcord;
-    private double ycord;
+    private double lon;
+    private double lat;
 
 
     @Override
@@ -25,11 +22,11 @@ public class EarthquakeOutdoorsShelter {
                 ", arcd=" + arcd +
                 ", sgg_nm='" + sgg_nm + '\'' +
                 ", ctprvn_nm='" + ctprvn_nm + '\'' +
-                ", dtl_adres='" + dtl_adres + '\'' +
-                ", vt_acmdfclty_nm='" + vt_acmdfclty_nm + '\'' +
+                ", dtl_adres='" + address + '\'' +
+                ", vt_acmdfclty_nm='" + title + '\'' +
                 ", fclty_ar=" + fclty_ar +
-                ", xcord=" + xcord +
-                ", ycord=" + ycord +
+                ", xcord=" + lon +
+                ", ycord=" + lat +
                 '}';
     }
 
@@ -65,20 +62,20 @@ public class EarthquakeOutdoorsShelter {
         this.ctprvn_nm = ctprvn_nm;
     }
 
-    public String getDtl_adres() {
-        return dtl_adres;
+    public String getAddress() {
+        return address;
     }
 
-    public void setDtl_adres(String dtl_adres) {
-        this.dtl_adres = dtl_adres;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getVt_acmdfclty_nm() {
-        return vt_acmdfclty_nm;
+    public String getTitle() {
+        return title;
     }
 
-    public void setVt_acmdfclty_nm(String vt_acmdfclty_nm) {
-        this.vt_acmdfclty_nm = vt_acmdfclty_nm;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public long getFclty_ar() {
@@ -89,20 +86,20 @@ public class EarthquakeOutdoorsShelter {
         this.fclty_ar = fclty_ar;
     }
 
-    public double getXcord() {
-        return xcord;
+    public double getLon() {
+        return lon;
     }
 
-    public void setXcord(double xcord) {
-        this.xcord = xcord;
+    public void setLon(double lon) {
+        this.lon = lon;
     }
 
-    public double getYcord() {
-        return ycord;
+    public double getLat() {
+        return lat;
     }
 
-    public void setYcord(double ycord) {
-        this.ycord = ycord;
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 
     public EarthquakeOutdoorsShelter(long acmdfclty_sn, long arcd, String sgg_nm, String ctprvn_nm, String dtl_adres, String vt_acmdfclty_nm, long fclty_ar, double xcord, double ycord) {
@@ -110,11 +107,11 @@ public class EarthquakeOutdoorsShelter {
         this.arcd = arcd;
         this.sgg_nm = sgg_nm;
         this.ctprvn_nm = ctprvn_nm;
-        this.dtl_adres = dtl_adres;
-        this.vt_acmdfclty_nm = vt_acmdfclty_nm;
+        this.address = dtl_adres;
+        this.title = vt_acmdfclty_nm;
         this.fclty_ar = fclty_ar;
-        this.xcord = xcord;
-        this.ycord = ycord;
+        this.lon = xcord;
+        this.lat = ycord;
     }
 
     public EarthquakeOutdoorsShelter() {

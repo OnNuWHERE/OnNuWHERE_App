@@ -1,15 +1,17 @@
 package com.example.onnuwhere.model;
 
-public class AED {
+import java.util.List;
+
+public class AED{
     private long rnum;
 
     private String buildAddress;
     private String buildPlace;
 
-    private double wgs84Lat;
-    private double wgs84Lon;
+    private double lat;
+    private double lon;
 
-    private String org;
+    private String title;
 
     private String mfg;
     private String model;
@@ -19,6 +21,7 @@ public class AED {
 
     private String gugun;
     private String sido;
+    private String address;
 
 
 
@@ -27,33 +30,33 @@ public class AED {
         this.rnum = 0;
         this.buildAddress = "";
         this.buildPlace = "";
-        this.wgs84Lat = 0;
-        this.wgs84Lon = 0;
-        this.org = "";
+        this.lat = 0;
+        this.lon = 0;
+        this.title = "";
         this.mfg = "";
         this.model = "";
         this.zipcode1 = 0;
         this.zipcode2 = 0;
         this.gugun = "";
         this.sido = "";
+        this.address = "";
     }
 
-    public AED(long rnum, String buildAddress, String buildPlace, long clerkTel, double wgs84Lat, double wgs84Lon, String org, String manager, String managerTel, String mfg, String model, int zipcode1, int zipcode2, String gugun, String sido, String sunFrtYon, String sunScdYon, String sunThiYon, String sunFurYon, String sunFifYon, int monEndTme, int monSttTme, int tueEndTme, int tueSttTme, int wedEndTme, int wedSttTme, int thuEndTme, int thuSttTme, int friSttTme, int friEndTme, int satEndTme, int satSttTme, int sunSttTme, int sunEndTme) {
+    public AED(long rnum, String buildAddress, String buildPlace, double lat, double lon, String title, String mfg, String model, int zipcode1, int zipcode2, String gugun, String sido,String address) {
         this.rnum = rnum;
         this.buildAddress = buildAddress;
         this.buildPlace = buildPlace;
-        this.wgs84Lat = wgs84Lat;
-        this.wgs84Lon = wgs84Lon;
-        this.org = org;
+        this.lat = lat;
+        this.lon = lon;
+        this.title = title;
         this.mfg = mfg;
         this.model = model;
         this.zipcode1 = zipcode1;
         this.zipcode2 = zipcode2;
         this.gugun = gugun;
         this.sido = sido;
+        this.address = address;
     }
-
-
 
     public long getRnum() {
         return rnum;
@@ -79,35 +82,29 @@ public class AED {
         this.buildPlace = buildPlace;
     }
 
-
-
-
-
-    public double getWgs84Lat() {
-        return wgs84Lat;
+    public double getLat() {
+        return lat;
     }
 
-    public void setWgs84Lat(double wgs84Lat) {
-        this.wgs84Lat = wgs84Lat;
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 
-    public double getWgs84Lon() {
-        return wgs84Lon;
+    public double getLon() {
+        return lon;
     }
 
-    public void setWgs84Lon(double wgs84Lon) {
-        this.wgs84Lon = wgs84Lon;
+    public void setLon(double lon) {
+        this.lon = lon;
     }
 
-    public String getOrg() {
-        return org;
+    public String getTitle() {
+        return title;
     }
 
-    public void setOrg(String org) {
-        this.org = org;
+    public void setTitle(String title) {
+        this.title = title;
     }
-
-
 
     public String getMfg() {
         return mfg;
@@ -157,6 +154,13 @@ public class AED {
         this.sido = sido;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     @Override
     public String toString() {
@@ -164,9 +168,9 @@ public class AED {
                 "rnum=" + rnum +
                 ", buildAddress='" + buildAddress + '\'' +
                 ", buildPlace='" + buildPlace + '\'' +
-                ", wgs84Lat=" + wgs84Lat +
-                ", wgs84Lon=" + wgs84Lon +
-                ", org='" + org + '\'' +
+                ", wgs84Lat=" + lat +
+                ", wgs84Lon=" + lon +
+                ", org='" + title + '\'' +
                 ", mfg='" + mfg + '\'' +
                 ", model='" + model + '\'' +
                 ", zipcode1=" + zipcode1 +

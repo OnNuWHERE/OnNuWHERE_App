@@ -8,7 +8,7 @@ public class TsunamiShelter {
     private String seismic;
     private String shel_div_type;
     private String remarks;
-    private String shel_nm;
+    private String title;
 
     private long height;
     private long lenth;
@@ -26,12 +26,12 @@ public class TsunamiShelter {
         
     }
 
-    public TsunamiShelter(long id, String seismic, String shel_div_type, String remarks, String shel_nm, long height, long lenth, long shel_av, String sido_name, String sigungu_name, String address, double lon, double lat) {
+    public TsunamiShelter(long id, String seismic, String shel_div_type, String remarks, String title, long height, long lenth, long shel_av, String sido_name, String sigungu_name, String address, double lon, double lat) {
         this.id = id;
         this.seismic = seismic;
         this.shel_div_type = shel_div_type;
         this.remarks = remarks;
-        this.shel_nm = shel_nm;
+        this.title = title;
         this.height = height;
         this.lenth = lenth;
         this.shel_av = shel_av;
@@ -74,12 +74,12 @@ public class TsunamiShelter {
         this.remarks = remarks;
     }
 
-    public String getShel_nm() {
-        return shel_nm;
+    public String getTitle() {
+        return title;
     }
 
-    public void setShel_nm(String shel_nm) {
-        this.shel_nm = shel_nm;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public long getHeight() {
@@ -153,7 +153,7 @@ public class TsunamiShelter {
                 ", seismic='" + seismic + '\'' +
                 ", shel_div_type='" + shel_div_type + '\'' +
                 ", remarks='" + remarks + '\'' +
-                ", shel_nm='" + shel_nm + '\'' +
+                ", shel_nm='" + title + '\'' +
                 ", height=" + height +
                 ", lenth=" + lenth +
                 ", shel_av=" + shel_av +

@@ -8,23 +8,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.onnuwhere.model.AED;
 import com.example.onnuwhere.model.TsunamiShelter;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class TsunamiAdapter extends RecyclerView.Adapter<TsunamiAdapter.MyViewHolder> {
+public class AEDAdapter extends RecyclerView.Adapter<AEDAdapter.MyViewHolder> {
 
     private MainActivity mContext;
 
-    private TsunamiShelter tsunamiShelter;
+    private AED aed;
 
 
 
-    private ArrayList<TsunamiShelter> tsunamiShelterList;
+    private ArrayList<AED> aedArrayList;
 
-    TsunamiAdapter(ArrayList<TsunamiShelter> tsunamiShelterList) {
-        this.tsunamiShelterList = tsunamiShelterList;
+    AEDAdapter(ArrayList<AED> aedArrayList) {
+        this.aedArrayList = aedArrayList;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -41,7 +41,7 @@ public class TsunamiAdapter extends RecyclerView.Adapter<TsunamiAdapter.MyViewHo
     }
     @NonNull
     @Override
-    public TsunamiAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AEDAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.addr_list, parent, false);
 
         MyViewHolder viewHolder = new MyViewHolder(view);
@@ -49,29 +49,25 @@ public class TsunamiAdapter extends RecyclerView.Adapter<TsunamiAdapter.MyViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TsunamiAdapter.MyViewHolder holder, int position) {
-        tsunamiShelter = tsunamiShelterList.get(position);
+    public void onBindViewHolder(@NonNull AEDAdapter.MyViewHolder holder, int position) {
+        aed = aedArrayList.get(position);
         double lat = ((MainActivity)MainActivity.mContext)
                 .mView.getMapCenterPoint().getMapPointGeoCoord().latitude;
         double lon = ((MainActivity)MainActivity.mContext)
                 .mView.getMapCenterPoint().getMapPointGeoCoord().longitude;
-        double dis = distance(tsunamiShelter.getLat(),tsunamiShelter.getLon(),lat,lon,"K");
+        double dis = distance(aed.getlat(),aed.getlon(),lat,lon,"K");
         if(dis*1000<=5000){
-            holder.addrTitle.setText(tsunamiShelter.getTitle());
-            holder.addrCategory.setText("해일대피소");
-            holder.addrRaw.setText(tsunamiShelter.getAddress());
-            if(dis<2){
-                holder.addrDistance.setText((dis*0.001)+"m");
-            }else {
-                holder.addrDistance.setText(dis+"km");
-            }
+            holder.addrTitle.setText(aed.getTitle());
+            holder.addrCategory.setText("제세동기");
+            holder.addrRaw.setText(aed.getBuildAddress()+" "+aed.getBuildPlace());
 
+            holder.addrDistance.setText(String.valueOf(dis));
         }
     }
 
     @Override
     public int getItemCount() {
-        return tsunamiShelterList==null?0:tsunamiShelterList.size();
+        return aedArrayList==null?0:aedArrayList.size();
     }
 
     private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {

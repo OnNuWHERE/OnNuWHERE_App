@@ -7,7 +7,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.onnuwhere.model.Civil;
+import com.example.onnuwhere.model.TsunamiShelter;
+
 import java.util.ArrayList;
 
 public class CivilAdapter extends RecyclerView.Adapter<CivilAdapter.MyViewHolder> {
@@ -26,6 +29,8 @@ public class CivilAdapter extends RecyclerView.Adapter<CivilAdapter.MyViewHolder
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView addrTitle, addrDistance, addrRaw, addrCategory;
+
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             addrTitle = (TextView) itemView.findViewById(R.id.addrTitle);
@@ -49,16 +54,13 @@ public class CivilAdapter extends RecyclerView.Adapter<CivilAdapter.MyViewHolder
                 .mView.getMapCenterPoint().getMapPointGeoCoord().latitude;
         double lon = ((MainActivity)MainActivity.mContext)
                 .mView.getMapCenterPoint().getMapPointGeoCoord().longitude;
-        double dis = distance(civil.getY(),civil.getX(),lat,lon,"K");
+        double dis = distance(civil.getLat(),civil.getLon(),lat,lon,"K");
         if(dis*1000<=5000){
-            holder.addrTitle.setText(civil.getOrg());
+            holder.addrTitle.setText(civil.getTitle());
             holder.addrCategory.setText("민방공대피소");
-            holder.addrRaw.setText(civil.getStAddr());
-            if(dis<2){
-                holder.addrDistance.setText((dis*0.001)+"m");
-            }else {
-                holder.addrDistance.setText(dis+"km");
-            }
+            holder.addrRaw.setText(civil.getAddress());
+
+            holder.addrDistance.setText(String.valueOf(dis));
         }
     }
 

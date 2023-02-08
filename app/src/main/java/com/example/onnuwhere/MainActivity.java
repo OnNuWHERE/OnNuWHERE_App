@@ -10,6 +10,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
 import android.content.Context;
@@ -28,10 +29,11 @@ import android.widget.Toast;
 
 
 import com.example.onnuwhere.model.AED;
+import com.example.onnuwhere.model.DataPage;
 import com.example.onnuwhere.model.EarthquakeOutdoorsShelter;
 import com.example.onnuwhere.model.Civil;
+import com.example.onnuwhere.model.Recycle;
 import com.example.onnuwhere.model.TsunamiShelter;
-import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,8 +52,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     public static Context mContext;
     Location location;
-
-
+    ViewPager2 mPager;
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION};
     Toolbar toolbar;
     ActionBar actionBar;
@@ -63,10 +64,17 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     private KakaoService kakaoService;
     LinearLayoutManager manager;
     MapView mView;
-
+    ViewPager2 viewPager2;
     FirebaseDatabase database;
     String address;
     String[] gugun;
+    ArrayList<TsunamiShelter> TsunamiList;
+    ArrayList<AED> AEDList;
+    ArrayList<Civil> civilList;
+    ArrayList<EarthquakeOutdoorsShelter> EarthquakeList;
+
+
+
 
 
     @Override
@@ -80,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
-
+        mPager = findViewById(R.id.viewpager);
         btnCpos = (Button) findViewById(R.id.btnCpos);
         searchBtn = (Button) findViewById(R.id.searchBtn);
 
@@ -89,7 +97,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         btnCivil = (Button) findViewById(R.id.btnCivil);
         btnDisaster = (Button) findViewById(R.id.btnDisaster);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mView = new MapView(MainActivity.this);
 
         ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
@@ -292,6 +299,18 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     CivilSearch(sLong, sLat);
                     AEDSearch(sLong, sLat);
                     EarthquakeSearch(sLong, sLat);
+                    List<DataPage> dataPageList = new ArrayList<>();
+                    dataPageList.add(ERQRe());
+                    dataPageList.add(CivilRe());
+                    dataPageList.add(AEDRe());
+                    dataPageList.add(TsuRe());
+
+                    viewPager2.setAdapter(new MainAdapter(dataPageList));
+
+
+
+
+
 
                 } else {
                     Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
@@ -362,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 .getInstance();
         DatabaseReference refAED =
                 database.getReference("AED");
-        ArrayList<AED> AEDList = new ArrayList<>();
+        AEDList = new ArrayList<>();
         List<MapPOIItem> mapPOIItemList = new ArrayList<>();
         mapPOIItemList.clear();
 
@@ -376,10 +395,10 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     AED AEDData = dataSnapshot.getValue(AED.class);
                     AEDList.add(AEDData);
                     MapPOIItem mapPOIItem = new MapPOIItem();
-                    double lat = AEDList.get(index).getWgs84Lat();
-                    double lon = AEDList.get(index).getWgs84Lon();
+                    double lat = AEDList.get(index).getLat();
+                    double lon = AEDList.get(index).getLon();
                     double calDis = distance(lat, lon, y, x, "K");
-                    mapPOIItem.setItemName(AEDList.get(index).getOrg());
+                    mapPOIItem.setItemName(AEDList.get(index).getTitle());
                     mapPOIItem.setTag(Integer.parseInt(AEDList.get(index).getZipcode1() + "" + AEDList.get(index).getZipcode2()));
                     mapPOIItem.setItemName(AEDList.get(index).getBuildPlace());
                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
@@ -387,7 +406,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     mapPOIItem.setCustomImageResourceId(R.drawable.aed_32);
                     mapPOIItem.setCustomImageAutoscale(false);
                     mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
-                    if (calDis * 1000 <= 100000) {
+                    if (calDis * 1000 <= 5000) {
                         mapPOIItemList.add(mapPOIItem);
                     }
                     index++;
@@ -412,7 +431,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 .getInstance();
         DatabaseReference refTsunami =
                 database.getReference("Civil");
-        ArrayList<Civil> civilList = new ArrayList<>();
+        civilList = new ArrayList<>();
         List<MapPOIItem> mapPOIItemList = new ArrayList<>();
         mapPOIItemList.clear();
         refTsunami.orderByChild("gugun").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
@@ -424,18 +443,18 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Civil civilData = dataSnapshot.getValue(Civil.class);
                     civilList.add(civilData);
-                    double lat = civilList.get(index).getY();
-                    double lon = civilList.get(index).getX();
+                    double lat = civilList.get(index).getLat();
+                    double lon = civilList.get(index).getLon();
                     MapPOIItem mapPOIItem = new MapPOIItem();
                     double calDis = distance(lat, lon, y, x, "K");
-                    mapPOIItem.setItemName(civilList.get(index).getOrg());
+                    mapPOIItem.setItemName(civilList.get(index).getTitle());
                     mapPOIItem.setTag((int) civilList.get(index).getcNum());
                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
                     mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
                     mapPOIItem.setCustomImageResourceId(R.drawable.shelter_32);
                     mapPOIItem.setCustomImageAutoscale(false);
                     mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
-                    if (calDis * 1000 <= 1000000) {
+                    if (calDis * 1000 <= 5000) {
                         mapPOIItemList.add(mapPOIItem);
                     }
                     index++;
@@ -458,7 +477,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 .getInstance();
         DatabaseReference refEarthquake =
                 database.getReference("Earthquake");
-        ArrayList<EarthquakeOutdoorsShelter> EarthquakeList = new ArrayList<>();
+        EarthquakeList = new ArrayList<>();
         List<MapPOIItem> mapPOIItemList = new ArrayList<>();
         mapPOIItemList.clear();
 
@@ -471,11 +490,11 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     EarthquakeOutdoorsShelter EarthquakeData = dataSnapshot.getValue(EarthquakeOutdoorsShelter.class);
                     EarthquakeList.add(EarthquakeData);
-                    double lat = EarthquakeList.get(index).getYcord();
-                    double lon = EarthquakeList.get(index).getXcord();
+                    double lat = EarthquakeList.get(index).getLat();
+                    double lon = EarthquakeList.get(index).getLon();
                     MapPOIItem mapPOIItem = new MapPOIItem();
                     double calDis = distance(lat, lon, y, x, "K");
-                    mapPOIItem.setItemName(EarthquakeList.get(index).getVt_acmdfclty_nm());
+                    mapPOIItem.setItemName(EarthquakeList.get(index).getTitle());
                     mapPOIItem.setTag(Long.valueOf(EarthquakeList.get(index).getArcd()).intValue());
                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
                     mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
@@ -488,8 +507,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     index++;
                 }
 
-                EarthquakeAdapter earthquakeAdapter = new EarthquakeAdapter(EarthquakeList);
-                recyclerView.setAdapter(earthquakeAdapter);
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
             @Override
@@ -505,7 +522,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 .getInstance();
         DatabaseReference refTsunami =
                 database.getReference("Tsunami");
-        ArrayList<TsunamiShelter> TsunamiList = new ArrayList<>();
+       TsunamiList = new ArrayList<>();
         List<MapPOIItem> mapPOIItemList = new ArrayList<>();
         mapPOIItemList.clear();
 
@@ -522,7 +539,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     double lon = TsunamiList.get(index).getLon();
                     MapPOIItem mapPOIItem = new MapPOIItem();
                     double calDis = distance(lat, lon, y, x, "K");
-                    mapPOIItem.setItemName(TsunamiList.get(index).getShel_nm());
+                    mapPOIItem.setItemName(TsunamiList.get(index).getTitle());
                     mapPOIItem.setTag(Long.valueOf(TsunamiList.get(index).getId()).intValue());
                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
                     mapPOIItem.setMarkerType(MapPOIItem.MarkerType.CustomImage);
@@ -534,8 +551,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
-                TsunamiAdapter tsunamiAdapter = new TsunamiAdapter(TsunamiList);
-                recyclerView.setAdapter(tsunamiAdapter);
+
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
 
@@ -545,6 +561,80 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             }
         });
     }
+
+    private DataPage AEDRe(){
+        int index = 0;
+        Recycle recycle = new Recycle();
+        List<Recycle> recycleList = new ArrayList<>();
+        if(AEDList.size()!=0){
+            for(AED a : AEDList){
+                recycle.setLat(AEDList.get(index).getLat());
+                recycle.setLon(AEDList.get(index).getLon());
+                recycle.setTitle(AEDList.get(index).getTitle());
+                recycle.setAddress(AEDList.get(index).getAddress());
+                recycleList.add(recycle);
+                index++;
+            }
+        }
+        DataPage dataPage = new DataPage();
+        dataPage.setRecycleList(recycleList);
+        return dataPage;
+    }
+    private DataPage CivilRe() {
+        int index = 0;
+        Recycle recycle = new Recycle();
+        List<Recycle> recycleList = new ArrayList<>();
+        if (civilList.size() != 0) {
+            for (Civil a : civilList) {
+                recycle.setLat(civilList.get(index).getLat());
+                recycle.setLon(civilList.get(index).getLon());
+                recycle.setTitle(civilList.get(index).getTitle());
+                recycle.setAddress(civilList.get(index).getAddress());
+                recycleList.add(recycle);
+                index++;
+            }
+        }
+        DataPage dataPage = new DataPage();
+        dataPage.setRecycleList(recycleList);
+        return dataPage;
+    }
+    private DataPage ERQRe(){
+        int index = 0;
+        Recycle recycle = new Recycle();
+        List<Recycle> recycleList = new ArrayList<>();
+        if(AEDList.size()!=0){
+            for(AED a : AEDList){
+                recycle.setLat(AEDList.get(index).getLat());
+                recycle.setLon(AEDList.get(index).getLon());
+                recycle.setTitle(AEDList.get(index).getTitle());
+                recycle.setAddress(AEDList.get(index).getAddress());
+                recycleList.add(recycle);
+                index++;
+            }
+        }
+        DataPage dataPage = new DataPage();
+        dataPage.setRecycleList(recycleList);
+        return dataPage;
+    }
+    private DataPage TsuRe(){
+        int index = 0;
+        Recycle recycle = new Recycle();
+        List<Recycle> recycleList = new ArrayList<>();
+        if(TsunamiList.size()!=0){
+            for(TsunamiShelter a : TsunamiList){
+                recycle.setLat(TsunamiList.get(index).getLat());
+                recycle.setLon(TsunamiList.get(index).getLon());
+                recycle.setTitle(TsunamiList.get(index).getTitle());
+                recycle.setAddress(TsunamiList.get(index).getAddress());
+                recycleList.add(recycle);
+                index++;
+            }
+        }
+        DataPage dataPage = new DataPage();
+        dataPage.setRecycleList(recycleList);
+        return dataPage;
+    }
+
 
     private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {
         if ((lat1 == lat2) && (lon1 == lon2)) {
