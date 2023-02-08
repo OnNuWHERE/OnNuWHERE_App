@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     ArrayList<EarthquakeOutdoorsShelter> EarthquakeList;
 
     List<DataPage> dataPageList = new ArrayList<>();
+    double sLat;
+    double sLong;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,18 +112,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED &&
-                        ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                                PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                if (lm.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
-                    location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                } else {
-                    location = (Location) lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                }
+
                 Intent searchIntent = new Intent(MainActivity.this, Search_View.class);
                 startActivityForResult(searchIntent, 1);
 
@@ -301,8 +292,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     Intent markerIntent = data;
                     Log.d("2@@@", markerIntent + "");
 
-                    double sLat = Double.parseDouble(markerIntent.getStringExtra("y"));
-                    double sLong = Double.parseDouble(markerIntent.getStringExtra("x"));
+                    sLat = Double.parseDouble(markerIntent.getStringExtra("y"));
+                    sLong = Double.parseDouble(markerIntent.getStringExtra("x"));
                     address = markerIntent.getStringExtra("address_name");
                     gugun = address.split(" ");
 
@@ -323,11 +314,20 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     CivilSearch(sLong, sLat);
                     AEDSearch(sLong, sLat);
                     EarthquakeSearch(sLong, sLat);
+                    new Handler().postDelayed(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            viewPager2.setAdapter(new MainAdapter(dataPageList));
+                        }
+                    }, 16500);// 0.6초 정도 딜레이를 준 후 시작
+
+                    Log.d("목록", "" + dataPageList.toString());
                 } else {
                     Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
                 }
-                viewPager2.setAdapter(new MainAdapter(dataPageList));
-                Log.d("목록", "" + dataPageList.toString());
+
             }
         }
     }//onActivityResult
@@ -571,6 +571,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     }
 
     private DataPage AEDRe(ArrayList<AED> AEDList) {
+
         List<Recycle> recycleList = new ArrayList<>();
 
         if (AEDList.size() != 0) {
@@ -582,6 +583,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 recycle.setTitle(a.getTitle());
                 recycle.setAddress(a.getAddress());
                 recycle.setCategory("제세동기");
+                recycle.setDis(distance(a.getLat(),a.getLon(),sLat,sLong,"K"));
                 recycleList.add(recycle);
             }
         }
@@ -592,6 +594,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     }
 
     private DataPage CivilRe(ArrayList<Civil> civilList) {
+
         List<Recycle> recycleList = new ArrayList<>();
 
         if (civilList.size() != 0) {
@@ -603,6 +606,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 recycle.setTitle(c.getTitle());
                 recycle.setAddress(c.getAddress());
                 recycle.setCategory("민방공대피소");
+                recycle.setDis(distance(c.getLat(),c.getLon(),sLat,sLong,"K"));
                 recycleList.add(recycle);
             }
         }
@@ -624,6 +628,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 recycle.setTitle(e.getTitle());
                 recycle.setAddress(e.getAddress());
                 recycle.setCategory("지진대피소");
+                recycle.setDis(distance(e.getLat(),e.getLon(),sLat,sLong,"K"));
                 recycleList.add(recycle);
             }
         }
@@ -634,6 +639,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     }
 
     private DataPage TsuRe(ArrayList<TsunamiShelter> tsunamiList) {
+
         List<Recycle> recycleList = new ArrayList<>();
 
         DataPage dataPage = new DataPage();
@@ -646,6 +652,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 recycle.setTitle(t.getTitle());
                 recycle.setAddress(t.getAddress());
                 recycle.setCategory("해일대피소");
+                recycle.setDis(distance(t.getLat(),t.getLon(),sLat,sLong,"K"));
                 recycleList.add(recycle);
             }
             dataPage.setRecycleList(recycleList);
