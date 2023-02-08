@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 }
                 Intent searchIntent = new Intent(MainActivity.this, Search_View.class);
                 startActivityForResult(searchIntent, 1);
+
             }
         });
 
@@ -222,19 +223,24 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         Log.d("@@@@", "x:" + mPointGeo.latitude + "y:" + mPointGeo.longitude + "f:" + v);
         currentMapPoint = MapPoint.mapPointWithGeoCoord(mPointGeo.latitude, mPointGeo.longitude);
         mapView.setMapCenterPoint(currentMapPoint, true);
+
     }
 
 
     @Override
     public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
+
+
     }
 
     @Override
     public void onCurrentLocationUpdateFailed(MapView mapView) {
+
     }
 
     @Override
     public void onCurrentLocationUpdateCancelled(MapView mapView) {
+
     }
 
     @Override
@@ -341,7 +347,10 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 } else {
                     Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
                 }
+
+
             }
+
         }
     }//onActivityResult
 
@@ -354,25 +363,31 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     @Override
     public void onMapViewInitialized(MapView mapView) {
+
     }
 
     @Override
     public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) {
+
+
     }
 
     @Override
     public void onMapViewZoomLevelChanged(MapView mapView, int i) {
         Toast.makeText(this, "zoom", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
         Toast.makeText(this, "tap", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onMapViewDoubleTapped(MapView mapView, MapPoint mapPoint) {
         Toast.makeText(this, "double", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -392,6 +407,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     @Override
     public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
+
     }
 
     private void AEDSearch(double x, double y) {
@@ -577,6 +593,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
