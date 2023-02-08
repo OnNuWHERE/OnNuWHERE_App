@@ -156,7 +156,59 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
                 }
             }
-        });
+        });//btnCpos
+
+        btnAED.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectedBtn) {
+                    btnAED.setSelected(false);
+                    selectedBtn = false;
+                } else {
+                    btnAED.setSelected(true);
+                    selectedBtn = true;
+                }
+            }
+        });//btnAED
+
+        btnTsunami.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectedBtn) {
+                    btnTsunami.setSelected(false);
+                    selectedBtn = false;
+                } else {
+                    btnTsunami.setSelected(true);
+                    selectedBtn = true;
+                }
+            }
+        });//btnTsunami
+
+        btnCivil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectedBtn) {
+                    btnCivil.setSelected(false);
+                    selectedBtn = false;
+                } else {
+                    btnCivil.setSelected(true);
+                    selectedBtn = true;
+                }
+            }
+        });//btnCivil
+
+        btnDisaster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (selectedBtn) {
+                    btnDisaster.setSelected(false);
+                    selectedBtn = false;
+                } else {
+                    btnDisaster.setSelected(true);
+                    selectedBtn = true;
+                }
+            }
+        });//btnDisaster
     }
 
     @Override
