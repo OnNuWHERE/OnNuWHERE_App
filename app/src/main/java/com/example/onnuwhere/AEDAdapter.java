@@ -55,7 +55,7 @@ public class AEDAdapter extends RecyclerView.Adapter<AEDAdapter.MyViewHolder> {
                 .mView.getMapCenterPoint().getMapPointGeoCoord().latitude;
         double lon = ((MainActivity)MainActivity.mContext)
                 .mView.getMapCenterPoint().getMapPointGeoCoord().longitude;
-        double dis = distance(aed.getlat(),aed.getlon(),lat,lon,"K");
+        double dis = distance(aed.getLat(),aed.getLon(),lat,lon,"K");
         if(dis*1000<=5000){
             holder.addrTitle.setText(aed.getTitle());
             holder.addrCategory.setText("제세동기");
