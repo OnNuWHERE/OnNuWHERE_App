@@ -100,9 +100,6 @@
 
     </FrameLayout>
 
-
-
-
     <LinearLayout
         android:id="@+id/drawer"
         android:layout_width="match_parent"
@@ -139,7 +136,6 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-
         </LinearLayout>
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewpager"

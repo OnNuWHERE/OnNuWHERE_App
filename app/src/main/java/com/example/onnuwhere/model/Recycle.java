@@ -1,13 +1,14 @@
 package com.example.onnuwhere.model;
 
 public class Recycle {
-    String title;
-    String address;
-    double lat;
-    double lon;
+    private String title;
+    private String address;
+    private String category;
+    private double lat;
+    private double lon;
 
 
-    public Recycle(){
+    public Recycle() {
 
     }
 
@@ -43,10 +44,21 @@ public class Recycle {
         this.lon = lon;
     }
 
-    public Recycle(String title, String address, double lat, double lon) {
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Recycle(String title, String address, double lat, double lon, String category) {
         this.title = title;
         this.address = address;
         this.lat = lat;
         this.lon = lon;
+        this.category = category;
     }
+
+
 }

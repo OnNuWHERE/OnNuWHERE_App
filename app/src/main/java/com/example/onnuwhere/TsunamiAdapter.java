@@ -18,9 +18,6 @@ public class TsunamiAdapter extends RecyclerView.Adapter<TsunamiAdapter.MyViewHo
     private MainActivity mContext;
 
     private TsunamiShelter tsunamiShelter;
-
-
-
     private ArrayList<TsunamiShelter> tsunamiShelterList;
 
     TsunamiAdapter(ArrayList<TsunamiShelter> tsunamiShelterList) {
@@ -29,8 +26,6 @@ public class TsunamiAdapter extends RecyclerView.Adapter<TsunamiAdapter.MyViewHo
 
     class MyViewHolder extends RecyclerView.ViewHolder {
         private TextView addrTitle, addrDistance, addrRaw, addrCategory;
-
-
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             addrTitle = (TextView) itemView.findViewById(R.id.addrTitle);

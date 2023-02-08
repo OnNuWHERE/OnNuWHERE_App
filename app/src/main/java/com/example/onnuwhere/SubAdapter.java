@@ -3,33 +3,29 @@ package com.example.onnuwhere;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.onnuwhere.model.AED;
-import com.example.onnuwhere.model.Civil;
+import com.example.onnuwhere.model.DataPage;
+import com.example.onnuwhere.model.Recycle;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class AEDAdpater extends RecyclerView.Adapter<AEDAdpater.MyViewHolder> {
+public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
 
-    private MainActivity mContext;
+    private List<Recycle> recycleList;
+    private Recycle recycle;
 
-    private AED aed;
-
-
-
-    private ArrayList<AED> aedArrayList;
-
-    AEDAdpater(ArrayList<AED> aedArrayList) {
-        this.aedArrayList = aedArrayList;
+    public SubAdapter(List<Recycle> recycleList) {
+        this.recycleList = recycleList;
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private TextView addrTitle, addrDistance, addrRaw, addrCategory;
-        public MyViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
             addrTitle = (TextView) itemView.findViewById(R.id.addrTitle);
             addrCategory = (TextView) itemView.findViewById(R.id.addrCategory);
@@ -37,37 +33,34 @@ public class AEDAdpater extends RecyclerView.Adapter<AEDAdpater.MyViewHolder> {
             addrDistance = (TextView) itemView.findViewById(R.id.addrDistance);
         }
     }
+
     @NonNull
     @Override
-    public AEDAdpater.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.addr_list, parent, false);
-        MyViewHolder viewHolder = new MyViewHolder(view);
-        return viewHolder;
+    public SubAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.addr_list,parent,false);
+        SubAdapter.ViewHolder sViewHolder = new SubAdapter.ViewHolder(view);
+        return sViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AEDAdpater.MyViewHolder holder, int position) {
-        aed = aedArrayList.get(position);
+    public void onBindViewHolder(@NonNull SubAdapter.ViewHolder holder, int position) {
+        recycle = recycleList.get(position);
         double lat = ((MainActivity)MainActivity.mContext)
                 .mView.getMapCenterPoint().getMapPointGeoCoord().latitude;
         double lon = ((MainActivity)MainActivity.mContext)
                 .mView.getMapCenterPoint().getMapPointGeoCoord().longitude;
-        double dis = distance(aed.getWgs84Lat(),aed.getWgs84Lon(),lat,lon,"K");
-        if(dis*1000<=5000){
-            holder.addrTitle.setText(aed.getOrg());
-            holder.addrCategory.setText("제세동기");
-            holder.addrRaw.setText(aed.getBuildAddress());
-            if(dis<2){
-                holder.addrDistance.setText((dis*0.001)+"m");
-            }else {
-                holder.addrDistance.setText(dis+"km");
-            }
+        double dis = distance(recycle.getLat(),recycle.getLon(),lat,lon,"K");
+        if(dis*1000<=5000) {
+            holder.addrTitle.setText(recycle.getTitle());
+            holder.addrCategory.setText(recycle.getCategory());
+            holder.addrRaw.setText(recycle.getAddress());
+            holder.addrDistance.setText(String.valueOf(dis));
         }
     }
 
     @Override
     public int getItemCount() {
-        return aedArrayList==null?0:aedArrayList.size();
+        return recycleList==null?0:recycleList.size();
     }
 
     private static double distance(double lat1, double lon1, double lat2, double lon2, String unit) {

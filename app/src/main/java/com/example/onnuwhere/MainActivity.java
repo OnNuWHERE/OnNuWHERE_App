@@ -59,9 +59,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     Button searchBtn, btnAED, btnCivil, btnDisaster, btnCpos;
     MapPoint.GeoCoordinate mPointGeo;
     MapPoint currentMapPoint;
-    RecyclerView recyclerView;
 
-    private KakaoService kakaoService;
     LinearLayoutManager manager;
     MapView mView;
     ViewPager2 viewPager2;
@@ -147,27 +145,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             }
         });
     }
-
-//    private void getHashKey() {
-//        PackageInfo packageInfo = null;
-//        try {
-//            packageInfo = getPackageManager().getPackageInfo(getPackageName(), PackageManager.GET_SIGNATURES);
-//        } catch (PackageManager.NameNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//        if (packageInfo == null)
-//            Log.e("KeyHash", "KeyHash:null");
-//
-//        for (Signature signature : packageInfo.signatures) {
-//            try {
-//                MessageDigest md = MessageDigest.getInstance("SHA");
-//                md.update(signature.toByteArray());
-//                Log.d("KeyHash", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-//            } catch (NoSuchAlgorithmException e) {
-//                Log.e("KeyHash", "Unable to get MessageDigest. signature=" + signature, e);
-//            }
-//        }
-//    }
 
     @Override
     public void onCurrentLocationUpdate(@NonNull MapView mapView, @NonNull MapPoint mapPoint, float v) {
@@ -289,29 +266,18 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     mView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(sLat, sLong), true);
                     //TrackingModeOff
                     mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
-                    //firebase 연결 후 주변 300m 만 마커 표시 그 외에는 마커에서 제외
-                    //마커 사용시 커스텀 마커 사용
-                    Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
-                    manager = new LinearLayoutManager(MainActivity.this,
-                            RecyclerView.VERTICAL, false);
-                    recyclerView.setLayoutManager(manager);
+                    //커스텀 마커
                     TsunamiSearch(sLong, sLat);
                     CivilSearch(sLong, sLat);
                     AEDSearch(sLong, sLat);
                     EarthquakeSearch(sLong, sLat);
+                    //리스트
                     List<DataPage> dataPageList = new ArrayList<>();
                     dataPageList.add(ERQRe());
                     dataPageList.add(CivilRe());
                     dataPageList.add(AEDRe());
                     dataPageList.add(TsuRe());
-
                     viewPager2.setAdapter(new MainAdapter(dataPageList));
-
-
-
-
-
-
                 } else {
                     Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
                 }
@@ -411,11 +377,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
-                manager = new LinearLayoutManager(MainActivity.this,
-                        RecyclerView.VERTICAL, false);
-                AEDAdpater aedAdpater = new AEDAdpater(AEDList);
-                recyclerView.setLayoutManager(manager);
-                recyclerView.setAdapter(aedAdpater);
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
 
@@ -459,11 +420,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
-                manager = new LinearLayoutManager(MainActivity.this,
-                        RecyclerView.VERTICAL, false);
-                CivilAdapter civilAdapter = new CivilAdapter(civilList);
-                recyclerView.setLayoutManager(manager);
-                recyclerView.setAdapter(civilAdapter);
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
             @Override
@@ -572,6 +528,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 recycle.setLon(AEDList.get(index).getLon());
                 recycle.setTitle(AEDList.get(index).getTitle());
                 recycle.setAddress(AEDList.get(index).getAddress());
+                recycle.setCategory("제세동기");
                 recycleList.add(recycle);
                 index++;
             }
@@ -585,11 +542,12 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         Recycle recycle = new Recycle();
         List<Recycle> recycleList = new ArrayList<>();
         if (civilList.size() != 0) {
-            for (Civil a : civilList) {
+            for (ArrayList<Civil> c : civilList) {
                 recycle.setLat(civilList.get(index).getLat());
                 recycle.setLon(civilList.get(index).getLon());
                 recycle.setTitle(civilList.get(index).getTitle());
                 recycle.setAddress(civilList.get(index).getAddress());
+                recycle.setCategory("민방공대피소");
                 recycleList.add(recycle);
                 index++;
             }
@@ -602,12 +560,13 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         int index = 0;
         Recycle recycle = new Recycle();
         List<Recycle> recycleList = new ArrayList<>();
-        if(AEDList.size()!=0){
-            for(AED a : AEDList){
-                recycle.setLat(AEDList.get(index).getLat());
-                recycle.setLon(AEDList.get(index).getLon());
-                recycle.setTitle(AEDList.get(index).getTitle());
-                recycle.setAddress(AEDList.get(index).getAddress());
+        if(EarthquakeList.size()!=0){
+            for(EarthquakeOutdoorsShelter e : EarthquakeList){
+                recycle.setLat(EarthquakeList.get(index).getLat());
+                recycle.setLon(EarthquakeList.get(index).getLon());
+                recycle.setTitle(EarthquakeList.get(index).getTitle());
+                recycle.setAddress(EarthquakeList.get(index).getAddress());
+                recycle.setCategory("지진대피소");
                 recycleList.add(recycle);
                 index++;
             }
@@ -621,11 +580,12 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         Recycle recycle = new Recycle();
         List<Recycle> recycleList = new ArrayList<>();
         if(TsunamiList.size()!=0){
-            for(TsunamiShelter a : TsunamiList){
+            for(TsunamiShelter t : TsunamiList){
                 recycle.setLat(TsunamiList.get(index).getLat());
                 recycle.setLon(TsunamiList.get(index).getLon());
                 recycle.setTitle(TsunamiList.get(index).getTitle());
                 recycle.setAddress(TsunamiList.get(index).getAddress());
+                recycle.setCategory("해일대피소");
                 recycleList.add(recycle);
                 index++;
             }

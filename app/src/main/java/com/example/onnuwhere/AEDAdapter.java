@@ -64,7 +64,6 @@ public class AEDAdapter extends RecyclerView.Adapter<AEDAdapter.MyViewHolder> {
             holder.addrDistance.setText(String.valueOf(dis));
         }
     }
-
     @Override
     public int getItemCount() {
         return aedArrayList==null?0:aedArrayList.size();
