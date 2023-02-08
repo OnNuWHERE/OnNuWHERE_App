@@ -55,7 +55,9 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION};
     Toolbar toolbar;
     ActionBar actionBar;
-    Button searchBtn, btnAED, btnCivil, btnDisaster, btnCpos;
+    Button searchBtn, btnAED, btnCivil, btnDisaster, btnCpos, btnTsunami;
+    //버튼 토글 유효성 검사용 boolean
+    boolean selectedBtn = false;
     MapPoint.GeoCoordinate mPointGeo;
     MapPoint currentMapPoint;
 
@@ -82,17 +84,21 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
+
         mPager = findViewById(R.id.viewpager);
+
         btnCpos = (Button) findViewById(R.id.btnCpos);
         searchBtn = (Button) findViewById(R.id.searchBtn);
-
 
         btnAED = (Button) findViewById(R.id.btnAED);
         btnCivil = (Button) findViewById(R.id.btnCivil);
         btnDisaster = (Button) findViewById(R.id.btnDisaster);
+        btnTsunami = (Button) findViewById(R.id.btnTsunami);
+
         viewPager2 = (ViewPager2) findViewById(R.id.viewpager);
 
         mView = new MapView(MainActivity.this);
@@ -131,6 +137,13 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         btnCpos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (selectedBtn) {
+                    btnCpos.setSelected(false);
+                    selectedBtn = false;
+                } else {
+                    btnCpos.setSelected(true);
+                    selectedBtn = true;
+                }
                 Log.d("@@@", "TrackingMode : " + mView.getCurrentLocationTrackingMode());
                 if (mView.getCurrentLocationTrackingMode() == MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading) {
                     Toast.makeText(MainActivity.this, "nonHeading", Toast.LENGTH_SHORT).show();
