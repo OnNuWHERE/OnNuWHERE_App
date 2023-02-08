@@ -580,6 +580,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     index++;
                 }
                 dataPageList.add(TsuRe(TsunamiList));
+
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
 
