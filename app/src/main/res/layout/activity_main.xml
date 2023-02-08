@@ -64,8 +64,11 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
                 android:layout_marginBottom="125dp"
-                android:background="@drawable/slct_aed_btn"/>
+                android:background="@drawable/slct_aed_btn" />
 
 
             <Button
@@ -73,6 +76,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_above="@+id/btnAED"
+                android:layout_margin="5dp"
                 android:background="@drawable/slct_civil_btn" />
 
             <Button
@@ -80,6 +84,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_above="@+id/btnCivil"
+                android:layout_margin="5dp"
                 android:background="@drawable/slct_eqos_btn" />
 
             <Button
@@ -87,6 +92,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_above="@+id/btnDisaster"
+                android:layout_margin="5dp"
                 android:background="@drawable/slct_tsunami_btn" />
         </RelativeLayout>
 
@@ -95,6 +101,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="bottom"
+            android:layout_marginLeft="5dp"
             android:layout_marginBottom="125dp"
             android:background="@drawable/slct_tracking_btn"/>
 
