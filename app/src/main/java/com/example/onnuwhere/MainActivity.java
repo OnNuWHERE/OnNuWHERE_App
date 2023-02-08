@@ -339,6 +339,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     CivilSearch(sLong, sLat);
                     AEDSearch(sLong, sLat);
                     EarthquakeSearch(sLong, sLat);
+
                     //리스트
                     new Handler().postDelayed(new Runnable() {
                         @Override
@@ -577,23 +578,30 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 .getInstance();
         DatabaseReference refTsunami =
                 database.getReference("Tsunami");
+
        TsunamiList = new ArrayList<>();
         List<MapPOIItem> mapPOIItemList = new ArrayList<>();
+
         mapPOIItemList.clear();
 
         refTsunami.orderByChild("sigungu_name").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 mContext = MainActivity.this;
-                TsunamiList.clear();
                 int index = 0;
+
+                TsunamiList.clear();
+
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     TsunamiShelter TsunamiData = dataSnapshot.getValue(TsunamiShelter.class);
                     TsunamiList.add(TsunamiData);
+
                     double lat = TsunamiList.get(index).getLat();
                     double lon = TsunamiList.get(index).getLon();
-                    MapPOIItem mapPOIItem = new MapPOIItem();
                     double calDis = distance(lat, lon, y, x, "K");
+
+                    MapPOIItem mapPOIItem = new MapPOIItem();
+
                     mapPOIItem.setItemName(TsunamiList.get(index).getTitle());
                     mapPOIItem.setTag(Long.valueOf(TsunamiList.get(index).getId()).intValue());
                     mapPOIItem.setMapPoint(MapPoint.mapPointWithGeoCoord(lat, lon));
@@ -601,25 +609,30 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     mapPOIItem.setCustomImageResourceId(R.drawable.tsunami_32);
                     mapPOIItem.setCustomImageAutoscale(false);
                     mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
+
                     if (calDis * 1000 <= 5000) {
                         mapPOIItemList.add(mapPOIItem);
                     }
+
                     index++;
                 }
-                new Handler().postDelayed(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        dataPageList.add(TsuRe(TsunamiList));
-                        Log.d("@@@",""+TsunamiList.size());
-                        mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
-                    }
-                }, 1000);
+
+                dataPageList.add(TsuRe(TsunamiList));
+                mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
+
+//                new Handler().postDelayed(new Runnable()
+//                {
+//                    @Override
+//                    public void run()
+//                    {
+//                        dataPageList.add(TsuRe(TsunamiList));
+//                        Log.d("@@@",""+TsunamiList.size());
+//                        mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
+//                    }
+//                }, 1000);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
@@ -678,16 +691,18 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     private DataPage TsuRe(ArrayList<TsunamiShelter> tsunamiList){
         Recycle recycle = new Recycle();
         List<Recycle> recycleList = new ArrayList<>();
-        if(TsunamiList.size()!=0){
-            for(int i = 0; i<TsunamiList.size(); i++){
-                recycle.setLat(TsunamiList.get(i).getLat());
-                recycle.setLon(TsunamiList.get(i).getLon());
-                recycle.setTitle(TsunamiList.get(i).getTitle());
-                recycle.setAddress(TsunamiList.get(i).getAddress());
+
+        if(tsunamiList.size()!=0){
+            for(int i = 0; i<tsunamiList.size(); i++){
+                recycle.setLat(tsunamiList.get(i).getLat());
+                recycle.setLon(tsunamiList.get(i).getLon());
+                recycle.setTitle(tsunamiList.get(i).getTitle());
+                recycle.setAddress(tsunamiList.get(i).getAddress());
                 recycle.setCategory("해일대피소");
                 recycleList.add(recycle);
             }
         }
+
         DataPage dataPage = new DataPage();
         dataPage.setRecycleList(recycleList);
         return dataPage;
