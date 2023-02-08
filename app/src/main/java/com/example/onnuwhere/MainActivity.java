@@ -55,7 +55,9 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     String[] REQUIRED_PERMISSIONS = {Manifest.permission.ACCESS_FINE_LOCATION};
     Toolbar toolbar;
     ActionBar actionBar;
-    Button searchBtn, btnAED, btnCivil, btnDisaster, btnCpos;
+    Button searchBtn, btnAED, btnCivil, btnDisaster, btnCpos, btnTsunami;
+    //버튼 토글 아이콘 변경용 boolean
+    boolean selectedBtn = false;
     MapPoint.GeoCoordinate mPointGeo;
     MapPoint currentMapPoint;
 
@@ -93,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         btnAED = (Button) findViewById(R.id.btnAED);
         btnCivil = (Button) findViewById(R.id.btnCivil);
         btnDisaster = (Button) findViewById(R.id.btnDisaster);
+        btnTsunami = (Button) findViewById(R.id.btnTsunami);
 
         mView = new MapView(MainActivity.this);
 
@@ -130,16 +133,25 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         btnCpos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("@@@", "TrackingMode : " + mView.getCurrentLocationTrackingMode());
-                if (mView.getCurrentLocationTrackingMode() == MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading) {
-                    Toast.makeText(MainActivity.this, "nonHeading", Toast.LENGTH_SHORT).show();
-                    mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
-                } else if (mView.getCurrentLocationTrackingMode() == MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading) {
-                    Toast.makeText(MainActivity.this, "Heading", Toast.LENGTH_SHORT).show();
-                    mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
+                //버튼 토글 아이콘 변화
+                if (selectedBtn) {
+                    btnCpos.setSelected(false);
+                    selectedBtn = false;
                 } else {
-                    Toast.makeText(MainActivity.this, "mHeading", Toast.LENGTH_SHORT).show();
-                    mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
+                    btnCpos.setSelected(true);
+                    selectedBtn = true;
+                    
+                    Log.d("@@@", "TrackingMode : " + mView.getCurrentLocationTrackingMode());
+                    if (mView.getCurrentLocationTrackingMode() == MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading) {
+                        Toast.makeText(MainActivity.this, "nonHeading", Toast.LENGTH_SHORT).show();
+                        mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
+                    } else if (mView.getCurrentLocationTrackingMode() == MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading) {
+                        Toast.makeText(MainActivity.this, "Heading", Toast.LENGTH_SHORT).show();
+                        mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
+                    } else {
+                        Toast.makeText(MainActivity.this, "mHeading", Toast.LENGTH_SHORT).show();
+                        mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
+                    }
                 }
             }
         });
@@ -349,7 +361,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         AEDList = new ArrayList<>();
         List<MapPOIItem> mapPOIItemList = new ArrayList<>();
         mapPOIItemList.clear();
-
 
         refAED.orderByChild("gugun").equalTo(gugun[1]).addValueEventListener(new ValueEventListener() {
             @Override
