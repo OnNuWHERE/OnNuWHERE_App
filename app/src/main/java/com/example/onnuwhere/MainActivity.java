@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         btnAED = (Button) findViewById(R.id.btnAED);
         btnCivil = (Button) findViewById(R.id.btnCivil);
         btnDisaster = (Button) findViewById(R.id.btnDisaster);
+        viewPager2 = (ViewPager2) findViewById(R.id.viewpager);
 
         mView = new MapView(MainActivity.this);
 
