@@ -116,6 +116,9 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             checkRunTimePermission();
         }
 
+        viewPager2.setAdapter(new MainAdapter(dataPageList));
+        Log.d("목록", "" + dataPageList.toString());
+
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,7 +136,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 }
                 Intent searchIntent = new Intent(MainActivity.this, Search_View.class);
                 startActivityForResult(searchIntent, 1);
-
             }
         });
 
@@ -220,24 +222,19 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         Log.d("@@@@", "x:" + mPointGeo.latitude + "y:" + mPointGeo.longitude + "f:" + v);
         currentMapPoint = MapPoint.mapPointWithGeoCoord(mPointGeo.latitude, mPointGeo.longitude);
         mapView.setMapCenterPoint(currentMapPoint, true);
-
     }
 
 
     @Override
     public void onCurrentLocationDeviceHeadingUpdate(MapView mapView, float v) {
-
-
     }
 
     @Override
     public void onCurrentLocationUpdateFailed(MapView mapView) {
-
     }
 
     @Override
     public void onCurrentLocationUpdateCancelled(MapView mapView) {
-
     }
 
     @Override
@@ -339,24 +336,16 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     CivilSearch(sLong, sLat);
                     AEDSearch(sLong, sLat);
                     EarthquakeSearch(sLong, sLat);
-                    //리스트
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            viewPager2.setAdapter(new MainAdapter(dataPageList));
-                            Log.d("목록", "" + dataPageList.toString());
-                        }
-                    }, 16000);
+
 
                 } else {
                     Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
                 }
-
-
             }
-
         }
-    }
+    }//onActivityResult
+
+
 
     public boolean checkLocationServiceStatus() {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -365,31 +354,25 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     @Override
     public void onMapViewInitialized(MapView mapView) {
-
     }
 
     @Override
     public void onMapViewCenterPointMoved(MapView mapView, MapPoint mapPoint) {
-
-
     }
 
     @Override
     public void onMapViewZoomLevelChanged(MapView mapView, int i) {
         Toast.makeText(this, "zoom", Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
     public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
         Toast.makeText(this, "tap", Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
     public void onMapViewDoubleTapped(MapView mapView, MapPoint mapPoint) {
         Toast.makeText(this, "double", Toast.LENGTH_SHORT).show();
-
     }
 
     @Override
@@ -409,7 +392,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     @Override
     public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
-
     }
 
     private void AEDSearch(double x, double y) {
@@ -426,14 +408,19 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 AEDList.clear();
+
                 int index = 0;
+
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     AED AEDData = dataSnapshot.getValue(AED.class);
                     AEDList.add(AEDData);
+
                     MapPOIItem mapPOIItem = new MapPOIItem();
+
                     double lat = AEDList.get(index).getLat();
                     double lon = AEDList.get(index).getLon();
                     double calDis = distance(lat, lon, y, x, "K");
+
                     mapPOIItem.setItemName(AEDList.get(index).getTitle());
                     mapPOIItem.setTag(Integer.parseInt(AEDList.get(index).getZipcode1() + "" + AEDList.get(index).getZipcode2()));
                     mapPOIItem.setItemName(AEDList.get(index).getBuildPlace());
@@ -442,22 +429,15 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     mapPOIItem.setCustomImageResourceId(R.drawable.aed_32);
                     mapPOIItem.setCustomImageAutoscale(false);
                     mapPOIItem.setCustomImageAnchor(0.5f, 1.5f);
+
                     if (calDis * 1000 <= 5000) {
                         mapPOIItemList.add(mapPOIItem);
                     }
                     index++;
                 }
-                new Handler().postDelayed(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                                      dataPageList.add(AEDRe(AEDList));
-                        Log.d("@@@",""+AEDList.size());
-                        mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
-                    }
-                }, 1000);
-
+                dataPageList.add(AEDRe(AEDList));
+                Log.d("@@@",""+AEDList.size());
+                mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
 
             @Override
@@ -500,17 +480,9 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
-                new Handler().postDelayed(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        dataPageList.add(CivilRe(civilList));
-                        Log.d("@@@",""+civilList.size());
-                        mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
-                    }
-                }, 1000);
-//
+                dataPageList.add(CivilRe(civilList));
+                Log.d("@@@",""+civilList.size());
+                mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -552,17 +524,9 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
-                new Handler().postDelayed(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        dataPageList.add(ERQRe(EarthquakeList));
-                        Log.d("@@@",""+EarthquakeList.size());
-                        mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
-                    }
-                }, 1000);
-//
+                dataPageList.add(ERQRe(EarthquakeList));
+                Log.d("@@@",""+EarthquakeList.size());
+                mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -588,6 +552,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 TsunamiList.clear();
                 int index = 0;
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Log.d("index",""+index);
                     TsunamiShelter TsunamiData = dataSnapshot.getValue(TsunamiShelter.class);
                     TsunamiList.add(TsunamiData);
                     double lat = TsunamiList.get(index).getLat();
@@ -606,29 +571,23 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
-                new Handler().postDelayed(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        dataPageList.add(TsuRe(TsunamiList));
-                        Log.d("@@@",""+TsunamiList.size());
-                        mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
-                    }
-                }, 1000);
+                dataPageList.add(TsuRe(TsunamiList));
+                Log.d("@@@",""+TsunamiList.size());
+                mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
 
     private DataPage AEDRe(ArrayList<AED> AEDList){
-        Recycle recycle = new Recycle();
         List<Recycle> recycleList = new ArrayList<>();
-        if(this.AEDList.size()!=0){
-            for(AED a : this.AEDList){
+
+        if(AEDList.size()!=0){
+            for(AED a : AEDList){
+                Recycle recycle = new Recycle();
+
                 recycle.setLat(a.getLat());
                 recycle.setLon(a.getLon());
                 recycle.setTitle(a.getTitle());
@@ -639,13 +598,17 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         }
         DataPage dataPage = new DataPage();
         dataPage.setRecycleList(recycleList);
+
         return dataPage;
     }
+
     private DataPage CivilRe(ArrayList<Civil> civilList) {
-        Recycle recycle = new Recycle();
         List<Recycle> recycleList = new ArrayList<>();
-        if (this.civilList.size() != 0) {
-            for (Civil c : this.civilList) {
+
+        if (civilList.size() != 0) {
+            for (Civil c : civilList) {
+                Recycle recycle = new Recycle();
+
                 recycle.setLat(c.getLat());
                 recycle.setLon(c.getLon());
                 recycle.setTitle(c.getTitle());
@@ -656,13 +619,16 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         }
         DataPage dataPage = new DataPage();
         dataPage.setRecycleList(recycleList);
+
         return dataPage;
     }
     private DataPage ERQRe(ArrayList<EarthquakeOutdoorsShelter> earthquakeList){
-        Recycle recycle = new Recycle();
         List<Recycle> recycleList = new ArrayList<>();
-        if(EarthquakeList.size()!=0){
-            for(EarthquakeOutdoorsShelter e : EarthquakeList){
+
+        if(earthquakeList.size()!=0){
+            for(EarthquakeOutdoorsShelter e : earthquakeList){
+                Recycle recycle = new Recycle();
+
                 recycle.setLat(e.getLat());
                 recycle.setLon(e.getLon());
                 recycle.setTitle(e.getTitle());
@@ -673,23 +639,26 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         }
         DataPage dataPage = new DataPage();
         dataPage.setRecycleList(recycleList);
+
         return dataPage;
     }
     private DataPage TsuRe(ArrayList<TsunamiShelter> tsunamiList){
-        Recycle recycle = new Recycle();
         List<Recycle> recycleList = new ArrayList<>();
-        if(TsunamiList.size()!=0){
-            for(int i = 0; i<TsunamiList.size(); i++){
-                recycle.setLat(TsunamiList.get(i).getLat());
-                recycle.setLon(TsunamiList.get(i).getLon());
-                recycle.setTitle(TsunamiList.get(i).getTitle());
-                recycle.setAddress(TsunamiList.get(i).getAddress());
+
+        DataPage dataPage = new DataPage();
+        if(tsunamiList.size()!=0){
+            for(TsunamiShelter t : tsunamiList){
+                Recycle recycle = new Recycle();
+
+                recycle.setLat(t.getLat());
+                recycle.setLon(t.getLon());
+                recycle.setTitle(t.getTitle());
+                recycle.setAddress(t.getAddress());
                 recycle.setCategory("해일대피소");
                 recycleList.add(recycle);
             }
+            dataPage.setRecycleList(recycleList);
         }
-        DataPage dataPage = new DataPage();
-        dataPage.setRecycleList(recycleList);
         return dataPage;
     }
 
