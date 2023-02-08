@@ -43,6 +43,7 @@ import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     ArrayList<AED> AEDList;
     ArrayList<Civil> civilList;
     ArrayList<EarthquakeOutdoorsShelter> EarthquakeList;
+
+    List<DataPage> dataPageList = new ArrayList<>();;
 
 
 
@@ -272,11 +275,13 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     AEDSearch(sLong, sLat);
                     EarthquakeSearch(sLong, sLat);
                     //리스트
-                    List<DataPage> dataPageList = new ArrayList<>();
-                    dataPageList.add(ERQRe());
-                    dataPageList.add(CivilRe());
-                    dataPageList.add(AEDRe());
-                    dataPageList.add(TsuRe());
+
+                    Log.d("목록", ""+dataPageList.toString());
+
+
+
+
+
                     viewPager2.setAdapter(new MainAdapter(dataPageList));
                 } else {
                     Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
@@ -342,7 +347,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     }
 
-    private void AEDSearch(double x, double y) {
+    public void AEDSearch(double x, double y) {
         database = FirebaseDatabase
                 .getInstance();
         DatabaseReference refAED =
@@ -377,6 +382,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
+//                dataPageList.add(AEDRe(AEDList));
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
 
@@ -387,7 +393,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         });
     }
 
-    private void CivilSearch(double x, double y) {
+    public void CivilSearch(double x, double y) {
         database = FirebaseDatabase
                 .getInstance();
         DatabaseReference refTsunami =
@@ -420,6 +426,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
+//                dataPageList.add(CivilRe(civilList));
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
             @Override
@@ -428,7 +435,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             }
         });
     }
-    private void EarthquakeSearch(double x, double y) {
+    public void EarthquakeSearch(double x, double y) {
         database = FirebaseDatabase
                 .getInstance();
         DatabaseReference refEarthquake =
@@ -462,7 +469,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
-
+//                dataPageList.add(ERQRe(EarthquakeList));
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
             @Override
@@ -473,7 +480,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     }
 
-    private void TsunamiSearch(double x, double y) {
+    public void TsunamiSearch(double x, double y) {
         database = FirebaseDatabase
                 .getInstance();
         DatabaseReference refTsunami =
@@ -507,7 +514,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
-
+                dataPageList.add(TsuRe(TsunamiList));
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
 
@@ -518,8 +525,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         });
     }
 
-    private DataPage AEDRe(){
-        int index = 0;
+    public DataPage AEDRe(ArrayList<AED> AEDList){
         Recycle recycle = new Recycle();
         List<Recycle> recycleList = new ArrayList<>();
         if(AEDList.size()!=0){
@@ -530,14 +536,13 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 recycle.setAddress(a.getAddress());
                 recycle.setCategory("제세동기");
                 recycleList.add(recycle);
-                index++;
             }
         }
         DataPage dataPage = new DataPage();
         dataPage.setRecycleList(recycleList);
         return dataPage;
     }
-    private DataPage CivilRe() {
+    public DataPage CivilRe(ArrayList<Civil> civilList) {
         Recycle recycle = new Recycle();
         List<Recycle> recycleList = new ArrayList<>();
         if (civilList.size() != 0) {
@@ -554,8 +559,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         dataPage.setRecycleList(recycleList);
         return dataPage;
     }
-    private DataPage ERQRe(){
-        int index = 0;
+    public DataPage ERQRe(ArrayList<EarthquakeOutdoorsShelter> EarthquakeList){
         Recycle recycle = new Recycle();
         List<Recycle> recycleList = new ArrayList<>();
         if(EarthquakeList.size()!=0){
@@ -566,26 +570,23 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 recycle.setAddress(e.getAddress());
                 recycle.setCategory("지진대피소");
                 recycleList.add(recycle);
-                index++;
             }
         }
         DataPage dataPage = new DataPage();
         dataPage.setRecycleList(recycleList);
         return dataPage;
     }
-    private DataPage TsuRe(){
-        int index = 0;
+    public DataPage TsuRe(ArrayList<TsunamiShelter> TsunamiList){
         Recycle recycle = new Recycle();
         List<Recycle> recycleList = new ArrayList<>();
         if(TsunamiList.size()!=0){
-            for(TsunamiShelter t : TsunamiList){
-                recycle.setLat(t.getLat());
-                recycle.setLon(t.getLon());
-                recycle.setTitle(t.getTitle());
-                recycle.setAddress(t.getAddress());
+            for(int i = 0; i<TsunamiList.size(); i++){
+                recycle.setLat(TsunamiList.get(i).getLat());
+                recycle.setLon(TsunamiList.get(i).getLon());
+                recycle.setTitle(TsunamiList.get(i).getTitle());
+                recycle.setAddress(TsunamiList.get(i).getAddress());
                 recycle.setCategory("해일대피소");
                 recycleList.add(recycle);
-                index++;
             }
         }
         DataPage dataPage = new DataPage();
