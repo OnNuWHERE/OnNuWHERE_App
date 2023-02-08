@@ -47,6 +47,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapReverseGeoCoder;
 import net.daum.mf.map.api.MapView;
 
 import java.util.ArrayList;
@@ -120,55 +121,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             checkRunTimePermission();
         }
 
-        // 초기 위치 검색 후 주위 마커 띄우기 식
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                        PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        if (lm.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
-            location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        } else {
-            location = (Location) lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        }
-        Retrofit retrofit = new Retrofit.Builder().baseUrl("https://dapi.kakao.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        String apiKey = "KakaoAK 091bdc2aa5e0e18b40a1fab4607866e8";
-        kakaoService = retrofit.create(KakaoService.class);
-
-        Call<Document> call =
-                kakaoService.getXY(apiKey, String.valueOf(location.getLongitude()),
-                        String.valueOf(location.getLatitude()));
-
-        call.enqueue(new Callback<Document>() {
-            @Override
-            public void onResponse(Call<Document> call, Response<Document> response) {
-                Document p = response.body();
-                InitLoc loc = p.getDocuments();
-                InitRoadAddr addr = loc.getRoad_address();
-                address = addr.getAddress_name();
-                Log.d("주소", ""+address);
-                gugun = address.split(" ");
-                TsunamiSearch(location.getLongitude(), location.getLatitude());
-                CivilSearch(location.getLongitude(), location.getLatitude());
-                AEDSearch(location.getLongitude(), location.getLatitude());
-                EarthquakeSearch(location.getLongitude(), location.getLatitude());
-                btnAED.setSelected(true);
-                btnCivil.setSelected(true);
-                btnTsunami.setSelected(true);
-                btnDisaster.setSelected(true);
-            }
-
-            @Override
-            public void onFailure(Call<Document> call, Throwable t) {
-
-            }
-        });
-
-
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -199,6 +151,47 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     Toast.makeText(MainActivity.this, "mHeading", Toast.LENGTH_SHORT).show();
                     mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
                 }
+                // 초기 위치 검색 후 주위 마커 띄우기 식
+                LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                if (ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED &&
+                        ActivityCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                                PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                if (lm.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
+                    location = (Location) lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                } else {
+                    location = (Location) lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                }
+                Log.d("현재 위치", ""+location.toString());
+
+                //  현재 주소 찾기
+//                MapPoint mpoint = MapPoint.mapPointWithGeoCoord(location.getLatitude(),
+//                        location.getLongitude());
+//                MapReverseGeoCoder reverseGeoCoder = new MapReverseGeoCoder("091bdc2aa5e0e18b40a1fab4607866e8",
+//                        mpoint, resultListener, MainActivity.this);
+//                MapReverseGeoCoder.ReverseGeoCodingResultListener resultListener = new MapReverseGeoCoder.ReverseGeoCodingResultListener() {
+//                    @Override
+//                    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
+//                        address = "";
+//                        gugun = address.split(" ");
+//
+//                        btnDisaster.setSelected(true);
+//                        btnAED.setSelected(true);
+//                        btnCivil.setSelected(true);
+//                        btnTsunami.setSelected(true);
+//                        TsunamiSearch(sLong, sLat);
+//                        CivilSearch(sLong, sLat);
+//                        AEDSearch(sLong, sLat);
+//                        EarthquakeSearch(sLong, sLat);
+//                    }
+//
+//                    @Override
+//                    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
+//
+//                    }
+//                };
             }
         });//btnCpos
 
@@ -786,5 +779,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             return (Math.round(Math.abs(dist)));
         }
     }
+
+
 
 }
