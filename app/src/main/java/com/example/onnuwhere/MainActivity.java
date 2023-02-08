@@ -167,31 +167,34 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 Log.d("현재 위치", ""+location.toString());
 
                 //  현재 주소 찾기
-//                MapPoint mpoint = MapPoint.mapPointWithGeoCoord(location.getLatitude(),
-//                        location.getLongitude());
-//                MapReverseGeoCoder reverseGeoCoder = new MapReverseGeoCoder("091bdc2aa5e0e18b40a1fab4607866e8",
-//                        mpoint, resultListener, MainActivity.this);
-//                MapReverseGeoCoder.ReverseGeoCodingResultListener resultListener = new MapReverseGeoCoder.ReverseGeoCodingResultListener() {
-//                    @Override
-//                    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
-//                        address = "";
-//                        gugun = address.split(" ");
-//
-//                        btnDisaster.setSelected(true);
-//                        btnAED.setSelected(true);
-//                        btnCivil.setSelected(true);
-//                        btnTsunami.setSelected(true);
-//                        TsunamiSearch(sLong, sLat);
-//                        CivilSearch(sLong, sLat);
-//                        AEDSearch(sLong, sLat);
-//                        EarthquakeSearch(sLong, sLat);
-//                    }
-//
-//                    @Override
-//                    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
-//
-//                    }
-//                };
+                MapPoint mpoint = MapPoint.mapPointWithGeoCoord(location.getLatitude(),
+                        location.getLongitude());
+                MapReverseGeoCoder.ReverseGeoCodingResultListener resultListener = new MapReverseGeoCoder.ReverseGeoCodingResultListener() {
+                    @Override
+                    public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
+                        Log.d("주소", ""+s);
+                        address = s;
+                        gugun = address.split(" ");
+
+                        btnDisaster.setSelected(true);
+                        btnAED.setSelected(true);
+                        btnCivil.setSelected(true);
+                        btnTsunami.setSelected(true);
+                        TsunamiSearch(location.getLongitude(), location.getLatitude());
+                        CivilSearch(location.getLongitude(), location.getLatitude());
+                        AEDSearch(location.getLongitude(), location.getLatitude());
+                        EarthquakeSearch(location.getLongitude(), location.getLatitude());
+                    }
+
+                    @Override
+                    public void onReverseGeoCoderFailedToFindAddress(MapReverseGeoCoder mapReverseGeoCoder) {
+
+                    }
+                };
+                MapReverseGeoCoder reverseGeoCoder = new MapReverseGeoCoder("091bdc2aa5e0e18b40a1fab4607866e8",
+                        mpoint, resultListener, MainActivity.this);
+                reverseGeoCoder.startFindingAddress();
+
             }
         });//btnCpos
 
