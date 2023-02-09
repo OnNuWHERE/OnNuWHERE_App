@@ -9,6 +9,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,6 +58,16 @@ public class Search_View extends Activity {
             }
         });
 
+        searchEdt.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if(keyCode == KeyEvent.KEYCODE_ENTER){
+                    searchEdt.setText(searchEdt.getText().toString());
+                    btnSearch.callOnClick();
+                }
+                return false;
+            }
+        });
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override

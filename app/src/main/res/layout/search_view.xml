@@ -27,7 +27,9 @@
                     android:layout_gravity="center_vertical"
                     android:background="@android:color/transparent"
                     android:hint="장소 검색"
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:maxLines="1"
+                    android:singleLine="true"/>
 
 
             <Button
