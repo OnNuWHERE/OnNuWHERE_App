@@ -170,15 +170,15 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                         address = s;
                         gugun = address.split(" ");
 
-                        btnDisaster.setSelected(true);
-                        btnAED.setSelected(true);
                         btnCivil.setSelected(true);
+                        btnAED.setSelected(true);
+                        btnDisaster.setSelected(true);
                         btnTsunami.setSelected(true);
 
-                        CivilSearch(location.getLongitude(), location.getLatitude());
-                        AEDSearch(location.getLongitude(), location.getLatitude());
                         EarthquakeSearch(location.getLongitude(), location.getLatitude());
                         TsunamiSearch(location.getLongitude(), location.getLatitude());
+                        CivilSearch(location.getLongitude(), location.getLatitude());
+                        AEDSearch(location.getLongitude(), location.getLatitude());
                         new Handler().postDelayed(new Runnable()
                         {
                             @Override
@@ -417,13 +417,11 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
                     //커스텀 마커
 
+                    EarthquakeSearch(sLong, sLat);
+                    TsunamiSearch(sLong, sLat);
                     CivilSearch(sLong, sLat);
-
                     AEDSearch(sLong, sLat);
 
-                    EarthquakeSearch(sLong, sLat);
-
-                    TsunamiSearch(sLong, sLat);
                     new Handler().postDelayed(new Runnable()
                     {
                         @Override
