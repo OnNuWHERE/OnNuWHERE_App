@@ -175,10 +175,10 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                         btnCivil.setSelected(true);
                         btnTsunami.setSelected(true);
 
-                        TsunamiSearch(location.getLongitude(), location.getLatitude());
                         CivilSearch(location.getLongitude(), location.getLatitude());
                         AEDSearch(location.getLongitude(), location.getLatitude());
                         EarthquakeSearch(location.getLongitude(), location.getLatitude());
+                        TsunamiSearch(location.getLongitude(), location.getLatitude());
                         new Handler().postDelayed(new Runnable()
                         {
                             @Override
