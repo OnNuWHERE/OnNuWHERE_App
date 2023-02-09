@@ -398,6 +398,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
             case 1: {
                 if (resultCode == RESULT_OK) {
+                    dataPageList.clear();
                     Toast.makeText(MainActivity.this, "@@@ " + resultCode, Toast.LENGTH_SHORT).show();
 
                     Intent markerIntent = data;
@@ -708,7 +709,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 recycle.setTitle(a.getTitle());
                 recycle.setAddress(a.getAddress());
                 recycle.setCategory("제세동기");
-                recycle.setDis(distance(a.getLat(),a.getLon(),sLat,sLong,"K"));
+                recycle.setDis(distance(a.getLat(),a.getLon(),location.getLatitude(),location.getLongitude(),"K"));
                 recycleList.add(recycle);
             }
         }
@@ -731,7 +732,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 recycle.setTitle(c.getTitle());
                 recycle.setAddress(c.getAddress());
                 recycle.setCategory("민방공대피소");
-                recycle.setDis(distance(c.getLat(),c.getLon(),sLat,sLong,"K"));
+                recycle.setDis(distance(c.getLat(),c.getLon(),location.getLatitude(),location.getLongitude(),"K"));
                 recycleList.add(recycle);
             }
         }
@@ -753,7 +754,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 recycle.setTitle(e.getTitle());
                 recycle.setAddress(e.getAddress());
                 recycle.setCategory("지진대피소");
-                recycle.setDis(distance(e.getLat(),e.getLon(),sLat,sLong,"K"));
+                recycle.setDis(distance(e.getLat(),e.getLon(),location.getLatitude(),location.getLongitude(),"K"));
                 recycleList.add(recycle);
             }
         }
@@ -777,7 +778,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 recycle.setTitle(t.getTitle());
                 recycle.setAddress(t.getAddress());
                 recycle.setCategory("해일대피소");
-                recycle.setDis(distance(t.getLat(),t.getLon(),sLat,sLong,"K"));
+                recycle.setDis(distance(t.getLat(),t.getLon(),location.getLatitude(),location.getLongitude(),"K"));
                 recycleList.add(recycle);
             }
             dataPage.setRecycleList(recycleList);
