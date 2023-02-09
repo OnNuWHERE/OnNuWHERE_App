@@ -1,10 +1,12 @@
 package com.example.onnuwhere;
 
+import android.media.Image;
 import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,12 +29,14 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView addrTitle, addrDistance, addrRaw, addrCategory;
+        ImageView ImgPin;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             addrTitle = (TextView) itemView.findViewById(R.id.addrTitle);
             addrCategory = (TextView) itemView.findViewById(R.id.addrCategory);
             addrRaw = (TextView) itemView.findViewById(R.id.addrRaw);
             addrDistance = (TextView) itemView.findViewById(R.id.addrDistance);
+            ImgPin = (ImageView) itemView.findViewById(R.id.ImgPin);
         }
     }
 
@@ -58,6 +62,15 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
                 holder.addrDistance.setText(recycle.getDis()*1000+"m");
             }else {
                 holder.addrDistance.setText(recycle.getDis()+"km");
+            }
+            if(recycle.getCategory().equals("지진대피소")){
+                holder.ImgPin.setImageResource(R.drawable.earthquake_32);
+            } else if(recycle.getCategory().equals("제세동기")) {
+                holder.ImgPin.setImageResource(R.drawable.aed_32);
+            } else if(recycle.getCategory().equals("민방공대피소")) {
+                holder.ImgPin.setImageResource(R.drawable.shelter_32);
+            } else {
+                holder.ImgPin.setImageResource(R.drawable.tsunami_32);
             }
     }
 

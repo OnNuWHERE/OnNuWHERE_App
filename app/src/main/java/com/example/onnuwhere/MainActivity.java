@@ -24,7 +24,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
+//import android.widget.Toast;
 
 
 import com.example.onnuwhere.model.AED;
@@ -124,6 +124,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         btnCpos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mView.removeAllPOIItems();
+                dataPageList.clear();
                 if (selectedBtn) {
                     btnCpos.setSelected(false);
                     selectedBtn = false;
@@ -131,16 +133,18 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     btnCpos.setSelected(true);
                     selectedBtn = true;
                 }
-                Log.d("@@@", "TrackingMode : " + mView.getCurrentLocationTrackingMode());
                 if (mView.getCurrentLocationTrackingMode() == MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading) {
-                    Toast.makeText(MainActivity.this, "nonHeading", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this, "nonHeading", Toast.LENGTH_SHORT).show();
                     mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading);
+                    mView.setZoomLevel(3,true);
                 } else if (mView.getCurrentLocationTrackingMode() == MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading) {
-                    Toast.makeText(MainActivity.this, "Heading", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this, "Heading", Toast.LENGTH_SHORT).show();
                     mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
+                    mView.setZoomLevel(3,true);
                 } else {
-                    Toast.makeText(MainActivity.this, "mHeading", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this, "mHeading", Toast.LENGTH_SHORT).show();
                     mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
+                    mView.setZoomLevel(3,true);
                 }
                 // 초기 위치 검색 후 주위 마커 띄우기 식
                 LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -155,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 } else {
                     location = (Location) lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 }
-                Log.d("현재 위치", ""+location.toString());
+
 
                 //  현재 주소 찾기
                 MapPoint mpoint = MapPoint.mapPointWithGeoCoord(location.getLatitude(),
@@ -163,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 MapReverseGeoCoder.ReverseGeoCodingResultListener resultListener = new MapReverseGeoCoder.ReverseGeoCodingResultListener() {
                     @Override
                     public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
-                        Log.d("주소", ""+s);
                         address = s;
                         gugun = address.split(" ");
 
@@ -255,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     btnCivil.setSelected(false);
                     selectedBtn = false;
                     for (int i=0; i<maklist.length; i++) {
-                        if(maklist[i].getCustomImageResourceId() == R.drawable.earthquake_32){
+                        if(maklist[i].getCustomImageResourceId() == R.drawable.shelter_32){
                             maklist[i].setAlpha(0.0f);
                         }
                     }
@@ -263,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     btnCivil.setSelected(true);
                     selectedBtn = true;
                     for (int i=0; i<maklist.length; i++) {
-                        if(maklist[i].getCustomImageResourceId() == R.drawable.earthquake_32){
+                        if(maklist[i].getCustomImageResourceId() == R.drawable.shelter_32){
                             maklist[i].setAlpha(1.0f);
                         }
                     }
@@ -300,7 +303,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     @Override
     public void onCurrentLocationUpdate(@NonNull MapView mapView, @NonNull MapPoint mapPoint, float v) {
         mPointGeo = mapPoint.getMapPointGeoCoord();
-        Log.d("@@@@", "x:" + mPointGeo.latitude + "y:" + mPointGeo.longitude + "f:" + v);
         currentMapPoint = MapPoint.mapPointWithGeoCoord(mPointGeo.latitude, mPointGeo.longitude);
         mapView.setMapCenterPoint(currentMapPoint, true);
     }
@@ -329,12 +331,11 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 }
             }
             if (check_result) {
-                Log.d("@@@", "start");
             } else if (ActivityCompat.shouldShowRequestPermissionRationale(this, REQUIRED_PERMISSIONS[0])) {
-                Toast.makeText(this, "Reject Permission", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Reject Permission", Toast.LENGTH_SHORT).show();
                 finish();
             } else {
-                Toast.makeText(this, "reject Permission", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "reject Permission", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -380,7 +381,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         switch (requestCode) {
             case 2001:
                 if (checkLocationServiceStatus()) {
-                    Log.d("@@@", "활성화");
                     checkRunTimePermission();
                     return;
                 }
@@ -389,10 +389,9 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             case 1: {
                 if (resultCode == RESULT_OK) {
                     dataPageList.clear();
-                    Toast.makeText(MainActivity.this, "@@@ " + resultCode, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this, "@@@ " + resultCode, Toast.LENGTH_SHORT).show();
 
                     Intent markerIntent = data;
-                    Log.d("2@@@", markerIntent + "");
 
                     sLat = Double.parseDouble(markerIntent.getStringExtra("y"));
                     sLong = Double.parseDouble(markerIntent.getStringExtra("x"));
@@ -430,14 +429,12 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                         @Override
                         public void run()
                         {
-                            Log.d("insert adapter","insert");
                             viewPager2.setAdapter(new MainAdapter(dataPageList));
                         }
                     }, 17000);// 0.6초 정도 딜레이를 준 후 시작
 
-                    Log.d("목록", "" + dataPageList.toString());
                 } else {
-                    Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity.this, "에러" + resultCode, Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -459,27 +456,27 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     @Override
     public void onMapViewZoomLevelChanged(MapView mapView, int i) {
-        Toast.makeText(this, "zoom", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "zoom", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onMapViewSingleTapped(MapView mapView, MapPoint mapPoint) {
-        Toast.makeText(this, "tap", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "tap", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onMapViewDoubleTapped(MapView mapView, MapPoint mapPoint) {
-        Toast.makeText(this, "double", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "double", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onMapViewLongPressed(MapView mapView, MapPoint mapPoint) {
-        Toast.makeText(this, "long", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "long", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onMapViewDragStarted(MapView mapView, MapPoint mapPoint) {
-        Toast.makeText(this, "drag", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "drag", Toast.LENGTH_SHORT).show();
         mapView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
     }
 
@@ -536,7 +533,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     dataPageList.add(AEDRe(AEDList));
                 }
 
-                Log.d("@@@", "" + AEDList.size());
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
 
@@ -584,7 +580,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
                 }else{
                 dataPageList.add(CivilRe(civilList));}
-                Log.d("@@@", "" + civilList.size());
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
 
@@ -634,7 +629,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
                 }else {
                 dataPageList.add(ERQRe(EarthquakeList));}
-                Log.d("@@@", "" + EarthquakeList.size());
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
 
@@ -662,7 +656,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 TsunamiList.clear();
                 int index = 0;
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Log.d("index", "" + index);
                     TsunamiShelter TsunamiData = dataSnapshot.getValue(TsunamiShelter.class);
                     TsunamiList.add(TsunamiData);
                     double lat = TsunamiList.get(index).getLat();
@@ -686,7 +679,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 }else {
                     dataPageList.add(TsuRe(TsunamiList));
                 }
-                Log.d("@@@", "" + TsunamiList.size());
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
 
