@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
@@ -20,7 +19,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -33,13 +31,8 @@ import com.example.onnuwhere.model.AED;
 import com.example.onnuwhere.model.DataPage;
 import com.example.onnuwhere.model.EarthquakeOutdoorsShelter;
 import com.example.onnuwhere.model.Civil;
-import com.example.onnuwhere.model.Place;
 import com.example.onnuwhere.model.Recycle;
 import com.example.onnuwhere.model.TsunamiShelter;
-import com.example.onnuwhere.model.firstpage.Document;
-import com.example.onnuwhere.model.firstpage.InitAddr;
-import com.example.onnuwhere.model.firstpage.InitLoc;
-import com.example.onnuwhere.model.firstpage.InitRoadAddr;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,12 +46,6 @@ import net.daum.mf.map.api.MapView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapView.MapViewEventListener {
 
@@ -268,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     btnCivil.setSelected(false);
                     selectedBtn = false;
                     for (int i=0; i<maklist.length; i++) {
-                        if(maklist[i].getCustomImageResourceId() == R.drawable.shelter_32){
+                        if(maklist[i].getCustomImageResourceId() == R.drawable.earthquake_32){
                             maklist[i].setAlpha(0.0f);
                         }
                     }
@@ -276,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     btnCivil.setSelected(true);
                     selectedBtn = true;
                     for (int i=0; i<maklist.length; i++) {
-                        if(maklist[i].getCustomImageResourceId() == R.drawable.shelter_32){
+                        if(maklist[i].getCustomImageResourceId() == R.drawable.earthquake_32){
                             maklist[i].setAlpha(1.0f);
                         }
                     }
