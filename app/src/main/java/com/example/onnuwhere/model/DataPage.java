@@ -1,8 +1,6 @@
 package com.example.onnuwhere.model;
 
 
-import com.example.onnuwhere.EarthquakeAdapter;
-
 import java.util.List;
 
 public class DataPage {
