@@ -26,7 +26,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     private List<DataPage> dataPageList;
     private DataPage dataPage;
 
-
     public MainAdapter(List<DataPage> dataPageList) {
         this.dataPageList = dataPageList;
     }
@@ -58,7 +57,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         holder.recyclerView.setLayoutManager(layoutManager);
         holder.recyclerView.setAdapter(subAdapter);
         holder.recyclerView.setRecycledViewPool(viewPool);
-
     }
 
     @Override

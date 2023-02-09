@@ -184,6 +184,14 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                         CivilSearch(location.getLongitude(), location.getLatitude());
                         AEDSearch(location.getLongitude(), location.getLatitude());
                         EarthquakeSearch(location.getLongitude(), location.getLatitude());
+                        new Handler().postDelayed(new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                viewPager2.setAdapter(new MainAdapter(dataPageList));
+                            }
+                        }, 16500);// 0.6초 정도 딜레이를 준 후 시작
                     }
 
                     @Override
@@ -194,6 +202,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 MapReverseGeoCoder reverseGeoCoder = new MapReverseGeoCoder("091bdc2aa5e0e18b40a1fab4607866e8",
                         mpoint, resultListener, MainActivity.this);
                 reverseGeoCoder.startFindingAddress();
+
 
             }
         });//btnCpos

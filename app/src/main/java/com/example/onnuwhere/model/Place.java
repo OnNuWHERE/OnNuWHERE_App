@@ -9,14 +9,14 @@ public class Place {
     String x;
     String y;
     String category_group_name;
-    String distance;
+    int distance;
 
-    public String getDistance() {
+    public int getDistance() {
         return distance;
     }
 
     public void setDistance(String distance) {
-        this.distance = distance;
+        this.distance = Integer.parseInt(distance);
     }
 
     public String getId() {

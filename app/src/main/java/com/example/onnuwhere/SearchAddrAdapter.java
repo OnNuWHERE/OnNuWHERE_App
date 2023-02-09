@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationRequest;
+import android.os.Build;
 import android.provider.CallLog;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,8 @@ import net.daum.mf.map.api.MapPoint;
 
 import org.w3c.dom.Text;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.MyViewHolder> {
@@ -80,13 +83,16 @@ public class SearchAddrAdapter extends RecyclerView.Adapter<SearchAddrAdapter.My
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SearchAddrAdapter.MyViewHolder holder,int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder,int position) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Collections.sort(placeList, Comparator.comparingInt(Place::getDistance));
+        }
         place = placeList.get(position);
         location = ((Search_View)Search_View.mContext).location;
         holder.addrTitle.setText(place.getPlace_name());
         holder.addrCategory.setText(place.getCategory_group_name());
         holder.addrRaw.setText(place.getAddress_name());
-        double distance = Integer.parseInt(place.getDistance());
+        double distance =place.getDistance();
         if(distance>1000) {
             holder.addrDistance.setText(Math.round(distance*0.001)+"km");
         } else {
