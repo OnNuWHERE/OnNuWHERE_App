@@ -121,6 +121,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             checkRunTimePermission();
         }
 
+
+
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -302,6 +304,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                 }
             }
         });//btnDisaster
+        btnCpos.callOnClick();
     }
 
     @Override
@@ -423,15 +426,20 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     //TrackingModeOff
                     mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOff);
                     //커스텀 마커
-                    TsunamiSearch(sLong, sLat);
+
                     CivilSearch(sLong, sLat);
+
                     AEDSearch(sLong, sLat);
+
                     EarthquakeSearch(sLong, sLat);
+
+                    TsunamiSearch(sLong, sLat);
                     new Handler().postDelayed(new Runnable()
                     {
                         @Override
                         public void run()
                         {
+                            Log.d("insert adapter","insert");
                             viewPager2.setAdapter(new MainAdapter(dataPageList));
                         }
                     }, 16500);// 0.6초 정도 딜레이를 준 후 시작
@@ -671,7 +679,11 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
-                dataPageList.add(TsuRe(TsunamiList));
+                if(TsunamiList.isEmpty()){
+
+                }else {
+                    dataPageList.add(TsuRe(TsunamiList));
+                }
                 Log.d("@@@", "" + TsunamiList.size());
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
