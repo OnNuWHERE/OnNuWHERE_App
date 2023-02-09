@@ -18,7 +18,7 @@ public interface KakaoService {
     Call<ResultSearchKeyword>  getSearchKeyword(
             @Header("Authorization") String key, @Query("query") String query
             ,@Query("y") String y, @Query("x") String x,
-             @Query("size") int size);
+             @Query("size") int size,@Query("sort")String distance);
 
     @GET("v2/local/geo/coord2address.json")
     Call<Document> getXY(
