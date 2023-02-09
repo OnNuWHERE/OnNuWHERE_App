@@ -20,6 +20,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -128,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             public void onClick(View v) {
                 Intent searchIntent = new Intent(MainActivity.this, Search_View.class);
                 startActivityForResult(searchIntent, 1);
+                dataPageList.clear();
 
             }
         });
@@ -444,7 +446,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                             Log.d("insert adapter","insert");
                             viewPager2.setAdapter(new MainAdapter(dataPageList));
                         }
-                    }, 16500);// 0.6초 정도 딜레이를 준 후 시작
+                    }, 17000);// 0.6초 정도 딜레이를 준 후 시작
 
                     Log.d("목록", "" + dataPageList.toString());
                 } else {
@@ -542,7 +544,11 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
-                dataPageList.add(AEDRe(AEDList));
+                if(AEDList.isEmpty()){
+                }else{
+                    dataPageList.add(AEDRe(AEDList));
+                }
+
                 Log.d("@@@", "" + AEDList.size());
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
@@ -587,7 +593,10 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
-                dataPageList.add(CivilRe(civilList));
+                if(civilList.isEmpty()){
+
+                }else{
+                dataPageList.add(CivilRe(civilList));}
                 Log.d("@@@", "" + civilList.size());
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
@@ -633,7 +642,11 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     }
                     index++;
                 }
-                dataPageList.add(ERQRe(EarthquakeList));
+
+                if(EarthquakeList.isEmpty()){
+
+                }else {
+                dataPageList.add(ERQRe(EarthquakeList));}
                 Log.d("@@@", "" + EarthquakeList.size());
                 mView.addPOIItems(mapPOIItemList.toArray(new MapPOIItem[mapPOIItemList.size()]));
             }
@@ -698,7 +711,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     }
 
     private DataPage AEDRe(ArrayList<AED> AEDList) {
-
         List<Recycle> recycleList = new ArrayList<>();
 
         if (AEDList.size() != 0) {
@@ -745,7 +757,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
     private DataPage ERQRe(ArrayList<EarthquakeOutdoorsShelter> earthquakeList) {
         List<Recycle> recycleList = new ArrayList<>();
-
         if (earthquakeList.size() != 0) {
             for (EarthquakeOutdoorsShelter e : earthquakeList) {
                 Recycle recycle = new Recycle();
@@ -768,6 +779,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     private DataPage TsuRe(ArrayList<TsunamiShelter> tsunamiList) {
 
         List<Recycle> recycleList = new ArrayList<>();
+
 
         DataPage dataPage = new DataPage();
         if (tsunamiList.size() != 0) {
@@ -802,7 +814,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             } else if (unit.equals("N")) {
                 dist = dist * 0.8684;
             }
-            return (Math.round(Math.abs(dist)));
+            return (Math.floor(Math.abs(dist)*100))/100;
         }
     }
 

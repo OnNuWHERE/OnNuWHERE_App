@@ -1,5 +1,6 @@
 package com.example.onnuwhere;
 
+import android.os.Build;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.onnuwhere.model.Recycle;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
@@ -43,18 +45,20 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SubAdapter.ViewHolder holder, int position) {
-        Collections.sort(recycleList, (o1, o2) -> (int) (o1.getDis() - o2.getDis()));
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Collections.sort(recycleList, Comparator.comparingDouble(Recycle::getDis));
+        }
         recycle = recycleList.get(position);
         Log.d("sub","recycle:"+recycle);
-        double lat = ((MainActivity)MainActivity.mContext)
-                .mView.getMapCenterPoint().getMapPointGeoCoord().latitude;
-        double lon = ((MainActivity)MainActivity.mContext)
-                .mView.getMapCenterPoint().getMapPointGeoCoord().longitude;
-            holder.addrTitle.setText(recycle.getTitle());
+        holder.addrTitle.setText(recycle.getTitle());
             holder.addrCategory.setText(recycle.getCategory());
             holder.addrRaw.setText(recycle.getAddress());
-            holder.addrDistance.setText(String.valueOf(recycle.getDis()));
+            if (recycle.getDis()<1){
+                holder.addrDistance.setText(recycle.getDis()*1000+"m");
+            }else {
+                holder.addrDistance.setText(recycle.getDis()+"km");
+            }
     }
 
     @Override
