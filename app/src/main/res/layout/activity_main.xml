@@ -26,6 +26,8 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
+            app:contentInsetStart="0dp"
+            android:elevation="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent">
@@ -45,9 +47,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="#ffffff"
+                android:background="@drawable/edittext_shadow"
                 android:gravity="center_vertical"
-                android:text="부산진구 부전2동"
+                android:text="  부산진구 부전2동"
                 android:textColor="#bbbbbb" />
             <!--                </LinearLayout>-->
             <!--            </LinearLayout>-->
