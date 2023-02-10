@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
+        app:contentInsetStart="0dp"
+        android:elevation="0dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -14,6 +17,7 @@
             android:layout_height="wrap_content">
 
             <Button
+                android:layout_gravity="center"
                 android:id="@+id/btnReturn"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
@@ -22,17 +26,16 @@
                 <EditText
                     android:id="@+id/searchEdt"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_weight="0.5"
                     android:layout_gravity="center_vertical"
-                    android:background="@android:color/transparent"
-                    android:hint="장소 검색"
-                    android:textSize="20dp"
+                    android:background="@drawable/round"
+                    android:hint="  장소 검색"
+                    android:textSize="15sp"
                     android:maxLines="1"
                     android:singleLine="true"/>
-
-
             <Button
+                android:layout_gravity="center"
                 android:id="@+id/btnSearch"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
