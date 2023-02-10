@@ -170,7 +170,6 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                         address = s;
                         gugun = address.split(" ");
                         searchBtn.setText(s);
-
                         btnCivil.setSelected(true);
                         btnAED.setSelected(true);
                         btnDisaster.setSelected(true);

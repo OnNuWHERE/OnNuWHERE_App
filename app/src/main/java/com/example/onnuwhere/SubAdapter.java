@@ -76,7 +76,10 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return 15;
+        if(recycleList.size()<15){
+          return recycleList.size();
+        }else {
+            return 15;
+        }
     }
-
 }
