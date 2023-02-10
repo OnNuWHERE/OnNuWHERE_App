@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -78,6 +79,14 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (!checkLocationServiceStatus()) {
+            showDialogForGpsServiceSetting();
+            return;
+        }
+        else {
+            checkRunTimePermission();
+        }
 //        getHashKey();
 
         toolbar = findViewById(R.id.toolbar);
@@ -103,11 +112,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         mapViewContainer.addView(mView);
         mView.setCurrentLocationTrackingMode(MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading);
         mView.setMapViewEventListener(this);
-        if (!checkLocationServiceStatus()) {
-            showDialogForGpsServiceSetting();
-        } else {
-            checkRunTimePermission();
-        }
+
 
 
 
@@ -319,6 +324,14 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
     @Override
     public void onCurrentLocationUpdateCancelled(MapView mapView) {
     }
+    private void restart(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        Intent intent = packageManager.getLaunchIntentForPackage(context.getPackageName());
+        ComponentName componentName = intent.getComponent();
+        Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+        context.startActivity(mainIntent);
+        Runtime.getRuntime().exit(0);
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -329,6 +342,13 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             for (int result : grantResults) {
                 if (result != PackageManager.PERMISSION_GRANTED) {
                     check_result = false;
+                }else{
+                    PackageManager packageManager = getPackageManager();
+                    Intent intent = packageManager.getLaunchIntentForPackage(getPackageName());
+                    ComponentName componentName = intent.getComponent();
+                    Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+                    startActivity(mainIntent);
+                    System.exit(0);
                 }
             }
             if (check_result) {
@@ -354,7 +374,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
         }
     }
 
-    private void showDialogForGpsServiceSetting() {
+    public void showDialogForGpsServiceSetting() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("위치 서비스 비활성화");
         builder.setMessage("앱을 사용하기 위해서는 위치 서비스가 필요합니다.\n" + "위치 설정을 수정하시겠습니까?");
@@ -364,12 +384,14 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
             public void onClick(DialogInterface dialog, int which) {
                 Intent callGpsSettingIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivityForResult(callGpsSettingIntent, 2001);
+
             }
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
+                restart(MainActivity.this);
             }
         });
         builder.create().show();
@@ -381,10 +403,7 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
 
         switch (requestCode) {
             case 2001:
-                if (checkLocationServiceStatus()) {
-                    checkRunTimePermission();
-                    return;
-                }
+                restart(MainActivity.this);
                 break;
 
             case 1: {
