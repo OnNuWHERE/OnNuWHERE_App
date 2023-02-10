@@ -169,7 +169,8 @@ public class MainActivity extends AppCompatActivity implements MapView.CurrentLo
                     public void onReverseGeoCoderFoundAddress(MapReverseGeoCoder mapReverseGeoCoder, String s) {
                         address = s;
                         gugun = address.split(" ");
-                        searchBtn.setText(s);
+                        searchBtn.setText("  "+s);
+
                         btnCivil.setSelected(true);
                         btnAED.setSelected(true);
                         btnDisaster.setSelected(true);
